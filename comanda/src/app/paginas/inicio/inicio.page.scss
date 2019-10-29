@@ -1,0 +1,264 @@
+.firstMenu
+{
+    width : 100vw;
+    height: 100vh;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+.itemEmpty
+{
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+.imgButton
+{
+    width : 50% ;
+    height : 100vh;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+.button
+{
+    background-image: url('/assets/img/btn_empty.png');
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(221, 255, 255);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.itemcButton
+{
+    height: 68px;
+    width: 100%;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    --background: transparent;
+}
+
+.background-linda
+{
+    --background: url('/assets/img/lindaciudad.png') 0 0/100% 100% no-repeat;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+.background-fea
+{
+    --background: url('/assets/img/feaciudad.png') 0 0/100% 100% no-repeat;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+
+.tableclass
+{
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+
+
+.buttonLindo
+{
+    background-image: url('/assets/img/btn_cosasLindas.png');
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    font-size: 35px;
+    font-weight: bold;
+    color: rgb(221, 255, 255);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.buttonFeo
+{
+    background-image: url('/assets/img/btn_cosasFeas.png');
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    font-size: 35px;
+    font-weight: bold;
+    color: rgb(18, 24, 19);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.trFull
+{
+    border: 2px solid black;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.NuevaFoto-linda
+{
+    --background: url('/assets/img/lindaciudad.png') 0 0/100% 100% no-repeat;
+    padding: 0px;
+    border: 2px solid black;
+    margin: 0px;
+    line-height:0;
+    text-align: center;
+}
+
+.NuevaFoto-fea
+{
+    --background: url('/assets/img/feaciudad.png') 0 0/100% 100% no-repeat;
+    padding: 0px;
+    border: 2px solid black;
+    margin: 0px;
+    text-align: center;
+}
+
+// con display:block; y line-height:0; en su contenedor se quita el hueco que se genera abajo
+.mifotoMuestra
+{
+    display:block;
+}
+
+.inputhis
+{
+    text-align: center;
+    border: 1px solid rgb(126, 126, 126);
+    background-color: rgb(255, 255, 255);
+    font-style: impact;
+    margin: 3px;
+}
+
+.fotoExponerFix
+{
+    background-color: rgba(255, 255, 255, 0.900);
+    border: 1px solid rgb(0, 0, 0);
+    text-align: center;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+}
+
+.labelBold
+{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+.trStand
+{
+    // border: 2px solid black;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+.table2
+{
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    // border: 0px;
+    margin: 0px;
+    border: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+}
+
+.trFull2
+{
+    border: 2px solid black;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.tdShow
+{
+    border: 2px solid black;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.mifotoMuestra2
+{
+    text-align: center;
+    // display:block;
+    height: 200px;
+    width: 200px;
+    padding: 5px
+}
+
+.logoOutFix
+{
+    text-align: center;
+    position: fixed;
+    // height: 100%;
+    // width: 100%;
+    left: 40%;
+}
+
+.logOutImg
+{
+    text-align: center;
+}
+
+.divSpinner
+{
+    // text-align: center;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+}
+
+.tableSpinner
+{
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+.hided
+{
+
+}
+
+.nombreText
+{
+    font-size: 12px;
+}
+
+
+

@@ -1,0 +1,89 @@
+<ion-header>
+    <ion-toolbar color="success">
+        <ion-title>Registro de Clientes</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content class="background-image" no-scroll padding>
+    <div [hidden]="ocultarSpinner" class="divSpinner">
+        <table class="tableSpinner">
+            <tr>
+                <img class="hided" src="assets/img/hided.png">
+            </tr>
+            <tr>
+                <img src="assets/img/preloader.gif">
+            </tr>
+        </table>
+    </div>
+
+    <div [hidden]="ocultarSeccion0">
+        <ion-item class="itemcButton">
+            <button  class="button" (click)="ElegirCliente('cliente')">Registrarme como cliente</button>
+        </ion-item>
+        <ion-item class="itemcButton">
+            <button  class="button" (click)="ElegirCliente('anonimo')">Registrar como anonimo</button>
+        </ion-item>
+    </div>
+
+    
+    
+    <div [hidden]="ocultarSeccion1">
+        <ion-item class="itemc">
+        <img class="logo_usuario" src="assets/img/add_user.png">
+        </ion-item>
+
+        <ion-item class="itemc">
+            <ion-label class="ion-text-center" position="floating">Correo</ion-label>
+            <br>
+            <ion-input class="inputhis" type="text" name="name" [(ngModel)]="usuario.correo" autocomplete="off" placeholder="algo@algo.com"></ion-input>
+        </ion-item>
+
+        <ion-item class="itemc">
+            <ion-label class="ion-text-center" position="floating">Clave</ion-label>
+            <br>
+            <ion-input class="inputhis" type="password" name="password" [(ngModel)]="clave" placeholder="minimo de 6 caracteres"></ion-input>
+        </ion-item>
+
+        <ion-item class="itemc">
+            <ion-label class="ion-text-center" position="floating">Nombre</ion-label>
+            <br>
+            <ion-input class="inputhis" type="text" [(ngModel)]="usuario.nombre"></ion-input>
+        </ion-item>
+
+        <ion-item class="itemc" [hidden]="!esCliente">
+            <ion-label class="ion-text-center" position="floating">Apellido</ion-label>
+            <br>
+            <ion-input class="inputhis" type="text" [(ngModel)]="usuario.apellido"></ion-input>
+        </ion-item>
+
+        <ion-item class="itemc" [hidden]="!esCliente">
+            <ion-label class="ion-text-center" position="floating">DNI</ion-label>
+            <br>
+            <ion-input class="inputhis" type="number" [(ngModel)]="usuario.DNI"></ion-input>
+        </ion-item>
+
+        <ion-item class="itemcButton" [hidden]="!esCliente">
+            <button  (click)="EscanearDNI()"  class="button">Escanear DNI</button>
+        </ion-item>
+        <ion-item class="itemcButton">
+            <button  class="button" (click)="ValidarRegistro()">Registrar</button>
+        </ion-item>
+    </div>
+    <div [hidden]="ocultarSeccion2">
+        <ion-item class="itemcButton">
+            <button  class="button" (click)="SacarFoto()">Sacar foto</button>
+        </ion-item>
+        <ion-item class="itemcButton">
+            <button  class="button" (click)="SinFoto()">Sin foto</button>
+        </ion-item>
+    </div>
+    <ion-item class="itemcButton" [hidden]="ocultarSeccion1">
+        <button  (click)="RellenarDatos()"  class="button">Rellenar</button>
+    </ion-item>
+    <ion-item class="itemcButton" (click)="BorrarDatos()">
+            <button routerLink="/login"  class="button">Volver</button>
+    </ion-item>
+</ion-content>
+      

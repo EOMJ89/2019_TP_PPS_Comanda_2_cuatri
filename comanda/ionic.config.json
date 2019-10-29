@@ -1,0 +1,7 @@
+{
+  "name": "comanda2019v2",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Comanda</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content class="background-image" no-scroll padding>
+
+  <ion-item class="itemc">
+      <img class="logo_usuario" src="assets/img/log_usuario.png" alt="">
+  </ion-item>
+
+  
+    <ion-item class="itemc">
+        <ion-label class="ion-text-center">Correo:</ion-label>
+      <input type="text" class="inputhis" [(ngModel)]="correo" autocomplete="off">
+    </ion-item>
+        
+    <ion-item class="itemc">
+        <ion-label class="ion-text-center">Clave:</ion-label>
+      <input type="password" class="inputhis" [(ngModel)]="clave" autocomplete="off">
+    </ion-item>
+
+    <br>
+
+    <ion-item class="itemcButton">
+        <button (click)="onSumitLogin()"  class="button">Ingresar</button>
+   </ion-item>
+
+   <ion-item class="itemcButton">
+      <button routerLink="/registro-cliente"  class="button">Crear cuenta</button>
+    </ion-item>
+
+    <div class="itemcButton">
+      <button (click)="ingresoAuto('dueño')"  class="button2">Ingresar como dueño</button>
+        <button (click)="ingresoAuto('supervisor')"  class="button2">Ingresar como supervisor</button>
+        <br>
+        <button (click)="ingresoAuto('mozo')"  class="button2">Ingresar como mozo</button>
+        <button (click)="ingresoAuto('bartender')"  class="button2">Ingresar como bartender</button>
+        <br>
+        <button (click)="ingresoAuto('candybar')"  class="button2">Ingresar como candybar</button>
+        <button (click)="ingresoAuto('camarero')"  class="button2">Ingresar como camarero</button>
+        <br>
+        <button (click)="ingresoAuto('cliente')"  class="button2">Ingresar como cliente</button>
+        <button (click)="ingresoAuto('anonimo')"  class="button2">Ingresar como anonimo</button>
+    </div>
+    
+
+</ion-content>

@@ -1,0 +1,25 @@
+<div class="logoOutFix">
+  <img class="logOutImg" (click)="authService.Logout()" src="/assets/img/logotout.png">
+</div>
+
+<ion-content>
+
+    <img class="logOutImg" (click)="authService.Logout()" src="/assets/img/logotout.png">
+    
+  <div [hidden]="ocultarSpinner" class="divSpinner">
+    <table class="tableSpinner">
+      <tr><img class="hided" src="assets/img/hided.png"></tr>
+      <tr><img src="assets/img/preloader.gif"></tr>
+    </table>
+  </div>
+
+  <ion-item class="itemcButton">
+    <button  routerLink="/registro-empleado"  class="button">Registrar Empleado</button>
+   
+</ion-item>
+  
+</ion-content>
+
+
+
+

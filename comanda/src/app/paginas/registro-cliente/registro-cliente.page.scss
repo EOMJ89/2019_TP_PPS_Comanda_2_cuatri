@@ -1,0 +1,76 @@
+img {
+    left: 0;
+    right: 0;
+    margin:0 auto;
+}
+
+.inputhis
+{
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.200);
+    background-color: rgba(255, 255, 255, 0.400);
+}
+
+.background-image
+{
+    --background: url('/assets/img/regback.png') 0 0/100% 100% no-repeat;
+}
+
+.itemc
+{
+    --background: transparent;
+}
+
+.selecter
+{
+    text-align: center;
+}
+
+.itemcButton
+{
+    height: 68px;
+    width: 100%;
+    --background: transparent;
+}
+
+.button
+{
+    background-image: url('/assets/img/btn_empty.png');
+    height: 100%;
+    // width: 237px;
+    width: 100%;
+    background-color: transparent;
+    // background-size: cover;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(221, 255, 255);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.toolbar
+{
+    background-image: url('/assets/img/btn_empty.png');
+    // background-color: rgb(236, 16, 0);
+    height: 100%;
+    // width: 237px;
+    width: 100%;
+    // background-color: transparent;
+    // background-size: cover;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    // background-size: 100% 100%;
+    // background-repeat: no-repeat;
+    text-align: center;
+  }
+
+  .divUP
+  {
+      position: fixed;
+  }
