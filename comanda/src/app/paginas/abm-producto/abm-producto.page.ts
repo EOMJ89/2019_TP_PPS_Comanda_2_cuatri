@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
-  selector: 'app-abm-mesa',
-  templateUrl: './abm-mesa.page.html',
-  styleUrls: ['./abm-mesa.page.scss'],
+  selector: 'app-abm-producto',
+  templateUrl: './abm-producto.page.html',
+  styleUrls: ['./abm-producto.page.scss'],
 })
-export class AbmMesaPage implements OnInit {
+export class AbmProductoPage implements OnInit {
   private formMesas: FormGroup;
-  private foto: string | boolean = false;
+  private fotos: Array<string>;
 
   constructor(
     private camera: Camera,
@@ -25,10 +25,13 @@ export class AbmMesaPage implements OnInit {
 
   public ngOnInit() {
     this.formMesas = new FormGroup({
-      nromesaCtrl: new FormControl('', Validators.required),
-      cantcomenCtrl: new FormControl('', Validators.required),
-      tmesaCtrl: new FormControl('', Validators.required)
+      nombreCtrl: new FormControl('', Validators.required),
+      descCtrl: new FormControl('', Validators.required),
+      tiempoCtrl: new FormControl('', Validators.required),
+      precioCtrl: new FormControl('', Validators.required),
+      quienPuedeverCtrl: new FormControl('', Validators.required),
     });
+    this.fotos = new Array<string>();
   }
 
   public tomarFoto() {
@@ -42,26 +45,29 @@ export class AbmMesaPage implements OnInit {
     };
 
     this.camera.getPicture(options).then((imageData) => {
-      this.foto = 'data:image/jpeg;base64,' + imageData;
+      this.fotos.unshift('data:image/jpeg;base64,' + imageData);
     }, (err) => {
       this.subidaErronea(err);
     });
   }
 
   public agregarMesas() {
-    if (this.formMesas.value.nromesaCtrl === '') {
-      this.mostrarFaltanDatos('El nro. de mesa es obligatorio');
+    if (this.formMesas.value.nombreCtrl === '') {
+      this.mostrarFaltanDatos('El nombre del producto es obligatorio');
       return true;
     }
-    if (this.formMesas.value.cantcomenCtrl === '') {
-      this.mostrarFaltanDatos('El nro. de personas es obligatorio');
+    if (this.formMesas.value.descCtrl === '') {
+      this.mostrarFaltanDatos('La descripción del producto es obligatorio');
       return true;
     }
-    if (this.formMesas.value.tmesaCtrl === '') {
-      this.mostrarFaltanDatos('El tipo de mesa es obligatorio');
+    if (this.formMesas.value.tiempoCtrl === '' || this.formMesas.value.tiempoCtrl < 0) {
+      this.mostrarFaltanDatos('El tiempo de preparación es invalido o incorrecto');
       return true;
     }
-    if (this.foto === false) {
+    if (this.formMesas.value.precioCtrl === '' || this.formMesas.value.tiempoCtrl < 0) {
+      this.mostrarFaltanDatos('El precio es invalido o incorrecto');
+    }
+    if (this.fotos.length === 0) {
       this.mostrarFaltanDatos('Debe subir una foto');
       return true;
     }
@@ -69,37 +75,42 @@ export class AbmMesaPage implements OnInit {
     this.comenzarSubida();
   }
 
-  private obtenerFotoOriginal(): string {
-    return (this.foto as string).split(',', 2)[1];
+  private obtenerFotoOriginal(foto): string {
+    return (foto as string).split(',', 2)[1];
   }
 
   private async comenzarSubida() {
-    const filename: string = this.formMesas.value.tmesaCtrl + this.formMesas.value.nromesaCtrl + '_0';
-    const imageRef: AngularFireStorageReference = this.storage.ref(`mesas/${filename}.jpg`);
-
     const datos: any = {
-      nromesa: this.formMesas.value.nromesaCtrl,
-      cantcomen: this.formMesas.value.cantcomenCtrl,
-      tmesa: this.formMesas.value.tmesaCtrl,
-      estado: 'libre',
-      cliente: ' ',
-      foto: ''
+      nombre: this.formMesas.value.nombreCtrl,
+      descripcion: this.formMesas.value.descCtrl,
+      tiempo: this.formMesas.value.tiempoCtrl,
+      precio: this.formMesas.value.precioCtrl,
+      quienPuedever: this.formMesas.value.quienPuedeverCtrl,
+      fotos: new Array<string>(),
     };
+    let contador = 0;
+    let errores = 0;
+    this.fotos.forEach(async foto => {
+      const filename: string = datos.nombre + '_' + contador;
+      const imageRef: AngularFireStorageReference = this.storage.ref(`productos/${filename}.jpg`);
+      foto = this.obtenerFotoOriginal(foto);
+      await imageRef.putString(foto, 'base64', { contentType: 'image/jpeg' })
+        .then(async (snapshot) => {
+          datos.fotos.push(await snapshot.ref.getDownloadURL());
+          contador++;
+        }).catch(() => {
+          this.subidaErronea(`Error al subir la foto ${contador}, se canceló el alta.`);
+          errores++;
+        });
+    });
 
-    const auxFoto = this.obtenerFotoOriginal();
-
-    await imageRef.putString(auxFoto, 'base64', { contentType: 'image/jpeg' })
-      .then(async (snapshot) => {
-        datos.foto = await snapshot.ref.getDownloadURL();
-        this.guardardatosDeProducto(datos);
-      })
-      .catch(() => {
-        this.subidaErronea('Error al subir la foto, se canceló el alta.');
-      });
+    if (errores === 0) {
+      this.guardardatosDeProducto(datos);
+    }
   }
 
   private guardardatosDeProducto(datos) {
-    this.firestore.collection('mesas').add(datos)
+    this.firestore.collection('productos').add(datos)
       .then((a) => {
         this.subidaExitosa('El alta se realizó de manera exitosa.');
       }).catch(err => {
@@ -134,7 +145,7 @@ export class AbmMesaPage implements OnInit {
 
   private clearInputs() {
     this.formMesas.reset();
-    this.foto = false;
+    this.fotos = new Array<string>();
   }
 
   public async mostrarFaltanDatos(mensaje: string) {

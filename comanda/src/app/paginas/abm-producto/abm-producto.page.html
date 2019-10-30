@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Alta de Producto
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- ABM Producto -->
+<ion-content class="background-image" padding>
+  <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
+    class="height-100">
+    <div class="center-vertical center-horizontal transparent-item width-100">
+      <!-- Hacer placeholder para foto de producto -->
+      <img class="profile-picture" *ngIf="this.fotos.length == 0"
+        src="assets/img/add_user.png">
+      <div *ngFor="let foto of this.fotos">
+        <img class="profile-picture" [src]="foto" />
+      </div>
+    </div>
+
+    <ion-item class="transparent-item">
+      <ion-label>Nombre</ion-label>
+      <ion-input formControlName="nombreCtrl" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item class="transparent-item">
+      <ion-label>Descripción</ion-label>
+      <ion-input formControlName="descCtrl" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item class="transparent-item">
+      <ion-label>Tiempo</ion-label>
+      <ion-input formControlName="tiempoCtrl" type="number"></ion-input>
+    </ion-item>
+
+    <ion-item class="transparent-item">
+      <ion-label>Precio</ion-label>
+      <ion-input formControlName="precioCtrl" type="number"></ion-input>
+    </ion-item>
+
+    <ion-select formControlName="quienPuedeverCtrl"
+      placeholder="Perfil de Visualización">
+      <ion-select-option value="mozo">Mozo</ion-select-option>
+      <ion-select-option value="bartender">Bartender</ion-select-option>
+      <ion-select-option value="candybar">Candybar</ion-select-option>
+      <ion-select-option value="camarero">Camarero</ion-select-option>
+    </ion-select>
+
+    <!-- Funciona como un footer -->
+    <div class="css-footer flex-v width-100">
+      <ion-button color="primary" [disabled]="this.fotos.length >= 3"
+        (click)="this.tomarFoto()">
+        Subir foto
+      </ion-button>
+      <ion-button type="submit" color="success" expand="full">
+        Agregar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

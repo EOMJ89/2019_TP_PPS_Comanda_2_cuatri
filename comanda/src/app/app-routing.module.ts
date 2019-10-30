@@ -9,10 +9,10 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
-    path: 'login', 
+    path: 'login',
     loadChildren: './paginas/login/login.module#LoginPageModule'
   },
   {
@@ -28,6 +28,11 @@ const routes: Routes = [
     loadChildren: './paginas/inicio/inicio.module#InicioPageModule'
   },
   { path: 'abm-mesa', loadChildren: './paginas/abm-mesa/abm-mesa.module#AbmMesaPageModule' },
+  { path: 'abm-producto', loadChildren: './paginas/abm-producto/abm-producto.module#AbmProductoPageModule' },
+  { path: 'encuesta-cliente', loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule' },
+  { path: 'encuesta-empleado', loadChildren: './paginas/encuesta-empleado/encuesta-empleado.module#EncuestaEmpleadoPageModule' },
+  { path: 'encuesta-sup', loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule' },
+
 ];
 
 @NgModule({
