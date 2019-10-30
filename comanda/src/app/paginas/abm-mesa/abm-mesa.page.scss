@@ -1,0 +1,39 @@
+.transparent-item {
+  --background-color: transparent !important;
+}
+
+.button {
+  background-image: url("/assets/img/btn_empty.png");
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(221, 255, 255);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
+.itemcButton {
+  height: 136px;
+  width: 100%;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+  --background: transparent;
+}
+
+.flex {
+  &-v {
+    display: flex;
+    flex-direction: column;
+  }
+  &-h {
+    display: flex;
+    flex-direction: row;
+  }
+}

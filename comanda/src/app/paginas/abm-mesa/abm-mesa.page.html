@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>
+      Alta Mesas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- ABM Mesa -->
+<ion-content>
+  <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()">
+    <ion-list>
+      <ion-item class="transparent-item">
+        <ion-label>Nro. Mesa</ion-label>
+        <ion-input formControlName="nromesaCtrl" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Nro. Personas</ion-label>
+        <ion-input formControlName="cantcomenCtrl" type="number"></ion-input>
+      </ion-item>
+      <ion-select formControlName="tmesaCtrl" placeholder="Tipo">
+        <ion-select-option value="vip">VIP</ion-select-option>
+        <ion-select-option value="discapacitados">Discapacitados</ion-select-option>
+        <ion-select-option value="normal">Normal</ion-select-option>
+      </ion-select>
+
+      <ion-slides>
+        <ion-slide *ngFor="let foto of this.captureDataUrl">
+          <img [src]="foto" *ngIf="this.captureDataUrl" />
+        </ion-slide>
+      </ion-slides>
+
+      <div class="itemcButton flex-v">
+        <button type="button" class="button" [disabled]="this.hayFotos"
+          (click)="this.tomarFoto()">
+          Subir foto
+        </button>
+        <button type="submit" class="button">
+          Agregar
+        </button>
+      </div>
+    </ion-list>
+  </form>
+</ion-content>

@@ -1,11 +1,13 @@
 <div class="logoOutFix">
-  <img class="logOutImg" (click)="authService.Logout()" src="/assets/img/logotout.png">
+  <img class="logOutImg" (click)="authService.Logout()"
+    src="/assets/img/logotout.png">
 </div>
 
 <ion-content>
 
-    <img class="logOutImg" (click)="authService.Logout()" src="/assets/img/logotout.png">
-    
+  <img class="logOutImg" (click)="authService.Logout()"
+    src="/assets/img/logotout.png">
+
   <div [hidden]="ocultarSpinner" class="divSpinner">
     <table class="tableSpinner">
       <tr><img class="hided" src="assets/img/hided.png"></tr>
@@ -14,12 +16,8 @@
   </div>
 
   <ion-item class="itemcButton">
-    <button  routerLink="/registro-empleado"  class="button">Registrar Empleado</button>
-   
-</ion-item>
-  
+    <button routerLink="/registro-empleado" class="button">Registrar Empleado</button>
+    <button routerLink="/abm-mesa" class="button">Registrar Mesa</button>
+  </ion-item>
+
 </ion-content>
-
-
-
-

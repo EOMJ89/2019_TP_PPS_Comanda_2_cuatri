@@ -28,6 +28,8 @@ import { LoginPageModule } from './paginas/login/login.module';
 import { RegistroEmpleadoPageModule } from './paginas/registro-empleado/registro-empleado.module';
 import { RegistroClientePageModule } from './paginas/registro-cliente/registro-cliente.module';
 
+// Alta de Producto y Mesa
+import { AbmMesaPageModule } from './paginas/abm-mesa/abm-mesa.module';
 
 // Servicios
 import { AuthService } from './servicios/auth.service';
@@ -40,11 +42,13 @@ import { AuthService } from './servicios/auth.service';
     IonicModule.forRoot(),
     AppRoutingModule,
     FormsModule,
-    //paginas
+    // paginas
     InicioPageModule,
     LoginPageModule,
     RegistroEmpleadoPageModule,
     RegistroClientePageModule,
+    // Alta de Producto y Mesa
+    AbmMesaPageModule,
     // AngularFire
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
@@ -63,4 +67,4 @@ import { AuthService } from './servicios/auth.service';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

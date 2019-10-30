@@ -27,6 +27,7 @@ const routes: Routes = [
     path: 'inicio',
     loadChildren: './paginas/inicio/inicio.module#InicioPageModule'
   },
+  { path: 'abm-mesa', loadChildren: './paginas/abm-mesa/abm-mesa.module#AbmMesaPageModule' },
 ];
 
 @NgModule({
