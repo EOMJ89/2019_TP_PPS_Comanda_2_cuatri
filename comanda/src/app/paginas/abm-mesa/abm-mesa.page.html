@@ -10,7 +10,7 @@
 </ion-header>
 
 <!-- ABM Mesa -->
-<ion-content class="background-image" padding>
+<ion-content class="background-image ion-padding">
   <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
     class="height-100">
     <div class="center-vertical center-horizontal transparent-item width-100">
@@ -37,10 +37,9 @@
       <ion-select-option value="normal">Normal</ion-select-option>
     </ion-select>
 
-    <!-- Funciona como un footer -->
-    <div class="css-footer flex-v width-100">
-      <ion-button color="primary"
-        [disabled]="this.foto" (click)="this.tomarFoto()">
+    <div class="align-text-center">
+      <ion-button color="primary" [disabled]="this.foto"
+        (click)="this.tomarFoto()">
         Subir foto
       </ion-button>
       <ion-button type="submit" color="success" expand="full">

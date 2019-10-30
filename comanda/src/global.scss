@@ -132,15 +132,6 @@
   margin-top: 0.5rem;
 }
 
-// Coloca el elemento al final del elemento que le contiene, funciona como el ion-footer pero sin tener que modificar las variables de color
-.css-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  padding: 0rem 1rem;
-  text-align: center;
-}
-
 // Agrega un borde negro alrededor del elemento (solo para testeo)
 .black-border {
   border: 1px black solid;
@@ -156,4 +147,9 @@
   min-width: 7rem;
   object-fit: cover;
   border-radius: 100% !important;
+}
+
+// Ajusta el texto dentro de un elemento
+.align-text-center {
+  text-align: center;
 }

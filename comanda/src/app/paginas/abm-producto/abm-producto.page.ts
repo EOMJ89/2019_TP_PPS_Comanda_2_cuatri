@@ -90,7 +90,8 @@ export class AbmProductoPage implements OnInit {
     };
     let contador = 0;
     let errores = 0;
-    this.fotos.forEach(async foto => {
+
+    for (let foto of this.fotos) {
       const filename: string = datos.nombre + '_' + contador;
       const imageRef: AngularFireStorageReference = this.storage.ref(`productos/${filename}.jpg`);
       foto = this.obtenerFotoOriginal(foto);
@@ -102,7 +103,7 @@ export class AbmProductoPage implements OnInit {
           this.subidaErronea(`Error al subir la foto ${contador}, se canceló el alta.`);
           errores++;
         });
-    });
+    }
 
     if (errores === 0) {
       this.guardardatosDeProducto(datos);
