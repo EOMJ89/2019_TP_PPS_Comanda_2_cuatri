@@ -13,6 +13,7 @@
 <ion-content class="background-image ion-padding">
   <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
     class="height-100">
+    <!-- Preview de la foto -->
     <div class="center-vertical center-horizontal transparent-item width-100">
       <!-- Hacer placeholder para foto de Mesa -->
       <img class="profile-picture" *ngIf="this.foto === false"

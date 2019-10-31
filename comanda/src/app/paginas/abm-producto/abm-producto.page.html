@@ -10,9 +10,10 @@
 </ion-header>
 
 <!-- ABM Producto -->
-<ion-content class="background-image" padding>
+<ion-content class="background-image ion-padding">
   <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
     class="height-100">
+    <!-- Preview de las fotos -->
     <div class="center-vertical center-horizontal transparent-item width-100">
       <!-- Hacer placeholder para foto de producto -->
       <img class="profile-picture" *ngIf="this.fotos.length == 0"
