@@ -31,7 +31,8 @@ const routes: Routes = [
   { path: 'abm-producto', loadChildren: './paginas/abm-producto/abm-producto.module#AbmProductoPageModule' },
   { path: 'encuesta-cliente', loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule' },
   { path: 'encuesta-empleado', loadChildren: './paginas/encuesta-empleado/encuesta-empleado.module#EncuestaEmpleadoPageModule' },
-  { path: 'encuesta-sup', loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule' },
+  { path: 'encuesta-sup', loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule' },  { path: 'modal-encuesta', loadChildren: './paginas/modal-encuesta/modal-encuesta.module#ModalEncuestaPageModule' },
+
 
 ];
 

@@ -27,9 +27,7 @@ import { InicioPageModule } from './paginas/inicio/inicio.module';
 import { LoginPageModule } from './paginas/login/login.module';
 import { RegistroEmpleadoPageModule } from './paginas/registro-empleado/registro-empleado.module';
 import { RegistroClientePageModule } from './paginas/registro-cliente/registro-cliente.module';
-
-// Alta de Producto y Mesa
-import { AbmMesaPageModule } from './paginas/abm-mesa/abm-mesa.module';
+import { ModalEncuestaPageModule } from './paginas/modal-encuesta/modal-encuesta.module';
 
 // Servicios
 import { AuthService } from './servicios/auth.service';
@@ -47,8 +45,8 @@ import { AuthService } from './servicios/auth.service';
     LoginPageModule,
     RegistroEmpleadoPageModule,
     RegistroClientePageModule,
-    // Alta de Producto y Mesa
-    AbmMesaPageModule,
+    // Modal para encuesta de Supervisor
+    ModalEncuestaPageModule,
     // AngularFire
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,

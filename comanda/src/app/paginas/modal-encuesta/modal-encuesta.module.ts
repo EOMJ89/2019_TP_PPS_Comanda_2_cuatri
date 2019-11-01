@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EncuestaSupPage } from './encuesta-sup.page';
+import { ModalEncuestaPage } from './modal-encuesta.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: EncuestaSupPage
+    component: ModalEncuestaPage
   }
 ];
 
@@ -18,9 +18,10 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [EncuestaSupPage]
+  declarations: [ModalEncuestaPage]
 })
-export class EncuestaSupPageModule { }
+export class ModalEncuestaPageModule {}

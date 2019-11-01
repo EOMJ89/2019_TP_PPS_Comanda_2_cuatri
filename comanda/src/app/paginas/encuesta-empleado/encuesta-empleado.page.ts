@@ -170,7 +170,7 @@ export class EncuestaEmpleadoPage implements OnInit {
       orden: this.formEncuesta.value.ordenCtrl,
       destacado: this.obtenerDestacados(),
       satisfaccion: this.formEncuesta.value.satisfaccionCtrl,
-      comentarioCtrl: this.formEncuesta.value.comentarioCtrl,
+      comentarios: this.formEncuesta.value.comentarioCtrl,
       usuario: this.obtenerUsername(),
       fotos: new Array<string>(),
       fecha: dateA.getTime(),
