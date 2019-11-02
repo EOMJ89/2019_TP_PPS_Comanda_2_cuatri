@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      QR de Ingreso al Local
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background-image ion-padding">
+  <div class="center-vertical center-horizontal width-100 height-100">
+    <div (click)="doScan()" class="flex-v border center-vertical">
+      <img class="qr-img" src="assets/img/QR_code_Wikipedia.svg">
+      <span class="qr-text">Escanear</span>
+    </div>
+  </div>
+</ion-content>
+
+<!-- <ion-footer>
+  <ion-button color="primary" expand="block" (click)="doScan()">Escanear</ion-button>
+</ion-footer> -->

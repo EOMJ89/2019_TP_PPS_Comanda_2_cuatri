@@ -11,3 +11,10 @@ export class Anonimo
         this.foto = "";
     }
 }
+
+export interface AnonimoKey {
+    key: string;
+    correo: string;
+    nombre: string;
+    foto: string;
+}
