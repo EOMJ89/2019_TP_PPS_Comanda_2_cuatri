@@ -147,11 +147,13 @@ export class QrIngresoLocalPage implements OnInit {
       if (estaEnListaEspera) {
         this.presentAlert(null, 'Ya está en la lista', 'Usted ya se encuentra en la lista de espera.');
       } else {
+        const d = new Date();
         // De lo contrario, se lo agrega a la lista de espera
         const datos: any = {
           correo: usuario.correo,
           perfil: esRegistrado === true ? 'cliente' : 'clienteAnonimo',
           estado: 'confirmacionMozo',
+          fecha: d.getTime(),
         };
 
         this.enviarDatos(datos).then(docRef => {

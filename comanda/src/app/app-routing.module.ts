@@ -30,6 +30,7 @@ const routes: Routes = [
   { path: 'encuesta-sup', loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule' },
   { path: 'modal-encuesta', loadChildren: './paginas/modal-encuesta/modal-encuesta.module#ModalEncuestaPageModule' },  { path: 'qr-ingreso-local', loadChildren: './paginas/qr-ingreso-local/qr-ingreso-local.module#QrIngresoLocalPageModule' },
   { path: 'list-confirmar-cliente-mesa', loadChildren: './paginas/list-confirmar-cliente-mesa/list-confirmar-cliente-mesa.module#ListConfirmarClienteMesaPageModule' },
+  { path: 'qr-mesa', loadChildren: './paginas/qr-mesa/qr-mesa.module#QrMesaPageModule' },
 
 
 

@@ -1,9 +1,46 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>listConfirmarClienteMesa</ion-title>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Lista de Espera
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  En progreso
+<ion-content *ngIf="this.esMozo">
+  <ion-list *ngIf="this.clientes.length> 0">
+    <ion-item *ngFor="let cliente of clientes">
+      {{cliente.correo}}
+      <div slot="end">
+        <ion-button size="small" color="primary"
+          (click)="this.confirmarCliente(cliente.correo)">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        </ion-button>
+        <ion-button size="small" color="danger"
+          (click)="this.rechazarCliente(cliente.correo)">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
+  <ion-card *ngIf="this.clientes.length == 0">
+    <ion-card-content>
+      No hay clientes en la lista.
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-content *ngIf="!this.esMozo">
+  <ion-list *ngIf="this.clientes.length> 0">
+    <ion-item *ngFor="let cliente of clientes">
+      {{cliente.correo}}
+    </ion-item>
+  </ion-list>
+  <ion-card *ngIf="this.clientes.length == 0">
+    <ion-card-content>
+      No hay clientes en lista de espera.
+    </ion-card-content>
+  </ion-card>
 </ion-content>
