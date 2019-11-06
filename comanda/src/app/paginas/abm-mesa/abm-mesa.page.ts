@@ -4,6 +4,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
+import { MesaKey } from 'src/app/clases/mesa';
 
 @Component({
   selector: 'app-abm-mesa',
@@ -82,9 +83,11 @@ export class AbmMesaPage implements OnInit {
       cantcomen: this.formMesas.value.cantcomenCtrl,
       tmesa: this.formMesas.value.tmesaCtrl,
       estado: 'libre',
-      cliente: ' ',
-      foto: ''
+      cliente: '',
+      foto: '',
+      reservada: false,
     };
+
 
     const auxFoto = this.obtenerFotoOriginal();
 

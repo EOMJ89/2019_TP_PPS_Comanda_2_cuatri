@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Cliente, ClienteKey } from 'src/app/clases/cliente';
+import { ClienteKey } from 'src/app/clases/cliente';
 import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { AnonimoKey } from 'src/app/clases/anonimo';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { ListaEsperaClientesKey, ListaEsperaClientes } from 'src/app/clases/lista-espera-clientes';
+import { ListaEsperaClientesKey, } from 'src/app/clases/lista-espera-clientes';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -82,25 +81,27 @@ export class ListConfirmarClienteMesaPage implements OnInit {
   }
 
   private async traerUsuarioAnonimo(): Promise<false | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise().then((d: DocumentSnapshot<any>) => {
-      if (d.exists) {
-        const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-        auxReturn.key = d.id;
-        return auxReturn;
-      } else {
-        return false;
-      }
-    });
+    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
+      .then((d: DocumentSnapshot<any>) => {
+        if (d.exists) {
+          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
+          auxReturn.key = d.id;
+          return auxReturn;
+        } else {
+          return false;
+        }
+      });
   }
 
   public traerListaEspera() {
-    return this.firestore.collection('listaEsperaClientes').snapshotChanges().pipe(map((f) => {
-      return f.map((a) => {
-        const data = a.payload.doc.data() as ListaEsperaClientesKey;
-        data.key = a.payload.doc.id;
-        return data;
-      });
-    }));
+    return this.firestore.collection('listaEsperaClientes').snapshotChanges()
+      .pipe(map((f) => {
+        return f.map((a) => {
+          const data = a.payload.doc.data() as ListaEsperaClientesKey;
+          data.key = a.payload.doc.id;
+          return data;
+        });
+      }));
   }
 
   private obtenerData(c: ListaEsperaClientesKey): any {

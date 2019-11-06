@@ -5,7 +5,7 @@ export class Mesa {
     public foto: string; // El link de la foto de la mesa en el storage
     public nromesa: number; // El numero de mesa
     public tmesa: string; // El tipo de mesa, valores posibles: 'vip', 'discapacitados', 'normal'
-
+    public reservada: boolean;
     constructor() {
         this.cantcomen = 0;
         this.cliente = '';
@@ -13,6 +13,7 @@ export class Mesa {
         this.foto = '';
         this.nromesa = 0;
         this.tmesa = '';
+        this.reservada = false;
     }
 }
 
@@ -24,4 +25,5 @@ export interface MesaKey {
     foto: string;
     nromesa: number;
     tmesa: string;
+    reservada: boolean;
 }

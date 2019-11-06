@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageReference, AngularFireStorage } from '@angular/fire/storage';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-encuesta-cliente',
@@ -21,7 +22,8 @@ export class EncuestaClientePage implements OnInit {
     private camera: Camera,
     private alertCtrl: AlertController,
     private storage: AngularFireStorage,
-    private firestore: AngularFirestore) { }
+    private firestore: AngularFirestore,
+    private router: Router) { }
 
   ngOnInit() {
     this.formEncuesta = new FormGroup({
@@ -84,6 +86,7 @@ export class EncuestaClientePage implements OnInit {
     await alert.present();
     // clear the previous photo data in the variable
     this.clearInputs();
+    this.router.navigate(['/qr-mesa']);
   }
 
   private clearInputs() {
