@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Confirmación de Clientes
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="this.clientes.length> 0" class="transparent-item">
+    <ion-item *ngFor="let cliente of clientes" class="transparent-item">
+      <ion-card class="width-100">
+        <ion-card-content>
+          <ion-item class="transparent-item">
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input [value]="cliente.nombre | titlecase" readonly></ion-input>
+          </ion-item>
+
+          <ion-item class="transparent-item">
+            <ion-label position="floating">Apellido</ion-label>
+            <ion-input [value]="cliente.apellido | titlecase" readonly></ion-input>
+          </ion-item>
+
+          <ion-item class="transparent-item">
+            <ion-label position="floating">DNI</ion-label>
+            <ion-input [value]="cliente.DNI" readonly></ion-input>
+          </ion-item>
+
+          <div class="width-100 align-between">
+            <ion-button size="small" color="primary"
+              (click)="this.confirmarCliente(cliente, cliente.key)">
+              <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+            </ion-button>
+            <ion-button size="small" color="danger"
+              (click)="this.rechazarCliente(cliente, cliente.key)">
+              <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+  <ion-card *ngIf="this.clientes.length == 0">
+    <ion-card-content>
+      No hay clientes en la lista.
+    </ion-card-content>
+  </ion-card>
+</ion-content>
