@@ -4,6 +4,7 @@ export class Cliente {
     public apellido: string;
     public DNI: number;
     public foto: string;
+    public confirmado: boolean;
 
     constructor() {
         this.correo = "";
@@ -11,6 +12,7 @@ export class Cliente {
         this.apellido = "";
         this.DNI = 0;
         this.foto = "";
+        this.confirmado = false;
     }
 }
 
@@ -21,4 +23,5 @@ export interface ClienteKey {
     correo: string;
     foto: string;
     nombre: string;
+    confirmado: boolean;
 }
