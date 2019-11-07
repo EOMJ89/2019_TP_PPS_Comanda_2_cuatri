@@ -80,7 +80,8 @@ export  class  AuthService
           nombre : usuario.nombre,
           apellido : usuario.apellido,
           DNI : usuario.DNI,
-          foto : usuario.foto
+          foto : usuario.foto,
+          confirmado : usuario.confirmado
         })
         resolve(res)
       }).catch( err => reject(err))
@@ -118,7 +119,7 @@ export  class  AuthService
     try
    {
         await this.afAuth.auth.signInWithEmailAndPassword(correo, clave);
-        this.router.navigate(['inicio']);
+        // this.router.navigate(['inicio']);
     } catch (e)
     {
         alert("Error!"  +  e.message);
