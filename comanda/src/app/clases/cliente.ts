@@ -4,7 +4,6 @@ export class Cliente {
     public apellido: string;
     public DNI: number;
     public foto: string;
-    public confirmado: boolean;
 
     constructor() {
         this.correo = "";
@@ -12,7 +11,6 @@ export class Cliente {
         this.apellido = "";
         this.DNI = 0;
         this.foto = "";
-        this.confirmado = false;
     }
 }
 
@@ -23,5 +21,32 @@ export interface ClienteKey {
     correo: string;
     foto: string;
     nombre: string;
-    confirmado: boolean;
+}
+
+export interface ClienteAConfirmarKey {
+    key: string;
+    DNI: number;
+    apellido: string;
+    correo: string;
+    foto: string;
+    nombre: string;
+    clave: string;
+}
+
+export class ClienteAConfirmar {
+    public correo: string;
+    public nombre: string;
+    public apellido: string;
+    public DNI: number;
+    public foto: string;
+    public clave: string;
+
+    constructor() {
+        this.correo = "";
+        this.nombre = "";
+        this.apellido = "";
+        this.DNI = 0;
+        this.foto = "";
+        this.clave = '';
+    }
 }

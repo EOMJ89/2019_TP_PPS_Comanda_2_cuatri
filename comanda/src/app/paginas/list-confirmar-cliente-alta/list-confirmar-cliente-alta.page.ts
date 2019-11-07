@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ClienteKey } from 'src/app/clases/cliente';
+import { ClienteKey, ClienteAConfirmar, ClienteAConfirmarKey } from 'src/app/clases/cliente';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ToastController } from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-list-confirmar-cliente-alta',
@@ -11,44 +12,47 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
   styleUrls: ['./list-confirmar-cliente-alta.page.scss'],
 })
 export class ListConfirmarClienteAltaPage implements OnInit {
-  private clientes = new Array<ClienteKey>();
+  private clientes = new Array<ClienteAConfirmarKey>();
 
   constructor(
     private firestore: AngularFirestore,
     private toastCtrl: ToastController,
-    private sendEmail: EmailComposer
+    private sendEmail: EmailComposer,
+    private authServ: AuthService,
   ) { }
 
   public ngOnInit() {
-    this.traerClientes().subscribe((d: ClienteKey[]) => {
+    this.traerClientes().subscribe((d: ClienteAConfirmarKey[]) => {
       // console.log('Tengo la lista de clientes', d);
-      this.clientes = d.filter(c => {
-        return c.confirmado === false;
-      });
+      this.clientes = d;
     });
   }
 
   public traerClientes() {
-    return this.firestore.collection('clientes').snapshotChanges()
+    return this.firestore.collection('clientes-confirmar').snapshotChanges()
       .pipe(map((f) => {
         return f.map((a) => {
-          const data = a.payload.doc.data() as ClienteKey;
+          const data = a.payload.doc.data() as ClienteAConfirmarKey;
           data.key = a.payload.doc.id;
           return data;
         });
       }));
   }
 
-  private actualizarDoc(db: string, key: string, data: any) {
+  /* private actualizarDoc(db: string, key: string, data: any) {
     return this.firestore.collection(db).doc(key).update(data);
-  }
+  } */
 
-  public confirmarCliente(cliente: ClienteKey, id: string) {
+  public confirmarCliente(cliente: ClienteAConfirmarKey, id: string) {
     // console.log('Confirmo el cliente', cliente, 'con id', id);
-    cliente.confirmado = true;
+    const clave: string = cliente.clave;
     const data: any = cliente as any;
     delete data.key;
-    this.actualizarDoc('clientes', id, data);
+    delete data.clave;
+    this.authServ.RegistrarClienteConfirmado(data, clave)
+      .then(() => {
+        this.removerDoc('clientes-confirmar', id);
+      });
     this.enviarCorreo(cliente.correo, false);
     this.presentToast('Cliente confirmado', 'success');
   }
@@ -59,7 +63,7 @@ export class ListConfirmarClienteAltaPage implements OnInit {
 
   public rechazarCliente(cliente: ClienteKey, id: string) {
     // console.log('Rechazo el cliente', cliente, 'con id', id);
-    this.removerDoc('clientes', id);
+    this.removerDoc('clientes-confirmar', id);
     this.enviarCorreo(cliente.correo, false);
     this.presentToast('Cliente rechazado', 'danger');
   }

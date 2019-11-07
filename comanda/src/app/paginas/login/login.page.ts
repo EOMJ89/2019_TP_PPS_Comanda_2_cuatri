@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Empleado } from '../../clases/empleado';
 import { CajaSonido } from '../../clases/cajaSonido';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
-import { ClienteKey } from 'src/app/clases/cliente';
+import { ClienteKey, ClienteAConfirmarKey } from 'src/app/clases/cliente';
 
 
 @Component({
@@ -25,43 +25,36 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  onSumitLogin() {
-    this.authService.Login(this.correo, this.clave).then(async (res) => {
-      const auxUser = await this.traerUsuarioRegistrado(this.correo);
-      if (auxUser) {
-        // console.log('Hay cliente registrado', auxUser);
-        if (auxUser.confirmado === true) {
-          this.router.navigate(['/inicio']);
-          this.cajaSonido.ReproducirGuardar();
-        } else {
-          this.authService.Logout();
-          alert("El cliente no ha sido confirmado.");
-        }
-      } else {
-        // Es cliente anonimo o es empleado
-        this.router.navigate(['/inicio']);
-        this.cajaSonido.ReproducirGuardar();
-      }
-
-      this.correo = "";
-      this.clave = "";
-    }).catch(err => {
-      alert("los datos son incorrectos o no existen");
-    }
-    );
-  }
-
-  private traerUsuarioRegistrado(correo: string): Promise<false | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', correo).get()
+  private traerUsuarioAConfirmar(correo: string): Promise<false | ClienteAConfirmarKey> {
+    return this.firestore.collection('clientes-confirmar').ref.where('correo', '==', correo).get()
       .then((d: QuerySnapshot<any>) => {
         if (d.empty) {
           return false;
         } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
+          const auxReturn: ClienteAConfirmarKey = d.docs[0].data() as ClienteAConfirmarKey;
           auxReturn.key = d.docs[0].id;
           return auxReturn;
         }
       });
+  }
+
+  async onSumitLogin() {
+    const user = await this.traerUsuarioAConfirmar(this.correo);
+    if (user !== false) {
+      alert("El cliente no ha sido confirmado.");
+      this.correo = "";
+      this.clave = "";
+    } else {
+      this.authService.Login(this.correo, this.clave).then(async (res) => {
+        this.router.navigate(['/inicio']);
+        this.cajaSonido.ReproducirGuardar();
+        this.correo = "";
+        this.clave = "";
+      }).catch(err => {
+        alert("los datos son incorrectos o no existen");
+      }
+      );
+    }
   }
 
   ingresoAuto(tipo: string) {
