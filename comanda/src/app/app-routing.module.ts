@@ -28,8 +28,12 @@ const routes: Routes = [
   { path: 'encuesta-cliente', loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule' },
   { path: 'encuesta-empleado', loadChildren: './paginas/encuesta-empleado/encuesta-empleado.module#EncuestaEmpleadoPageModule' },
   { path: 'encuesta-sup', loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule' },
-  { path: 'modal-encuesta', loadChildren: './paginas/modal-encuesta/modal-encuesta.module#ModalEncuestaPageModule' },  { path: 'qr-ingreso-local', loadChildren: './paginas/qr-ingreso-local/qr-ingreso-local.module#QrIngresoLocalPageModule' },
+  { path: 'modal-encuesta', loadChildren: './paginas/modal-encuesta/modal-encuesta.module#ModalEncuestaPageModule' },
+  { path: 'qr-ingreso-local', loadChildren: './paginas/qr-ingreso-local/qr-ingreso-local.module#QrIngresoLocalPageModule' },
   { path: 'list-confirmar-cliente-mesa', loadChildren: './paginas/list-confirmar-cliente-mesa/list-confirmar-cliente-mesa.module#ListConfirmarClienteMesaPageModule' },
+  { path: 'generar-pedido', loadChildren: './paginas/generar-pedido/generar-pedido.module#GenerarPedidoPageModule' },
+  { path: 'modal-pedido', loadChildren: './paginas/modal-pedido/modal-pedido.module#ModalPedidoPageModule' },  { path: 'juegos', loadChildren: './paginas/juegos/juegos.module#JuegosPageModule' },
+
 
 
 
