@@ -28,8 +28,6 @@ export class QrMesaPage implements OnInit {
   private reservaAMostrar: ReservaKey;
   private listaEspera: ListaEsperaClientesKey[];
   private user: ClienteKey | AnonimoKey;
-  private pedidos: PedidoKey[];
-  private idPedido: string;
 
   constructor(
     private firestore: AngularFirestore,
@@ -54,10 +52,6 @@ export class QrMesaPage implements OnInit {
     this.traerListaEspera().subscribe((d: ListaEsperaClientesKey[]) => {
       // console.log('Tengo la lista de espera', d);
       this.listaEspera = d;
-    });
-
-    this.traerPedidos().subscribe((d: PedidoKey[]) => {
-      this.pedidos = d;
     });
 
     await this.buscarUsuario();
@@ -121,17 +115,6 @@ export class QrMesaPage implements OnInit {
       }));
   }
 
-  public traerPedidos() {
-    return this.firestore.collection('pedidos').snapshotChanges()
-      .pipe(map((f) => {
-        return f.map((a) => {
-          const data = a.payload.doc.data() as PedidoKey;
-          data.key = a.payload.doc.id;
-          return data;
-        });
-      }));
-  }
-
   private obtenerUsername() {
     return this.auth.auth.currentUser.email;
   }
@@ -177,24 +160,24 @@ export class QrMesaPage implements OnInit {
       .then(async (data: BarcodeScanResult) => {
         console.log('La mesa escaneada es ', data);
         const nroMesa: number = parseInt(data.text, 10);
-       // alert(nroMesa);
+        // alert(nroMesa);
         // Si el numero de mesa es valido
         try {
           if (!isNaN(nroMesa)) {
             // Busco la mesa en la db
             this.buscarMesa(nroMesa);
-           // alert(this.mesaAMostrar);
+            // alert(this.mesaAMostrar);
             // Si hay mesa
             if (this.mesaAMostrar !== undefined) {
               // Verifico el tipo de usuario
               if (this.esCliente) {
-               // alert('Es un usuario');
+                // alert('Es un usuario');
                 // Reviso el estado de la mesa
                 if (this.mesaAMostrar.estado === 'libre') {
-                 // alert('La mesa está libre');
+                  // alert('La mesa está libre');
                   // Si la mesa está reservada y ya pasó la hora que figura en la reserva
                   if (this.mesaAMostrar.reservada) {
-                   // alert('La mesa está reservada');
+                    // alert('La mesa está reservada');
                     // Si el cliente escaneando el qr es el de la reserva, se le da la opción de ocupar la mesa
                     // de lo contrario, solo se informa
                     if (this.validarHorario()) {
@@ -213,26 +196,26 @@ export class QrMesaPage implements OnInit {
                         `La mesa se encuentra reservada pero aún no es horario`);
                     }
                   } else { // Le mesa no está reservada o está fuera del horario de reserva
-                   // alert('La mesa NO ESTÁ reservada');
+                    // alert('La mesa NO ESTÁ reservada');
                     const puestoLista: boolean | ListaEsperaClientesKey = this.estaEnLista();
-                   // alert(puestoLista);
+                    // alert(puestoLista);
                     if (puestoLista !== false) { // Si el cliente está en la lista de espera
-                     // alert('puestoLista es un ListaEsperaClientesKey, está en la lista');
+                      // alert('puestoLista es un ListaEsperaClientesKey, está en la lista');
                       if ((puestoLista as ListaEsperaClientesKey).estado === 'esperandoMesa') {
                         this.presentAlertCliente();
                       } else if ((puestoLista as ListaEsperaClientesKey).estado === 'confirmacionMozo') {
                         this.presentAlert('¡Error!', `Usted sigue en lista de espera.`, `Debe esperar a que el mozo lo confirme`);
                       }
                     } else { // Si el cliente no esta en lista de espera
-                     // alert('puestoLista es un false, no está en la lista de espera');
+                      // alert('puestoLista es un false, no está en la lista de espera');
 
                       const puestoMesa: boolean | MesaKey = this.estaEnMesa();
                       if (puestoMesa !== false) { // Valido que el cliente NO esté usando otra mesa
-                       // alert('puestoMesa es un MesaKey, el cliente ya ocupa una mesa');
+                        // alert('puestoMesa es un MesaKey, el cliente ya ocupa una mesa');
                         this.presentAlert('¡Error!', 'Mesa ocupada', 'Usted ya se encuentra ocupando una mesa');
                       } else {
                         // No se encuentra en lista de espera ni tampoco ocupando otra mesa
-                       // alert('puestoMesa es un false, el cliente no ocupa una mesa ni está en la lista');
+                        // alert('puestoMesa es un false, el cliente no ocupa una mesa ni está en la lista');
                         this.presentAlert(
                           '¡Error!',
                           'No se encuentra en lista de espera.',
@@ -241,11 +224,11 @@ export class QrMesaPage implements OnInit {
                     }
                   }
                 } else { // Si la mesa esta ocupada
-                 // alert('La mesa está ocupada');
+                  // alert('La mesa está ocupada');
                   if (this.mesaAMostrar.cliente === this.user.correo) {
                     // Si el que escanea es el que ocupa la mesa
-                   // alert('El cliente es el quien la ocupa');
-                    if (this.verificarPedidoEnPreparacion() !== false) {
+                    // alert('El cliente es el quien la ocupa');
+                    if (this.mesaAMostrar.pedidoActual !== '') {
                       // Si ya hizo un pedido
                       this.presentAlertConPedido();
                     } else { // Si aun no hizo un pedido
@@ -256,7 +239,7 @@ export class QrMesaPage implements OnInit {
                       );
                     }
                   } else { // Si el que escanea no es quien ocupa la mesa
-                   // alert('La mesa está ocupada y no es el cliente quien escanea');
+                    // alert('La mesa está ocupada y no es el cliente quien escanea');
 
                     this.presentAlert(
                       'Estado de mesa',
@@ -265,7 +248,7 @@ export class QrMesaPage implements OnInit {
                   }
                 }
               } else {
-               // alert('El que escanea no es un cliente');
+                // alert('El que escanea no es un cliente');
                 this.presentAlert(
                   'Estado de mesa',
                   `Mesa: ${this.mesaAMostrar.nromesa}`,
@@ -371,7 +354,7 @@ export class QrMesaPage implements OnInit {
     /* this.modalCtrl.create({
       component: ModalPedidoPage,// No tengo la página requerida
       componentProps: {
-        pedido: this.idPedido,
+        pedido: this.mesaAMostrar.pedidoActual,
       }
     }).then(modal => {
       modal.present();
@@ -451,18 +434,6 @@ export class QrMesaPage implements OnInit {
       return m.cliente === this.user.correo;
     }) !== undefined) {
       return true;
-    } else {
-      return false;
-    }
-  }
-
-  private verificarPedidoEnPreparacion(): boolean | PedidoKey {
-    const arr = this.pedidos.find(p => {
-      return p.mesa === this.mesaAMostrar.nromesa && p.estado !== 'cerrado';
-    });
-
-    if (arr !== undefined) {
-      return arr;
     } else {
       return false;
     }

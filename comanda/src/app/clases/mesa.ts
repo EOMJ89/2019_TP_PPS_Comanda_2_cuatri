@@ -5,7 +5,9 @@ export class Mesa {
     public foto: string; // El link de la foto de la mesa en el storage
     public nromesa: number; // El numero de mesa
     public tmesa: string; // El tipo de mesa, valores posibles: 'vip', 'discapacitados', 'normal'
-    public reservada: boolean;
+    public reservada: boolean; // Muestra si la mesa está reservada o no
+    public pedidoActual: string; // Indica el UID de Firestore en firebase del pedido que se está llevando a cabo
+
     constructor() {
         this.cantcomen = 0;
         this.cliente = '';
@@ -14,11 +16,12 @@ export class Mesa {
         this.nromesa = 0;
         this.tmesa = '';
         this.reservada = false;
+        this.pedidoActual = '';
     }
 }
 
 export interface MesaKey {
-    key: string; // Uid de Firestore en Firebase
+    key: string; // UID de Firestore en Firebase
     cantcomen: number;
     cliente: string;
     estado: string;
@@ -26,4 +29,5 @@ export interface MesaKey {
     nromesa: number;
     tmesa: string;
     reservada: boolean;
+    pedidoActual: string;
 }
