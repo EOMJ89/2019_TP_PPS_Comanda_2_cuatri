@@ -30,12 +30,18 @@ const routes: Routes = [
   { path: 'encuesta-sup', loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule' },
   { path: 'modal-encuesta', loadChildren: './paginas/modal-encuesta/modal-encuesta.module#ModalEncuestaPageModule' },
   { path: 'qr-ingreso-local', loadChildren: './paginas/qr-ingreso-local/qr-ingreso-local.module#QrIngresoLocalPageModule' },
-  { path: 'list-confirmar-cliente-mesa', loadChildren: './paginas/list-confirmar-cliente-mesa/list-confirmar-cliente-mesa.module#ListConfirmarClienteMesaPageModule' },
+  {
+    path: 'list-confirmar-cliente-mesa',
+    loadChildren: './paginas/list-confirmar-cliente-mesa/list-confirmar-cliente-mesa.module#ListConfirmarClienteMesaPageModule'
+  },
   { path: 'qr-mesa', loadChildren: './paginas/qr-mesa/qr-mesa.module#QrMesaPageModule' },
-  { path: 'list-confirmar-cliente-alta', loadChildren: './paginas/list-confirmar-cliente-alta/list-confirmar-cliente-alta.module#ListConfirmarClienteAltaPageModule' },
-
-
-
+  {
+    path: 'list-confirmar-cliente-alta',
+    loadChildren: './paginas/list-confirmar-cliente-alta/list-confirmar-cliente-alta.module#ListConfirmarClienteAltaPageModule'
+  },
+  { path: 'generar-pedido', loadChildren: './paginas/generar-pedido/generar-pedido.module#GenerarPedidoPageModule' },
+  { path: 'modal-pedido', loadChildren: './paginas/modal-pedido/modal-pedido.module#ModalPedidoPageModule' },
+  { path: 'juegos', loadChildren: './paginas/juegos/juegos.module#JuegosPageModule' },
 ];
 
 @NgModule({

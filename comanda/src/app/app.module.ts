@@ -29,9 +29,14 @@ import { LoginPageModule } from './paginas/login/login.module';
 import { RegistroEmpleadoPageModule } from './paginas/registro-empleado/registro-empleado.module';
 import { RegistroClientePageModule } from './paginas/registro-cliente/registro-cliente.module';
 import { ModalEncuestaPageModule } from './paginas/modal-encuesta/modal-encuesta.module';
+import { GenerarPedidoPage } from './paginas/generar-pedido/generar-pedido.page';
+import { ModalPedidoPage } from './paginas/modal-pedido/modal-pedido.page';
 
 // Servicios
 import { AuthService } from './servicios/auth.service';
+import { FirebaseService } from './servicios/firebase.service';
+
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [AppComponent
@@ -41,13 +46,17 @@ import { AuthService } from './servicios/auth.service';
     IonicModule.forRoot(),
     AppRoutingModule,
     FormsModule,
-    // paginas
+    // Paginas
     InicioPageModule,
     LoginPageModule,
     RegistroEmpleadoPageModule,
     RegistroClientePageModule,
     // Modal para encuesta de Supervisor
     ModalEncuestaPageModule,
+    // Pedido
+    // GenerarPedidoPage,
+    // ModalPedidoPage,
+
     // AngularFire
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
@@ -58,8 +67,10 @@ import { AuthService } from './servicios/auth.service';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    HttpModule,
     // Servicios
     AuthService,
+    FirebaseService,
     // Modulos Extra
     Camera,
     BarcodeScanner,
