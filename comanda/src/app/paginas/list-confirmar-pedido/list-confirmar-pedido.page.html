@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Confirmar pedido
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background-page">
+  <ion-card *ngIf="this.pedidos.length > 0" class="card-background">
+    <ion-card-content>
+      <ion-item class="ion-no-padding transparent-item" *ngFor="let pedido of
+        pedidos">
+        Mesa {{pedido.mesa}}
+        <div slot="end">
+          <ion-button size="small" color="primary"
+            (click)="aceptarPedido(pedido.key)">
+            <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+          </ion-button>
+          <ion-button size="small" color="danger"
+            (click)="rechazarPedido(pedido.key, pedido.mesa)">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="this.pedidos.length == 0" class="card-background">
+    <ion-card-content>
+      No hay pedidos para confirmar.
+    </ion-card-content>
+  </ion-card>
+</ion-content>

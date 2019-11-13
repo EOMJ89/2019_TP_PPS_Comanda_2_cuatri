@@ -41,7 +41,8 @@ const routes: Routes = [
   },
   { path: 'generar-pedido', loadChildren: './paginas/generar-pedido/generar-pedido.module#GenerarPedidoPageModule' },
   { path: 'modal-pedido', loadChildren: './paginas/modal-pedido/modal-pedido.module#ModalPedidoPageModule' },
-  { path: 'juegos', loadChildren: './paginas/juegos/juegos.module#JuegosPageModule' },
+  { path: 'juegos', loadChildren: './paginas/juegos/juegos.module#JuegosPageModule' },  { path: 'list-confirmar-pedido', loadChildren: './paginas/list-confirmar-pedido/list-confirmar-pedido.module#ListConfirmarPedidoPageModule' },
+
 ];
 
 @NgModule({
