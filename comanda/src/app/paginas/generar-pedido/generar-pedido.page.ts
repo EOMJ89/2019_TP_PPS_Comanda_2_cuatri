@@ -130,7 +130,7 @@ export class GenerarPedidoPage implements OnInit {
       }
     }
 
-   // console.log(this.user.correo);
+    // console.log(this.user.correo);
   }
 
   async ngOnInit() {
@@ -156,7 +156,7 @@ export class GenerarPedidoPage implements OnInit {
   sumarProducto(key: string) {
     const producto = this.productos.find(prod => prod.key === key);
     producto.cantidad += 1;
-   // console.log('Cantidad de productos', producto.cantidad);
+    // console.log('Cantidad de productos', producto.cantidad);
 
     const productosPedidos = this.productos.filter(prod => prod.cantidad > 0);
     this.totalPedido = this.calcularPrecioTotal(productosPedidos);
@@ -231,6 +231,8 @@ export class GenerarPedidoPage implements OnInit {
   }
 
   public verPedido(pedido: string) {
+    this.router.navigate(['inicio']);
+
     // alert('La página de pedido no está implementada');
     this.modalCtrl.create({
       component: ModalPedidoPage,
