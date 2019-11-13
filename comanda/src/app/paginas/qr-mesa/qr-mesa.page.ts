@@ -12,6 +12,7 @@ import { ListaEsperaClientesKey } from 'src/app/clases/lista-espera-clientes';
 import { PedidoKey } from 'src/app/clases/pedido';
 import { Router } from '@angular/router';
 import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
+import { EncuestaClientePage } from '../encuesta-cliente/encuesta-cliente.page';
 
 @Component({
   selector: 'app-qr-mesa',
@@ -163,96 +164,7 @@ export class QrMesaPage implements OnInit {
         const nroMesa: number = parseInt(data.text, 10);
         // alert(nroMesa); // Si el numero de mesa es valido
         try {
-          if (!isNaN(nroMesa)) {
-            // Busco la mesa en la db
-            this.buscarMesa(nroMesa);
-            // alert(this.mesaAMostrar); // Si hay mesa
-            if (this.mesaAMostrar !== undefined) {
-              // Verifico el tipo de usuario
-              if (this.esCliente) {
-                // alert('Es un usuario'); // Reviso el estado de la mesa
-                if (this.mesaAMostrar.estado === 'libre') {
-                  // alert('La mesa está libre'); // Si la mesa está reservada y ya pasó la hora que figura en la reserva
-                  if (this.mesaAMostrar.reservada) {
-                    // alert('La mesa está reservada');
-                    // Si el cliente escaneando el qr es el de la reserva, se le da la opción de ocupar la mesa
-                    // de lo contrario, solo se informa
-                    if (this.validarHorario()) {
-                      if (this.reservaAMostrar.correo === this.user.correo) {
-                        this.presentAlertClienteConReserva();
-                      } else {
-                        this.presentAlert(
-                          'Estado de mesa',
-                          `Mesa: ${this.mesaAMostrar.nromesa}`,
-                          `La mesa se encuentra reservada`);
-                      }
-                    } else {
-                      this.presentAlert(
-                        'Estado de mesa',
-                        `Mesa: ${this.mesaAMostrar.nromesa}`,
-                        `La mesa se encuentra reservada pero aún no es horario`);
-                    }
-                  } else {
-                    // alert('La mesa NO ESTÁ reservada'); // La mesa no está reservada o está fuera del horario de reserva 
-                    const puestoLista: boolean | ListaEsperaClientesKey = this.estaEnLista();
-                    // alert(puestoLista);
-                    if (puestoLista !== false) {
-                      // alert('puestoLista es un ListaEsperaClientesKey, está en la lista'); // Si el cliente está en la lista de espera
-                      if ((puestoLista as ListaEsperaClientesKey).estado === 'esperandoMesa') {
-                        this.presentAlertCliente();
-                      } else if ((puestoLista as ListaEsperaClientesKey).estado === 'confirmacionMozo') {
-                        this.presentAlert('¡Error!', `Usted sigue en lista de espera.`, `Debe esperar a que el mozo lo confirme`);
-                      }
-                    } else {
-                      // alert('puestoLista es un false, no está en la lista de espera'); // Si el cliente no esta en lista de espera
-                      const puestoMesa: boolean | MesaKey = this.estaEnMesa();
-                      if (puestoMesa !== false) {
-                        // alert('puestoMesa es un MesaKey, el cliente ya ocupa mesa'); // Valido que el cliente NO esté usando otra mesa
-                        this.presentAlert('¡Error!', 'Mesa ocupada', 'Usted ya se encuentra ocupando una mesa');
-                      } else {
-                        // alert('puestoMesa es un false, el cliente no ocupa una mesa ni está en la lista'); // No está en lista ni en mesa
-                        this.presentAlert(
-                          '¡Error!',
-                          'No se encuentra en lista de espera.',
-                          'Debe escanear el QR de ingreso al local.');
-                      }
-                    }
-                  }
-                } else {
-                  // alert('La mesa está ocupada'); // Si la mesa esta ocupada
-                  if (this.mesaAMostrar.cliente === this.user.correo) {
-                    // alert('El cliente es el quien la ocupa'); // Si el que escanea es el que ocupa la mesa
-                    if (this.mesaAMostrar.pedidoActual !== '') {
-                      // Si ya hizo un pedido
-                      this.presentAlertConPedido();
-                    } else { // Si aun no hizo un pedido
-                      this.presentAlert(
-                        `Mesa: ${this.mesaAMostrar.nromesa}`,
-                        'Mesa sin pedido',
-                        'Todavía no ha realizado ningún pedido'
-                      );
-                    }
-                  } else {
-                    // alert('La mesa está ocupada y no es el cliente quien escanea');  // Si el que escanea no es quien ocupa la mesa
-                    this.presentAlert(
-                      'Estado de mesa',
-                      `Mesa: ${this.mesaAMostrar.nromesa}`,
-                      `La mesa se encuentra ${this.mesaAMostrar.estado}`);
-                  }
-                }
-              } else {
-                // alert('El que escanea no es un cliente');
-                this.presentAlert(
-                  'Estado de mesa',
-                  `Mesa: ${this.mesaAMostrar.nromesa}`,
-                  `La mesa se encuentra ${this.mesaAMostrar.estado}`);
-              }
-            } else {
-              this.presentAlert('¡Error!', 'Error en la Mesa.', 'El número de la Mesa no es correcto.');
-            }
-          } else {
-            this.presentAlert('¡Error!', 'Error en la Mesa.', 'El número de la Mesa no es correcto.');
-          }
+          this.manejarQr(nroMesa);
         } catch (err) {
           console.log('Error en el try', err);
           this.presentAlert('¡Error!', 'Error al leer el código.', 'Error desconocido.');
@@ -260,7 +172,101 @@ export class QrMesaPage implements OnInit {
       }).catch(err => {
         console.log('Error al escanear el qr', err);
         this.presentAlert('¡Error!', 'Error al leer el código.', 'Error desconocido.');
+        // this.manejarQr(6);
       });
+  }
+
+  private manejarQr(nroMesa: number) {
+    if (!isNaN(nroMesa)) {
+      // Busco la mesa en la db
+      this.buscarMesa(nroMesa);
+      // alert(this.mesaAMostrar); // Si hay mesa
+      if (this.mesaAMostrar !== undefined) {
+        // Verifico el tipo de usuario
+        if (this.esCliente) {
+          // alert('Es un usuario'); // Reviso el estado de la mesa
+          if (this.mesaAMostrar.estado === 'libre') {
+            // alert('La mesa está libre'); // Si la mesa está reservada y ya pasó la hora que figura en la reserva
+            if (this.mesaAMostrar.reservada) {
+              // alert('La mesa está reservada');
+              // Si el cliente escaneando el qr es el de la reserva, se le da la opción de ocupar la mesa
+              // de lo contrario, solo se informa
+              if (this.validarHorario()) {
+                if (this.reservaAMostrar.correo === this.user.correo) {
+                  this.presentAlertClienteConReserva();
+                } else {
+                  this.presentAlert(
+                    'Estado de mesa',
+                    `Mesa: ${this.mesaAMostrar.nromesa}`,
+                    `La mesa se encuentra reservada`);
+                }
+              } else {
+                this.presentAlert(
+                  'Estado de mesa',
+                  `Mesa: ${this.mesaAMostrar.nromesa}`,
+                  `La mesa se encuentra reservada pero aún no es horario`);
+              }
+            } else {
+              // alert('La mesa NO ESTÁ reservada'); // La mesa no está reservada o está fuera del horario de reserva
+              const puestoLista: boolean | ListaEsperaClientesKey = this.estaEnLista();
+              // alert(puestoLista);
+              if (puestoLista !== false) {
+                // alert('puestoLista es un ListaEsperaClientesKey, está en la lista'); // Si el cliente está en la lista de espera
+                if ((puestoLista as ListaEsperaClientesKey).estado === 'esperandoMesa') {
+                  this.presentAlertCliente();
+                } else if ((puestoLista as ListaEsperaClientesKey).estado === 'confirmacionMozo') {
+                  this.presentAlert('¡Error!', `Usted sigue en lista de espera.`, `Debe esperar a que el mozo lo confirme`);
+                }
+              } else {
+                // alert('puestoLista es un false, no está en la lista de espera'); // Si el cliente no esta en lista de espera
+                const puestoMesa: boolean | MesaKey = this.estaEnMesa();
+                if (puestoMesa !== false) {
+                  // alert('puestoMesa es un MesaKey, el cliente ya ocupa mesa'); // Valido que el cliente NO esté usando otra mesa
+                  this.presentAlert('¡Error!', 'Mesa ocupada', 'Usted ya se encuentra ocupando una mesa');
+                } else {
+                  // alert('puestoMesa es un false, el cliente no ocupa una mesa ni está en la lista'); // No está en lista ni en mesa
+                  this.presentAlert(
+                    '¡Error!',
+                    'No se encuentra en lista de espera.',
+                    'Debe escanear el QR de ingreso al local.');
+                }
+              }
+            }
+          } else {
+            // alert('La mesa está ocupada'); // Si la mesa esta ocupada
+            if (this.mesaAMostrar.cliente === this.user.correo) {
+              // alert('El cliente es el quien la ocupa'); // Si el que escanea es el que ocupa la mesa
+              if (this.mesaAMostrar.pedidoActual !== '') {
+                // Si ya hizo un pedido
+                this.presentAlertConPedido();
+              } else { // Si aun no hizo un pedido
+                this.presentAlert(
+                  `Mesa: ${this.mesaAMostrar.nromesa}`,
+                  'Mesa sin pedido',
+                  'Todavía no ha realizado ningún pedido'
+                );
+              }
+            } else {
+              // alert('La mesa está ocupada y no es el cliente quien escanea');  // Si el que escanea no es quien ocupa la mesa
+              this.presentAlert(
+                'Estado de mesa',
+                `Mesa: ${this.mesaAMostrar.nromesa}`,
+                `La mesa se encuentra ${this.mesaAMostrar.estado}`);
+            }
+          }
+        } else {
+          // alert('El que escanea no es un cliente');
+          this.presentAlert(
+            'Estado de mesa',
+            `Mesa: ${this.mesaAMostrar.nromesa}`,
+            `La mesa se encuentra ${this.mesaAMostrar.estado}`);
+        }
+      } else {
+        this.presentAlert('¡Error!', 'Error en la Mesa.', 'El número de la Mesa no es correcto.');
+      }
+    } else {
+      this.presentAlert('¡Error!', 'Error en la Mesa.', 'El número de la Mesa no es correcto.');
+    }
   }
 
   public presentAlert(header: string, subHeader: string, message: string) {
@@ -329,33 +335,41 @@ export class QrMesaPage implements OnInit {
         {
           text: 'Pedido',
           handler: () => {
-            this.verPedido();
+            this.verPedido(this.mesaAMostrar.pedidoActual);
           }
         },
         {
           text: 'Encuesta',
           handler: () => {
-            this.verEncuesta();
+            this.verEncuesta(this.mesaAMostrar.pedidoActual);
           }
         }
       ]
     }).then(alert => { alert.present(); });
   }
 
-  public verPedido() {
+  public verPedido(pedido: string) {
     // alert('La página de pedido no está implementada');
     this.modalCtrl.create({
       component: ModalPedidoPage,
       componentProps: {
-        pedido: this.mesaAMostrar !== undefined ? this.mesaAMostrar.pedidoActual : undefined,
+        pedido,
       }
     }).then(modal => {
       modal.present();
     });
   }
 
-  public verEncuesta() {
-    this.router.navigate(['/encuesta-cliente']);
+  public verEncuesta(pedido) {
+    // Implementar verificación por si ya hay encuesta
+    this.modalCtrl.create({
+      component: EncuestaClientePage,
+      componentProps: {
+        pedido,
+      }
+    }).then(modal => {
+      modal.present();
+    });
   }
 
   private removerDoc(db: string, key: string) {

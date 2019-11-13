@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentSnapshot } from '@angular/fire/firestore';
 import { PedidoKey } from 'src/app/clases/pedido';
 import { PedidoDetalleKey } from 'src/app/clases/pedidoDetalle';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-modal-pedido',
@@ -10,9 +11,10 @@ import { PedidoDetalleKey } from 'src/app/clases/pedidoDetalle';
   styleUrls: ['./modal-pedido.page.scss'],
 })
 export class ModalPedidoPage implements OnInit {
-  @Input() pedido: string;
+  // tslint:disable-next-line: no-input-rename
+  @Input('pedido') public pedido: string;
   pedidoActual: PedidoKey;
-  pedidoDetalle: PedidoDetalleKey[] = [];
+  pedidoDetalle: PedidoDetalleKey[] = new Array<PedidoDetalleKey>();
 
   constructor(
     private firestore: AngularFirestore,
@@ -20,10 +22,8 @@ export class ModalPedidoPage implements OnInit {
   }
 
   ngOnInit() {
-    if (this.pedido !== undefined) {
-      this.traerPedido();
-      this.traerPedidoDetalle();
-    }
+    this.traerPedido();
+    this.traerPedidoDetalle();
   }
 
   public traerPedido() {
@@ -36,18 +36,19 @@ export class ModalPedidoPage implements OnInit {
   }
 
   public traerPedidoDetalle() {
-    this.firestore.collection('pedidoDetalle').ref.where('id_pedido', '==', this.pedido).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (!d.empty) {
-          const detallesArr = new Array<PedidoDetalleKey>();
-          for (const da of d.docs) {
-            const det = da.data() as PedidoDetalleKey;
-            det.key = da.id;
-
-            detallesArr.unshift(det);
-          }
-        }
+    this.firestore.collection('pedidoDetalle').snapshotChanges().pipe(map((f) => {
+      const fArr: Array<PedidoDetalleKey> = f.map((a) => {
+        const data = a.payload.doc.data() as PedidoDetalleKey;
+        data.key = a.payload.doc.id;
+        return data;
       });
+
+      return fArr.filter((d) => {
+        return d.id_pedido === this.pedido;
+      });
+    })).subscribe((da: PedidoDetalleKey[]) => {
+      this.pedidoDetalle = da;
+    });
   }
 
   public async cerrar() {

@@ -36,6 +36,7 @@ import { AuthService } from './servicios/auth.service';
 import { FirebaseService } from './servicios/firebase.service';
 
 import { HttpModule } from '@angular/http';
+import { EncuestaClientePageModule } from './paginas/encuesta-cliente/encuesta-cliente.module';
 
 @NgModule({
   declarations: [AppComponent
@@ -52,6 +53,7 @@ import { HttpModule } from '@angular/http';
     RegistroClientePageModule,
     // Modal para encuesta de Supervisor
     ModalEncuestaPageModule,
+    EncuestaClientePageModule,
     // Pedido
     // GenerarPedidoPage,
     ModalPedidoPageModule,

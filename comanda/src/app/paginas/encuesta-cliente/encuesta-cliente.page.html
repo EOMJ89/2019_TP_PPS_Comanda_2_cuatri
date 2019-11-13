@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="inicio"></ion-back-button>
+      <ion-button (click)="this.cerrarModal()">
+        <ion-icon name="arrow-round-back" slot="icon-only"></ion-icon>
+      </ion-button>
+      <!-- <ion-back-button defaultHref="inicio"></ion-back-button> -->
     </ion-buttons>
     <ion-title>
       Encuesta <!-- Cliente -->

@@ -7,15 +7,16 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="this.pedidoActual != undefined">
-    <ion-item *ngFor="let producto of pedidoDetalle">
-      ({{ producto.cantidad }}) {{ producto.producto }} - {{ (producto.cantidad
-      * producto.precio) | currency }}
-      <div class="item-note" slot="end">
-        {{ producto.estado }}
-      </div>
-    </ion-item>
-  </ion-list>
+  <ion-card *ngIf="this.pedidoActual != undefined" class="card-background">
+    <ion-card-content>
+      <ion-item class="transparent-item ion-no-padding"
+        *ngFor="let producto of pedidoDetalle">
+        ({{ producto.cantidad }}) {{ producto.producto }} - {{
+        (producto.cantidad * producto.precio) | currency }}
+        <div slot="end">{{ producto.estado }}</div>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
   <ion-card *ngIf="this.pedidoActual == undefined">
     <ion-card-content>
       Usted aún no ha realizado ningún pedido.

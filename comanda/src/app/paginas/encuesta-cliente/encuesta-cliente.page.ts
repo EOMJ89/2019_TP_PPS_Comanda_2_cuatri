@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageReference, AngularFireStorage } from '@angular/fire/storage';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./encuesta-cliente.page.scss'],
 })
 export class EncuestaClientePage implements OnInit {
+  // tslint:disable-next-line: no-input-rename
+  @Input('pedido') public pedido: string;
   private formEncuesta: FormGroup;
   private fotos: Array<string>;
 
@@ -23,7 +25,8 @@ export class EncuestaClientePage implements OnInit {
     private alertCtrl: AlertController,
     private storage: AngularFireStorage,
     private firestore: AngularFirestore,
-    private router: Router) { }
+    /* private router: Router, */
+    private modalCtrl: ModalController) { }
 
   ngOnInit() {
     this.formEncuesta = new FormGroup({
@@ -86,7 +89,12 @@ export class EncuestaClientePage implements OnInit {
     await alert.present();
     // clear the previous photo data in the variable
     this.clearInputs();
-    this.router.navigate(['/qr-mesa']);
+    this.cerrarModal();
+    // this.router.navigate(['/qr-mesa']);
+  }
+
+  private cerrarModal() {
+    this.modalCtrl.dismiss();
   }
 
   private clearInputs() {
@@ -165,6 +173,7 @@ export class EncuestaClientePage implements OnInit {
       usuario: this.obtenerUsername(),
       fotos: new Array<string>(),
       fecha: dateA.getTime(),
+      pedido: this.pedido,
     };
     let contador = 0;
     let errores = 0;

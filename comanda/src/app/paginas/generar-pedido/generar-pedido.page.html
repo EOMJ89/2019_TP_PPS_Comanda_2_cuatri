@@ -119,7 +119,7 @@
 
 <ion-footer>
   <ion-button color="dark" expand="block"
-    [disabled]="this.mesaDelPedido.pedidoActual != ''"
+    [disabled]="this.mesaDelPedido !== null && this.mesaDelPedido.pedidoActual != ''"
     (click)="confirmarPedido()">
     Realizar Pedido</ion-button>
   <!--  <ion-button color="dark" expand="block" (click)="muestraModal()">Ver pedido</ion-button> -->

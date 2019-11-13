@@ -24,7 +24,7 @@ import { PedidoDetalle } from 'src/app/clases/pedidoDetalle'; */
 export class GenerarPedidoPage implements OnInit {
   // tslint:disable-next-line: variable-name
   private productos: ProductoKey[];
-  private mesaDelPedido: MesaKey;
+  private mesaDelPedido: MesaKey = null;
   private productosCocina: ProductoKey[];
   private productosBartender: ProductoKey[];
   private totalPedido = 0;
@@ -219,19 +219,19 @@ export class GenerarPedidoPage implements OnInit {
             this.mesaDelPedido.pedidoActual = doc.id;
             this.actualizarMesa();
             await this.hacerPedidoDetalle(productosPedidos, doc.id);
+            this.verPedido(doc.id);
           });
         this.presentToast('Pedido generado.');
-        this.verPedido();
       }
     }
   }
 
-  public verPedido() {
+  public verPedido(pedido: string) {
     // alert('La página de pedido no está implementada');
     this.modalCtrl.create({
       component: ModalPedidoPage,
       componentProps: {
-        pedido: this.mesaDelPedido !== undefined ? this.mesaDelPedido.pedidoActual : undefined,
+        pedido
       }
     }).then(modal => {
       modal.present();
@@ -266,10 +266,12 @@ export class GenerarPedidoPage implements OnInit {
     // console.log("mesas");
     this.firestore.collection('mesas').ref.where('cliente', '==', correo).get()
       .then((d: QuerySnapshot<any>) => {
-        console.log(d);
+        // console.log(d);
         if (!d.empty) {
           this.mesaDelPedido = d.docs[0].data() as MesaKey;
           this.mesaDelPedido.key = d.docs[0].id;
+        } else {
+          this.mesaDelPedido = null;
         }
       });
   }
