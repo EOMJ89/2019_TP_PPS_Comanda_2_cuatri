@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   declarations: [QrMesaPage]
 })
-export class QrMesaPageModule {}
+export class QrMesaPageModule { }

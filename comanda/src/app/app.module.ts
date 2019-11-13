@@ -29,8 +29,7 @@ import { LoginPageModule } from './paginas/login/login.module';
 import { RegistroEmpleadoPageModule } from './paginas/registro-empleado/registro-empleado.module';
 import { RegistroClientePageModule } from './paginas/registro-cliente/registro-cliente.module';
 import { ModalEncuestaPageModule } from './paginas/modal-encuesta/modal-encuesta.module';
-import { GenerarPedidoPage } from './paginas/generar-pedido/generar-pedido.page';
-import { ModalPedidoPage } from './paginas/modal-pedido/modal-pedido.page';
+import { ModalPedidoPageModule } from './paginas/modal-pedido/modal-pedido.module';
 
 // Servicios
 import { AuthService } from './servicios/auth.service';
@@ -55,7 +54,7 @@ import { HttpModule } from '@angular/http';
     ModalEncuestaPageModule,
     // Pedido
     // GenerarPedidoPage,
-    // ModalPedidoPage,
+    ModalPedidoPageModule,
 
     // AngularFire
     AngularFireModule.initializeApp(environment.firebaseConfig),
