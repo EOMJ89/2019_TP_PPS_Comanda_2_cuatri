@@ -6,48 +6,35 @@
     <ion-title>
       Realizar Pedido
     </ion-title>
-    <!--  <ion-buttons slot="end">
-      <ion-icon slot="icon-only" name=""></ion-icon>
-      <ion-button color="light" size="small" (click)="pedir()">Pedir</ion-button>
-    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!--CLIENTE-->
-
-  <ion-spinner name="lines" *ngIf="spinner"></ion-spinner>
-
-  <div class="category-block" *ngIf="!spinner">
-
-    <ion-row no-padding class="category-banner-cocinero">
-      <ion-col text-left button tappable (click)="true" align-self-center>
-        <b class="tituloClase">COCINA</b>
-      </ion-col>
-    </ion-row>
-
-    <ion-slides [options]="sliderConfig">
-      <ion-slide *ngFor="let producto of productosCocina">
-        <div>
-          <ion-card>
+<ion-content>
+  <div class="width-100">
+    <div>
+      <div class="width-100 center-horizontal center-vertical title-div">
+        COCINA
+      </div>
+      <ion-slides>
+        <ion-slide *ngFor="let producto of productosCocina">
+          <ion-card class="card-background">
             <ion-card-header>
               <ion-card-title>
-                <b class="" color="white">{{ producto.nombre }}</b>
-                <b class="">{{ producto.descripcion }}</b>
+                <b>{{ producto.nombre }}</b><br>
+                <b>{{ producto.descripcion }}</b>
               </ion-card-title>
               <ion-card-subtitle>
-                <h1 class=""><b>Precio: {{ producto.precio | currency}}</b></h1>
+                <h1>
+                  <b>Precio: {{ producto.precio | currency}}</b>
+                </h1>
               </ion-card-subtitle>
-
               <ion-card-content>
                 <img [src]="producto.fotos[0]">
-                <br>
-                <h6>
-                  <b class="cantidadPedido">
+                <h3>
+                  <p>
                     Cant. en Pedido: {{producto.cantidad}}
-                  </b>
-                </h6>
-
+                  </p>
+                </h3>
                 <ion-button (click)="sumarProducto(producto.key)"
                   color="primary">
                   <ion-icon name="add-circle" slot="start"></ion-icon>Agregar
@@ -59,38 +46,34 @@
               </ion-card-content>
             </ion-card-header>
           </ion-card>
-        </div>
-      </ion-slide>
-    </ion-slides>
+        </ion-slide>
+      </ion-slides>
+    </div>
 
-    <ion-row no-padding class="category-banner-bartender">
-      <ion-col text-left button tappable (click)="true" align-self-center>
-        <b class="tituloClase">BEBIDAS</b>
-      </ion-col>
-    </ion-row>
-
-    <ion-slides [options]="sliderConfig">
-      <ion-slide *ngFor="let producto of productosBartender">
-        <div>
-          <ion-card>
+    <div>
+      <div class="width-100 center-horizontal center-vertical title-div">
+        BEBIDAS
+      </div>
+      <ion-slides>
+        <ion-slide *ngFor="let producto of productosBartender">
+          <ion-card class="card-background">
             <ion-card-header>
               <ion-card-title>
-                <b class="" color="white">{{ producto.nombre }}</b>
-                <b class="">{{ producto.descripcion }}</b>
+                <b>{{ producto.nombre }}</b><br>
+                <b>{{ producto.descripcion }}</b>
               </ion-card-title>
               <ion-card-subtitle>
-                <h1 class=""><b>Precio: {{ producto.precio | currency}}</b></h1>
+                <h1>
+                  <b>Precio: {{ producto.precio | currency}}</b>
+                </h1>
               </ion-card-subtitle>
-
               <ion-card-content>
                 <img [src]="producto.fotos[0]">
-                <br>
-                <h6>
-                  <b class="cantidadPedido">
+                <h3>
+                  <p>
                     Cant. en Pedido: {{producto.cantidad}}
-                  </b>
-                </h6>
-
+                  </p>
+                </h3>
                 <ion-button (click)="sumarProducto(producto.key)"
                   color="primary">
                   <ion-icon name="add-circle" slot="start"></ion-icon>Agregar
@@ -102,11 +85,50 @@
               </ion-card-content>
             </ion-card-header>
           </ion-card>
-        </div>
-      </ion-slide>
-    </ion-slides>
+        </ion-slide>
+      </ion-slides>
+    </div>
 
+    <div>
+      <div class="width-100 center-horizontal center-vertical title-div">
+        POSTRES
+      </div>
+      <ion-slides>
+        <ion-slide *ngFor="let producto of productosCandybar">
+          <ion-card class="card-background">
+            <ion-card-header>
+              <ion-card-title>
+                <b>{{ producto.nombre }}</b><br>
+                <b>{{ producto.descripcion }}</b>
+              </ion-card-title>
+              <ion-card-subtitle>
+                <h1>
+                  <b>Precio: {{ producto.precio | currency}}</b>
+                </h1>
+              </ion-card-subtitle>
+              <ion-card-content>
+                <img [src]="producto.fotos[0]">
+                <h3>
+                  <p>
+                    Cant. en Pedido: {{producto.cantidad}}
+                  </p>
+                </h3>
+                <ion-button (click)="sumarProducto(producto.key)"
+                  color="primary">
+                  <ion-icon name="add-circle" slot="start"></ion-icon>Agregar
+                </ion-button>
+                <ion-button (click)="restarProducto(producto.key)"
+                  [disabled]="producto.cantidad == 0" color="primary">
+                  <ion-icon name="remove-circle" slot="start"></ion-icon>Restar
+                </ion-button>
+              </ion-card-content>
+            </ion-card-header>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </div>
   </div>
+
   <ion-fab *ngIf="!spinner" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="secondary" *ngIf="totalPedido==0">
       <b>TOTAL</b>
@@ -118,9 +140,8 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button color="dark" expand="block"
-    [disabled]="this.mesaDelPedido !== null && this.mesaDelPedido.pedidoActual != ''"
-    (click)="confirmarPedido()">
-    Realizar Pedido</ion-button>
-  <!--  <ion-button color="dark" expand="block" (click)="muestraModal()">Ver pedido</ion-button> -->
+  <ion-button color="dark" expand="block" (click)="confirmarPedido()"
+    [disabled]="this.mesaDelPedido !== null &&
+    this.mesaDelPedido.pedidoActual != ''">Realizar Pedido
+  </ion-button>
 </ion-footer>

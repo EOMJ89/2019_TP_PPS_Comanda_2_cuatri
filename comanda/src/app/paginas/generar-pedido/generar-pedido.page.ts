@@ -27,6 +27,7 @@ export class GenerarPedidoPage implements OnInit {
   private mesaDelPedido: MesaKey = null;
   private productosCocina: ProductoKey[];
   private productosBartender: ProductoKey[];
+  private productosCandybar: ProductoKey[];
   private totalPedido = 0;
   private user: ClienteKey | AnonimoKey;
 
@@ -65,6 +66,9 @@ export class GenerarPedidoPage implements OnInit {
       });
       this.productosCocina = data.filter((f: ProductoKey) => {
         return f.quienPuedever === 'cocinero';
+      });
+      this.productosCandybar = data.filter((f: ProductoKey) => {
+        return f.quienPuedever === 'candybar';
       });
 
       this.productos = data;
@@ -126,7 +130,7 @@ export class GenerarPedidoPage implements OnInit {
       }
     }
 
-    console.log(this.user.correo);
+   // console.log(this.user.correo);
   }
 
   async ngOnInit() {
@@ -152,7 +156,7 @@ export class GenerarPedidoPage implements OnInit {
   sumarProducto(key: string) {
     const producto = this.productos.find(prod => prod.key === key);
     producto.cantidad += 1;
-    console.log('Cantidad de productos', producto.cantidad);
+   // console.log('Cantidad de productos', producto.cantidad);
 
     const productosPedidos = this.productos.filter(prod => prod.cantidad > 0);
     this.totalPedido = this.calcularPrecioTotal(productosPedidos);
@@ -277,11 +281,11 @@ export class GenerarPedidoPage implements OnInit {
   }
 
   public obtenerPedidoMensaje(): string {
-    let auxReturn = 'Pedido\n<br>';
+    let auxReturn = '';
     const prodPedidos = this.productos.filter(prod => prod.cantidad > 0);
 
     for (const p of prodPedidos) {
-      auxReturn += `Producto: ${p.nombre} - Cant. ${p.cantidad}.\n<br>`;
+      auxReturn += `${p.cantidad} ${p.nombre}<br>`;
     }
 
     return auxReturn;
