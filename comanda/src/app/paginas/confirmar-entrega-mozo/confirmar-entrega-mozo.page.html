@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Entregar Pedidos <!-- Mozo -->
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Pedidos -->
+  <ion-card class="card-background" *ngIf="this.pedidos.length> 0">
+    <ion-card-content>
+      <div *ngFor="let pedido of this.pedidos">
+        <ion-item class="transparent-item ion-no-padding">
+          {{ pedido.cliente }}<br>{{ pedido.mesa }}
+          <ion-button slot="end" (click)="confirmarEntrega(pedido.key)">Confirmar</ion-button>
+        </ion-item>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- En caso de no existir pedidos -->
+  <ion-card class="card-background"
+    *ngIf="this.pedidos.length == 0">
+    <ion-card-content>
+      Aún no existen pedidos a entregar.
+    </ion-card-content>
+  </ion-card>
+</ion-content>

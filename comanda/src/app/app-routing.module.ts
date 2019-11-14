@@ -44,6 +44,7 @@ const routes: Routes = [
   { path: 'juegos', loadChildren: './paginas/juegos/juegos.module#JuegosPageModule' },  { path: 'list-confirmar-pedido', loadChildren: './paginas/list-confirmar-pedido/list-confirmar-pedido.module#ListConfirmarPedidoPageModule' },
   { path: 'confirmar-entrega', loadChildren: './paginas/confirmar-entrega/confirmar-entrega.module#ConfirmarEntregaPageModule' },
   { path: 'confirmar-cierre-mesa', loadChildren: './paginas/confirmar-cierre-mesa/confirmar-cierre-mesa.module#ConfirmarCierreMesaPageModule' },
+  { path: 'confirmar-entrega-mozo', loadChildren: './paginas/confirmar-entrega-mozo/confirmar-entrega-mozo.module#ConfirmarEntregaMozoPageModule' },
 
 ];
 

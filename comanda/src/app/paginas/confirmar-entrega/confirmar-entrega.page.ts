@@ -92,7 +92,7 @@ export class ConfirmarEntregaPage implements OnInit {
     // Obtengo el cliente activo en la base de clientes registrados
     const auxUser = await this.traerUsuarioRegistrado()
       .catch(err => {
-        alert(err);
+        // alert(err);
       });
 
     // Si el cliente está registrado, entonces prosigo con la operación
@@ -103,7 +103,7 @@ export class ConfirmarEntregaPage implements OnInit {
       // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
       const auxUserAnon = await this.traerUsuarioAnonimo()
         .catch(err => {
-          alert(err);
+          // alert(err);
         });
       if (auxUserAnon) {
         this.user = auxUserAnon;
@@ -123,7 +123,8 @@ export class ConfirmarEntregaPage implements OnInit {
             const a: PedidoKey = p.data() as PedidoKey;
             a.key = p.id;
 
-            if (a.estado === 'listoEntrega') {
+            if (a.estado === 'entregadoMozo') {
+              // if (a.estado === 'listoEntrega') {
               auxReturn.unshift(a);
             }
           }
@@ -145,6 +146,7 @@ export class ConfirmarEntregaPage implements OnInit {
             a.key = p.id;
 
             if (a.estado === 'listoEntrega') {
+              // if (a.estado === 'listoEntrega') {
               auxReturn.unshift(a);
             }
           }
@@ -236,26 +238,23 @@ export class ConfirmarEntregaPage implements OnInit {
     });
   }
 
-
   private actualizarDoc(db: string, key: string, data: any) {
     return this.firestore.collection(db).doc(key).update(data);
   }
 
   public actualizarPropina(propina: number) {
     this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { propina }).then(() => {
-      this.traerPedidosDelivery().then((pd: PedidoDeliveryKey[]) => {
+      this.inicializarPedidos();
+      /* this.traerPedidosDelivery().then((pd: PedidoDeliveryKey[]) => {
         if (pd.length > 0) {
           this.pedidoDelivery = pd[0];
-          /* this.traerDetalles(this.pedidoDelivery.key).then((d: PedidoDetalleKey[]) => {
-             this.pedidoDetalles = d;
-           }); */
         }
-      });
+      }); */
     });
   }
 
   public confirmarEntrega() {
-    console.log('Confirmo la entrega');
+    // console.log('Confirmo la entrega');
 
     if (this.pedidoEnLocal != null) {
       this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(() => {
