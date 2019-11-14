@@ -12,7 +12,7 @@
 <ion-content *ngIf="this.esMozo">
   <ion-list *ngIf="this.clientes.length> 0">
     <ion-item *ngFor="let cliente of clientes">
-      {{cliente.correo}}
+      {{cliente.perfil}}<br>{{cliente.correo}}
       <div slot="end">
         <ion-button size="small" color="primary"
           (click)="this.confirmarCliente(cliente.correo)">
@@ -35,7 +35,7 @@
 <ion-content *ngIf="!this.esMozo">
   <ion-list *ngIf="this.clientes.length> 0">
     <ion-item *ngFor="let cliente of clientes">
-      {{cliente.correo}}
+      {{cliente.perfil}}<br>{{cliente.correo}}
     </ion-item>
   </ion-list>
   <ion-card *ngIf="this.clientes.length == 0">

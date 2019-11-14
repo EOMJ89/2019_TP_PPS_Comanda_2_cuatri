@@ -218,9 +218,8 @@ export class QrMesaPage implements OnInit {
                   this.presentAlert('¡Error!', `Usted sigue en lista de espera.`, `Debe esperar a que el mozo lo confirme`);
                 }
               } else {
-                // alert('puestoLista es un false, no está en la lista de espera'); // Si el cliente no esta en lista de espera
-                const puestoMesa: boolean | MesaKey = this.estaEnMesa();
-                if (puestoMesa !== false) {
+                // Si el cliente no esta en lista de espera
+                if (this.estaEnMesa()) {
                   // alert('puestoMesa es un MesaKey, el cliente ya ocupa mesa'); // Valido que el cliente NO esté usando otra mesa
                   this.presentAlert('¡Error!', 'Mesa ocupada', 'Usted ya se encuentra ocupando una mesa');
                 } else {
@@ -387,12 +386,14 @@ export class QrMesaPage implements OnInit {
     const mesaKey = this.mesaAMostrar.key;
     const data = this.mesaAMostrar as any;
     delete data.key;
-    console.log(data);
+    // console.log(data);
     this.actualizarDoc('mesas', mesaKey, data);
 
     // Se elimina el cliente de la lista de espera
     const l = this.estaEnLista() !== false ? (this.estaEnLista() as ListaEsperaClientesKey).key : '';
-    this.removerDoc('listaEsperaClientes', l);
+    if (l !== '') {
+      this.removerDoc('listaEsperaClientes', l);
+    }
   }
 
   private ocuparMesaReservada() {
@@ -403,13 +404,15 @@ export class QrMesaPage implements OnInit {
     const mesaKey = this.mesaAMostrar.key;
     const data = this.mesaAMostrar as any;
     delete data.key;
-    console.log(data);
+    // console.log(data);
     this.removerDoc('reservademesas', this.reservaAMostrar.key);
     this.actualizarDoc('mesas', mesaKey, data);
 
     // Saco al cliente de lista de espera
     const l = this.estaEnLista() !== false ? (this.estaEnLista() as ListaEsperaClientesKey).key : '';
-    this.removerDoc('listaEsperaClientes', l);
+    if (l !== '') {
+      this.removerDoc('listaEsperaClientes', l);
+    }
   }
 
   public validarHorario(): boolean {
@@ -418,28 +421,35 @@ export class QrMesaPage implements OnInit {
     if (this.reservaAMostrar === undefined) {
       return false;
     } else {
-      const dateReserva = new Date(this.reservaAMostrar.fecha);
+      const dateReserva = this.reservaAMostrar.fecha;
+      const dateNow = Date.now();
       // alert(Date.now() > dateReserva.getTime());
-      return Date.now() > dateReserva.getTime();
+
+      if (dateNow >= (dateReserva - 2400000) && dateNow <= (dateReserva + 2400000)) {
+        return false;
+      } else {
+        return true;
+      }
     }
   }
 
   public estaEnLista(): boolean | ListaEsperaClientesKey {
-    if (this.listaEspera.find(l => {
-      return l.correo === this.user.correo;
-    }) !== undefined) {
-      return this.listaEspera.find(m => {
-        return m.correo === this.user.correo;
-      });
+    const auxReturn = this.listaEspera.find(m => {
+      return m.correo === this.user.correo;
+    });
+
+    if (auxReturn !== undefined) {
     } else {
       return false;
     }
   }
 
   public estaEnMesa(): boolean {
-    if (this.mesas.find(m => {
+    const auxReturn = this.mesas.find(m => {
       return m.cliente === this.user.correo;
-    }) !== undefined) {
+    });
+
+    if (auxReturn !== undefined) {
       return true;
     } else {
       return false;

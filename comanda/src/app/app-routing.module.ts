@@ -42,6 +42,8 @@ const routes: Routes = [
   { path: 'generar-pedido', loadChildren: './paginas/generar-pedido/generar-pedido.module#GenerarPedidoPageModule' },
   { path: 'modal-pedido', loadChildren: './paginas/modal-pedido/modal-pedido.module#ModalPedidoPageModule' },
   { path: 'juegos', loadChildren: './paginas/juegos/juegos.module#JuegosPageModule' },  { path: 'list-confirmar-pedido', loadChildren: './paginas/list-confirmar-pedido/list-confirmar-pedido.module#ListConfirmarPedidoPageModule' },
+  { path: 'confirmar-entrega', loadChildren: './paginas/confirmar-entrega/confirmar-entrega.module#ConfirmarEntregaPageModule' },
+  { path: 'confirmar-cierre-mesa', loadChildren: './paginas/confirmar-cierre-mesa/confirmar-cierre-mesa.module#ConfirmarCierreMesaPageModule' },
 
 ];
 
