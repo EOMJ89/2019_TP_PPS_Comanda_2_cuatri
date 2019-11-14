@@ -17,7 +17,7 @@ import { PedidoDeliveryKey } from 'src/app/clases/pedidoDelivery';
 })
 export class ConfirmarEntregaPage implements OnInit {
   private pedidoEnLocal: PedidoKey = null;
-  private pedidoDetalles: PedidoDetalleKey[] = new Array<PedidoDetalleKey>();
+  private pedidoDetalles: PedidoDetalleKey[] = null;
   private pedidoDelivery: PedidoDeliveryKey = null; // Cambiar a Pedido Delivery cuando se haga la clase
   private user: ClienteKey | AnonimoKey;
 
@@ -30,6 +30,11 @@ export class ConfirmarEntregaPage implements OnInit {
 
   public async ngOnInit() {
     await this.buscarUsuario();
+    this.inicializarPedidos();
+  }
+
+  public inicializarPedidos() {
+    this.pedidoDetalles = new Array<PedidoDetalleKey>();
     this.traerPedidos().then((p: PedidoKey[]) => {
       if (p.length > 0) {
         this.pedidoEnLocal = p[0];
@@ -255,22 +260,14 @@ export class ConfirmarEntregaPage implements OnInit {
     if (this.pedidoEnLocal != null) {
       this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(() => {
         this.presentToast('Entrega confirmada', 'success');
-        this.traerPedidos().then((p: PedidoKey[]) => {
-          if (p.length > 0) {
-            this.pedidoEnLocal = p[0];
-          }
-        });
+        this.inicializarPedidos();
       });
     }
 
     if (this.pedidoDelivery != null) {
       this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { estado: 'cobrado' }).then(() => {
         this.presentToast('Delivery entregado', 'success');
-        this.traerPedidosDelivery().then((pd: PedidoDeliveryKey[]) => {
-          if (pd.length > 0) {
-            this.pedidoDelivery = pd[0];
-          }
-        });
+        this.inicializarPedidos();
       });
     }
   }

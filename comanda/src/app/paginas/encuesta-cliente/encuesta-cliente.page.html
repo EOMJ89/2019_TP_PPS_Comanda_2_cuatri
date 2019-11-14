@@ -38,7 +38,7 @@
       <ion-item-divider color="primary">
         <h6>Conformidad</h6>
       </ion-item-divider>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-range color="primary" min="1" max="10" ticks="true" snaps="true"
           formControlName="conformidadCtrl">
           <ion-label slot="start">1</ion-label>
@@ -52,23 +52,23 @@
       <ion-item-divider color="primary">
         <h6>¿Qué le pareció lo más destacado?</h6>
       </ion-item-divider>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-label>Servicio de mesa</ion-label>
         <ion-checkbox formControlName="servicioCtrl" checked="false"></ion-checkbox>
       </ion-item>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-label>Comida</ion-label>
         <ion-checkbox formControlName="comidaCtrl" checked="false"></ion-checkbox>
       </ion-item>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-label>Bebida</ion-label>
         <ion-checkbox formControlName="bebidaCtrl" checked="false"></ion-checkbox>
       </ion-item>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-label>Instalaciones</ion-label>
         <ion-checkbox formControlName="instalacionesCtrl" checked="false"></ion-checkbox>
       </ion-item>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-label>Atención del personal</ion-label>
         <ion-checkbox formControlName="personalCtrl" checked="false"></ion-checkbox>
       </ion-item>
@@ -81,11 +81,11 @@
       </ion-item-divider>
       <!-- formControlName="recomendariaCtrl" -->
       <ion-radio-group (ionChange)="mapRadioToFormValue($event)">
-        <ion-item class="transparent-item">
+        <ion-item class="transparent-item ion-no-padding">
           <ion-label>Sí</ion-label>
           <ion-radio slot="start" value="true" checked></ion-radio>
         </ion-item>
-        <ion-item class="transparent-item">
+        <ion-item class="transparent-item ion-no-padding">
           <ion-label>No</ion-label>
           <ion-radio slot="start" value="false"></ion-radio>
         </ion-item>
@@ -97,7 +97,7 @@
       <ion-item-divider color="primary">
         <h6>Limpieza del lugar</h6>
       </ion-item-divider>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         <ion-select formControlName="limpiezaCtrl"
           value="limpio">
           <ion-select-option value="impecable">Impecable</ion-select-option>

@@ -13,7 +13,8 @@
   <!-- Pedido local -->
   <ion-card class="card-background" *ngIf="this.pedidoEnLocal != null">
     <ion-card-content>
-      <ion-item *ngFor="let producto of pedidoDetalle" class="transparent-item">
+      <ion-item *ngFor="let producto of pedidoDetalles"
+        class="transparent-item ion-no-padding">
         ({{ producto.cantidad }}) - {{ producto.producto }}
       </ion-item>
     </ion-card-content>
@@ -22,13 +23,14 @@
   <!-- Pedido de Delivery -->
   <ion-card class="card-background" *ngIf="this.pedidoDelivery != null">
     <ion-card-content>
-      <ion-item *ngFor="let producto of pedidoDetalle" class="transparent-item">
+      <ion-item *ngFor="let producto of pedidoDetalles"
+        class="transparent-item ion-no-padding">
         ({{ producto.cantidad }}) - {{ producto.producto }}
         <div class="item-note" slot="end">
           {{(producto.cantidad * producto.precio) | currency}}
         </div>
       </ion-item>
-      <ion-item class="transparent-item">
+      <ion-item class="transparent-item ion-no-padding">
         PRECIO FINAL:
         {{this.manejarPrecioPropina(this.pedidoDelivery.preciototal,
         this.pedidoDelivery.propina) | currency}}
