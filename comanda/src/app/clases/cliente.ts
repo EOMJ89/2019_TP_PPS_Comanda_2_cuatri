@@ -6,11 +6,11 @@ export class Cliente {
     public foto: string;
 
     constructor() {
-        this.correo = "";
-        this.nombre = "";
-        this.apellido = "";
+        this.correo = '';
+        this.nombre = '';
+        this.apellido = '';
         this.DNI = 0;
-        this.foto = "";
+        this.foto = '';
     }
 }
 
@@ -42,11 +42,11 @@ export class ClienteAConfirmar {
     public clave: string;
 
     constructor() {
-        this.correo = "";
-        this.nombre = "";
-        this.apellido = "";
+        this.correo = '';
+        this.nombre = '';
+        this.apellido = '';
         this.DNI = 0;
-        this.foto = "";
+        this.foto = '';
         this.clave = '';
     }
 }

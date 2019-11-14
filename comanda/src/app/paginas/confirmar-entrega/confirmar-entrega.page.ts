@@ -5,35 +5,48 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ClienteKey } from 'src/app/clases/cliente';
 import { AnonimoKey } from 'src/app/clases/anonimo';
+import { PedidoKey } from 'src/app/clases/pedido';
+import { map } from 'rxjs/operators';
+import { PedidoDetalleKey, PedidoDetalle } from 'src/app/clases/pedidoDetalle';
+import { PedidoDeliveryKey } from 'src/app/clases/pedidoDelivery';
 
 @Component({
   selector: 'app-confirmar-entrega',
   templateUrl: './confirmar-entrega.page.html',
   styleUrls: ['./confirmar-entrega.page.scss'],
 })
-export class ConfirmarEntregaPage /* implements OnInit */ {
-  /* private pedidoEnLocal: any = null;
-  private pedidoDelivery: any = null;
-  private pedidoDetalle: any[] = [];
-  private hayPedidoDelivery: boolean = false;
-  private hayPedidoEnLocal: boolean = false;
-  private precioTotalAnterior: number;
-  private totalFinal: number;
-  private propinaFinal: string;
-  private keyPedidoDelivery: string;
+export class ConfirmarEntregaPage implements OnInit {
+  private pedidoEnLocal: PedidoKey = null;
+  private pedidoDetalles: PedidoDetalleKey[] = new Array<PedidoDetalleKey>();
+  private pedidoDelivery: PedidoDeliveryKey = null; // Cambiar a Pedido Delivery cuando se haga la clase
+  private user: ClienteKey | AnonimoKey;
 
   constructor(
     private auth: AngularFireAuth,
     private firestore: AngularFirestore,
     private toastCtrl: ToastController,
     private scanner: BarcodeScanner,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController) { }
 
-  }
-
-  async ngOnInit() {
+  public async ngOnInit() {
     await this.buscarUsuario();
-    this.traerPedidos();
+    this.traerPedidos().then((p: PedidoKey[]) => {
+      if (p.length > 0) {
+        this.pedidoEnLocal = p[0];
+        this.traerDetalles(this.pedidoEnLocal.key).then((d: PedidoDetalleKey[]) => {
+          this.pedidoDetalles = d;
+        });
+      } else {
+        this.traerPedidosDelivery().then((pd: PedidoDeliveryKey[]) => {
+          if (pd.length > 0) {
+            this.pedidoDelivery = pd[0];
+            this.traerDetalles(this.pedidoDelivery.key).then((d: PedidoDetalleKey[]) => {
+              this.pedidoDetalles = d;
+            });
+          }
+        });
+      }
+    });
   }
 
   private obtenerUsername() {
@@ -81,8 +94,6 @@ export class ConfirmarEntregaPage /* implements OnInit */ {
     if (auxUser) {
       // console.log('Hay cliente registrado', auxUser);
       this.user = auxUser;
-      this.esCliente = true;
-      this.esClienteAnonimo = false;
     } else {
       // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
       const auxUserAnon = await this.traerUsuarioAnonimo()
@@ -91,124 +102,188 @@ export class ConfirmarEntregaPage /* implements OnInit */ {
         });
       if (auxUserAnon) {
         this.user = auxUserAnon;
-        this.esCliente = true;
-        this.esClienteAnonimo = true;
         // console.log('Hay usuario anonimo', auxUserAnon);
       }
     }
   }
 
-  traerPedidos() {
-    let cliente = JSON.parse(sessionStorage.getItem('usuario')).correo;
-    this.baseService.getItems('pedidos').then(ped => {
-      this.pedidoEnLocal = ped.find(pedido => pedido.estado == "listoEntrega" && pedido.cliente == cliente);
-      this.hayPedidoEnLocal = this.pedidoEnLocal != undefined;
+  private traerPedidos() {
+    return this.firestore.collection('pedidos').ref.where('cliente', '==', this.user.correo).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return new Array<PedidoKey>();
+        } else {
+          const auxReturn = new Array<PedidoKey>();
+          for (const p of d.docs) {
+            const a: PedidoKey = p.data() as PedidoKey;
+            a.key = p.id;
 
-      if (this.hayPedidoEnLocal)
-        this.traerDetalle(this.pedidoEnLocal.id);
-    });
+            if (a.estado === 'listoEntrega') {
+              auxReturn.unshift(a);
+            }
+          }
 
-    this.baseService.getItems('pedidosDelivery').then(ped => {
-      this.pedidoDelivery = ped.find(pedido => pedido.estado == "listoEntrega" && pedido.cliente == cliente);
-      this.hayPedidoDelivery = this.pedidoDelivery != undefined;
-
-      if (this.hayPedidoDelivery)
-        this.traerDetalle(this.pedidoDelivery.id);
-      this.keyPedidoDelivery = this.pedidoDelivery.key;
-    });
+          return auxReturn;
+        }
+      });
   }
 
-  traerDetalle(idPedido: number) {
-    this.baseService.getItems('pedidoDetalle').then(pedido => {
-      this.pedidoDetalle = pedido.filter(producto => producto.id_pedido == idPedido);
-    });
+  private traerDetalles(id: string) {
+    return this.firestore.collection('pedidoDetalle').ref.where('id_pedido', '==', id).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return new Array<PedidoDetalleKey>();
+        } else {
+          const auxReturn = new Array<PedidoDetalleKey>();
+          for (const p of d.docs) {
+            const a: PedidoDetalleKey = p.data() as PedidoDetalleKey;
+            a.key = p.id;
+
+            if (a.estado === 'listoEntrega') {
+              auxReturn.unshift(a);
+            }
+          }
+
+          return auxReturn;
+        }
+      });
   }
 
-  propina() {
+  private traerPedidosDelivery() {
+    return this.firestore.collection('pedidosDelivery').ref.where('cliente', '==', this.user.correo).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return new Array<PedidoDeliveryKey>();
+        } else {
+          const auxReturn = new Array<PedidoDeliveryKey>();
+          for (const p of d.docs) {
+            const a: PedidoDeliveryKey = p.data() as PedidoDeliveryKey;
+            a.key = p.id;
+
+            if (a.estado === 'listoEntrega') {
+              auxReturn.unshift(a);
+            }
+          }
+
+          return auxReturn;
+        }
+      });
+  }
+
+  public manejarPrecioPropina(total: number, propina: number) {
+    const precioTotal: number = total;
+    const agregadoPropina: number = (propina / 100) * total;
+    return precioTotal + agregadoPropina;
+  }
+
+  public propina() {
+    // console.log('Doy la propina');
     this.scanner.scan().then((data) => {
-      this.propinaFinal = data.text;
+      const propina = parseInt(data.text, 10);
 
-      if (this.propinaFinal == '5' || this.propinaFinal == '10' || this.propinaFinal == '15' || this.propinaFinal == '20') {
-        this.precioTotalAnterior = this.pedidoDelivery.preciototal;
-        this.totalFinal = this.pedidoDelivery.preciototal + (this.pedidoDelivery.preciototal * parseInt(this.propinaFinal) / 100);
-
-        this.muestroAlert();
+      if ((isNaN(propina) === false) ||
+        (propina === 5 || propina === 10 || propina === 15 || propina === 20)) {
+        this.manejarPropina(propina);
       } else {
-        this.mostrarQRErroneo();
+        this.mostrarAlert('¡Código erroneo!', 'Debe escanear un codigo QR valido');
       }
     }, (err) => {
-      console.log("Error: " + err);
+      console.log('Error: ', err);
+      this.mostrarAlert('¡Error!', 'Error desconocido.');
+      this.manejarPropina(5);
     });
   }
 
-  async muestroAlert() {
-    const alert = await this.alertCtrl.create({
-      header: 'Propina seleccionada: ' + this.propinaFinal + '%',
-      subHeader: '¿Confirma propina?',
-      message: 'Precio pedido: $' + JSON.stringify(this.precioTotalAnterior) + ' Desea agregar ' + this.propinaFinal + '%? Precio final: $' + this.totalFinal,
+  private manejarPropina(propina: number) {
+    const total = this.manejarPrecioPropina(this.pedidoDelivery.preciototal, propina);
+    this.muestroAlertPropina(this.pedidoDelivery.preciototal, propina, total);
+  }
 
+  private async mostrarAlert(header, message) {
+    await this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['OK']
+    }).then(alert => {
+      alert.present();
+    });
+  }
+
+  private async muestroAlertPropina(anterior: number, propina: number, total: number) {
+    await this.alertCtrl.create({
+      header: `Propina seleccionada: ${propina}%`,
+      subHeader: '¿Confirmar propina?',
+      message: `Su precio total pasará de ser $${anterior} a ser $${total}`,
       buttons: [
         {
           text: 'Confirmar',
           handler: () => {
-            this.cargarenlaBD();
-            this.presentToast('Propina cargada');
-            this.traerDetalle(this.pedidoDelivery.id);
+            this.actualizarPropina(propina);
           }
         }, {
           text: 'Cancelar',
           role: 'cancel',
-          // icon: 'close',
-          handler: () => {
-          }
+          handler: () => { }
         }
       ]
+    }).then(alert => {
+      alert.present();
     });
-    await alert.present();
   }
 
-  cargarenlaBD() {
-    // let key = this.pedidoDelivery.key;
-    delete this.pedidoDelivery['key'];
-    this.pedidoDelivery.preciototal = this.totalFinal;
-    this.baseService.updateItem('pedidosDelivery', this.keyPedidoDelivery, this.pedidoDelivery);
+
+  private actualizarDoc(db: string, key: string, data: any) {
+    return this.firestore.collection(db).doc(key).update(data);
   }
 
-  async mostrarQRErroneo() {
-    const alert = await this.alertCtrl.create({
-      header: 'El código leído no es un QR de propina',
-      message: 'Debe escanear un QR valido',
-      buttons: ['OK']
+  public actualizarPropina(propina: number) {
+    this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { propina }).then(() => {
+      this.traerPedidosDelivery().then((pd: PedidoDeliveryKey[]) => {
+        if (pd.length > 0) {
+          this.pedidoDelivery = pd[0];
+          /* this.traerDetalles(this.pedidoDelivery.key).then((d: PedidoDetalleKey[]) => {
+             this.pedidoDetalles = d;
+           }); */
+        }
+      });
     });
-    await alert.present();
   }
 
-  confirmarEntrega() {
-    if (this.hayPedidoEnLocal) {
-      let key: string = this.pedidoEnLocal.key;
-      delete this.pedidoEnLocal['key'];
-      this.pedidoEnLocal.estado = 'entregado';
-      this.baseService.updateItem('pedidos', key, this.pedidoEnLocal);
+  public confirmarEntrega() {
+    console.log('Confirmo la entrega');
+
+    if (this.pedidoEnLocal != null) {
+      this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(() => {
+        this.presentToast('Entrega confirmada', 'success');
+        this.traerPedidos().then((p: PedidoKey[]) => {
+          if (p.length > 0) {
+            this.pedidoEnLocal = p[0];
+          }
+        });
+      });
     }
-    if (this.hayPedidoDelivery) {
-      // let key: string = this.pedidoDelivery.key;
-      delete this.pedidoDelivery['key'];
-      this.pedidoDelivery.estado = 'cobrado';
-      this.baseService.updateItem('pedidosDelivery', this.keyPedidoDelivery, this.pedidoDelivery);
+
+    if (this.pedidoDelivery != null) {
+      this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { estado: 'cobrado' }).then(() => {
+        this.presentToast('Delivery entregado', 'success');
+        this.traerPedidosDelivery().then((pd: PedidoDeliveryKey[]) => {
+          if (pd.length > 0) {
+            this.pedidoDelivery = pd[0];
+          }
+        });
+      });
     }
-    this.presentToast('Entrega confirmada');
-    this.traerPedidos();
   }
 
-  async presentToast(mensaje: string) {
+  private async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
-      message: mensaje,
-      color: 'success',
+      message,
+      color,
       showCloseButton: false,
       position: 'bottom',
       closeButtonText: 'Done',
       duration: 2000
     });
     toast.present();
-  } */
+  }
 }

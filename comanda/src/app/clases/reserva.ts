@@ -3,6 +3,13 @@ export class Reserva {
     public fecha: number; // date.GetTime();
     public mesaSeleccionada: number;
     public estadoConfirmacion: string;
+
+    constructor() {
+        this.correo = '';
+        this.fecha = 0;
+        this.mesaSeleccionada = 0;
+        this.estadoConfirmacion = '';
+    }
 }
 
 export interface ReservaKey {

@@ -1,9 +1,56 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>confirmarEntrega</ion-title>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Confirmar Entrega
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- Pedido local -->
+  <ion-card class="card-background" *ngIf="this.pedidoEnLocal != null">
+    <ion-card-content>
+      <ion-item *ngFor="let producto of pedidoDetalle" class="transparent-item">
+        ({{ producto.cantidad }}) - {{ producto.producto }}
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
+  <!-- Pedido de Delivery -->
+  <ion-card class="card-background" *ngIf="this.pedidoDelivery != null">
+    <ion-card-content>
+      <ion-item *ngFor="let producto of pedidoDetalle" class="transparent-item">
+        ({{ producto.cantidad }}) - {{ producto.producto }}
+        <div class="item-note" slot="end">
+          {{(producto.cantidad * producto.precio) | currency}}
+        </div>
+      </ion-item>
+      <ion-item class="transparent-item">
+        PRECIO FINAL:
+        {{this.manejarPrecioPropina(this.pedidoDelivery.preciototal,
+        this.pedidoDelivery.propina) | currency}}
+      </ion-item>
+      <ion-button color="primary" expand="block" (click)="propina()">
+        Propina
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- En caso de no existir pedidos -->
+  <ion-card class="card-background"
+    *ngIf="this.pedidoDelivery == null && this.pedidoEnLocal == null">
+    <ion-card-content>
+      Aún no existen pedidos a entregar.
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<ion-footer>
+  <ion-button color="primary" expand="block" (click)="confirmarEntrega()"
+    [disabled]="this.pedidoDelivery == null && this.pedidoEnLocal == null">
+    Confirmar entrega
+  </ion-button>
+</ion-footer>

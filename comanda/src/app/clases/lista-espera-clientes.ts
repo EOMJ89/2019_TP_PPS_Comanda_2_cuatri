@@ -1,8 +1,9 @@
 export class ListaEsperaClientes {
     public correo: string; // el correo del cliente
     public perfil: string; // el perfil del cliente
-    public estado: string; // el estado de la esperam valores: 'confirmacionMozo', y otros
+    public estado: string; // el estado de la espera, valores: 'confirmacionMozo', y otros
     public fecha: number;
+
     constructor() {
         this.correo = '';
         this.perfil = '';

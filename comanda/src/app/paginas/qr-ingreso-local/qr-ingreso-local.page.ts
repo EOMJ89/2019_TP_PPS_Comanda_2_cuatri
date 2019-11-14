@@ -79,34 +79,38 @@ export class QrIngresoLocalPage implements OnInit {
     this.scanner.scan(this.opt)
       .then(async (data: BarcodeScanResult) => {
         // console.log('Lo escaneado es', data.text);
-
         if (data.text === 'IngresoLocal') {
-          // Obtengo el cliente activo en la base de clientes registrados
-          const auxUser = await this.traerUsuarioRegistrado();
-
-          // Si el cliente está registrado, entonces prosigo con la operación
-          if (auxUser) {
-            // console.log('Hay cliente registrado', auxUser);
-            this.buscarMesa(auxUser, true);
-          } else {
-            // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-            const auxUserAnon = await this.traerUsuarioAnonimo();
-            if (auxUserAnon) {
-              this.buscarMesa(auxUserAnon, false);
-              // console.log('Hay usuario anonimo', auxUserAnon);
-            } else {
-              // Si no encuentro cliente anonimo, significa que soy un empleado y supervisor
-              console.log('No hay cliente, se enviará a las estadisticas de clientes');
-              this.presentAlert(null, 'No hay usuario', 'Se enviará a las estadisticas de clientes.');
-              // this.router.navigate(['/est-satisfaccion']); // Sin implementar
-            }
-          }
+          await this.manejarQR();
         } else {
           this.presentAlert('QR Erroneo', 'El QR no pertenece al de ingreso al local.', 'Por favor, apunte al código de Ingreso al Local');
         }
       }).catch(err => {
         console.log('Error al escanear el qr', err);
+        // await this.manejarQR();
       });
+  }
+
+  private async manejarQR() {
+    // Obtengo el cliente activo en la base de clientes registrados
+    const auxUser = await this.traerUsuarioRegistrado();
+
+    // Si el cliente está registrado, entonces prosigo con la operación
+    if (auxUser) {
+      // console.log('Hay cliente registrado', auxUser);
+      this.buscarMesa(auxUser, true);
+    } else {
+      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
+      const auxUserAnon = await this.traerUsuarioAnonimo();
+      if (auxUserAnon) {
+        this.buscarMesa(auxUserAnon, false);
+        // console.log('Hay usuario anonimo', auxUserAnon);
+      } else {
+        // Si no encuentro cliente anonimo, significa que soy un empleado y supervisor
+        console.log('No hay cliente, se enviará a las estadisticas de clientes');
+        this.presentAlert(null, 'No hay usuario', 'Se enviará a las estadisticas de clientes.');
+        // this.router.navigate(['/est-satisfaccion']); // Sin implementar
+      }
+    }
   }
 
   public presentAlert(header: string, subHeader: string, message: string) {
