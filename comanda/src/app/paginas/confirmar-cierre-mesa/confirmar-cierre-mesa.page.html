@@ -1,9 +1,32 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>confirmarCierreMesa</ion-title>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Cierre de Mesas
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- Pedidos -->
+  <ion-card class="card-background" *ngIf="this.pedidos.length> 0">
+    <ion-card-content>
+      <div *ngFor="let pedido of this.pedidos">
+        <ion-item class="transparent-item ion-no-padding">
+          {{ pedido.cliente }}<br>{{ pedido.mesa }}
+          <ion-button slot="end" (click)="cerrarPedido(pedido)">Cerrar Mesa</ion-button>
+        </ion-item>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
+  <!-- En caso de no existir pedidos -->
+  <ion-card class="card-background"
+    *ngIf="this.pedidos.length == 0">
+    <ion-card-content>
+      No hay mesas para cerrar.
+    </ion-card-content>
+  </ion-card>
 </ion-content>

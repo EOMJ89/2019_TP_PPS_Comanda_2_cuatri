@@ -53,14 +53,15 @@ export class ConfirmarEntregaMozoPage implements OnInit {
   }
 
   private async presentToast(message: string, color: string) {
-    const toast = await this.toastCtrl.create({
+    await this.toastCtrl.create({
       message,
       color,
       showCloseButton: false,
       position: 'bottom',
       closeButtonText: 'Done',
       duration: 2000
+    }).then(toast => {
+      toast.present();
     });
-    toast.present();
   }
 }
