@@ -5,10 +5,11 @@ import { Anonimo } from '../../clases/anonimo';
 import { Herramientas } from '../../clases/herramientas';
 import { CajaSonido } from '../../clases/cajaSonido';
 
-import * as firebase from "firebase";
+import * as firebase from 'firebase';
 import { Camera } from '@ionic-native/camera/ngx';
 import { CameraOptions } from '@ionic-native/camera';
 import { BarcodeScannerOptions, BarcodeScanResult, BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registro-cliente',
@@ -23,19 +24,21 @@ export class RegistroClientePage implements OnInit {
   private clave: string;
   private herramientas: Herramientas = new Herramientas();
   private cajaSonido: CajaSonido = new CajaSonido();
-  private ocultarSeccion0: boolean = false;
-  private ocultarSeccion1: boolean = true;
-  private ocultarSeccion2: boolean = true;
-  private ocultarSpinner: boolean = true;
-  private esCliente: boolean = true;
+  private ocultarSeccion0 = false;
+  private ocultarSeccion1 = true;
+  private ocultarSeccion2 = true;
+  private ocultarSpinner = true;
+  private esCliente = true;
 
-  constructor(private auth: AuthService,
+  constructor(
+    private auth: AuthService,
     private camera: Camera,
-    public barcodeScanner: BarcodeScanner
+    public barcodeScanner: BarcodeScanner,
+    private alertCtrl: AlertController,
   ) {
     this.usuario = new Cliente();
     this.anonimo = new Anonimo();
-    this.clave = "";
+    this.clave = '';
   }
 
   ngOnInit() {
@@ -44,37 +47,44 @@ export class RegistroClientePage implements OnInit {
     this.ocultarSeccion2 = true;
     this.usuario = new Cliente();
     this.anonimo = new Anonimo();
-    this.clave = "";
+    this.clave = '';
+  }
+
+  public presentAlert(header: string, subHeader: string, message: string) {
+    this.alertCtrl.create({
+      header,
+      subHeader,
+      message,
+      buttons: ['OK']
+    }).then(a => { a.present(); });
   }
 
   /*
     *verifica que los datos ingresados en el formulario son correctos, de serlo se muestra un selector
   */
   public ValidarRegistro() {
-    var validado: boolean = true;
+    let validado = true;
 
-    if (this.usuario.correo == "") {
+    if (this.usuario.correo === '') {
       validado = false;
-      alert("Debe escribir un correo electronico");
-    }
-    else if (this.clave == "") {
+      this.presentAlert('¡Error!', 'Error en el registro.', 'Debe escribir un correo electrónico.');
+    } else if (this.clave === '') {
       validado = false;
-      alert("Debe escribir una clave");
-    }
-    else if (!this.herramientas.ValidarMail(this.usuario.correo)) {
+      this.presentAlert('¡Error!', 'Error en el registro.', 'Debe escribir una clave.');
+    } else if (!this.herramientas.ValidarMail(this.usuario.correo)) {
       validado = false;
-      alert("No es un correo electronico valido");
+      this.presentAlert('¡Error!', 'Error en el registro.', 'No es un correo electronico valido.');
     } else if (!this.herramientas.ValidarNombre(this.usuario.nombre)) {
       validado = false;
-      alert("No es un nombre valido");
+      this.presentAlert('¡Error!', 'Error en el registro.', 'No es un nombre valido.');
     }
-    if (this.esCliente == true) {
+    if (this.esCliente === true) {
       if (!this.herramientas.ValidarNombre(this.usuario.apellido)) {
         validado = false;
-        alert("No es un apellido valido");
+        this.presentAlert('¡Error!', 'Error en el registro.', 'No es un apellido valido.');
       } else if (!this.herramientas.ValidarDNI(this.usuario.DNI)) {
         validado = false;
-        alert("No es un DNI valido");
+        this.presentAlert('¡Error!', 'Error en el registro.', 'No es un DNI valido.');
       }
     }
     if (validado) {
@@ -88,10 +98,9 @@ export class RegistroClientePage implements OnInit {
   */
   async SacarFoto() {
     this.cajaSonido.ReproducirSelecionar();
-    let imageName = this.usuario.correo + (this.herramientas.GenRanNum(1111111, 9999999).toString());
+    const imageName = this.usuario.correo + (this.herramientas.GenRanNum(1111111, 9999999).toString());
     try {
-
-      let options: CameraOptions = {
+      const options: CameraOptions = {
         quality: 50,
         targetHeight: 600,
         targetWidth: 600,
@@ -100,10 +109,10 @@ export class RegistroClientePage implements OnInit {
         mediaType: this.camera.MediaType.PICTURE
       };
 
-      let result = await this.camera.getPicture(options);
-      let image = `data:image/jpeg;base64,${result}`;
-      let pictures = firebase.storage().ref(`fotos/${imageName}`);
-      pictures.putString(image, "data_url").then(() => {
+      const result = await this.camera.getPicture(options);
+      const image = `data:image/jpeg;base64,${result}`;
+      const pictures = firebase.storage().ref(`fotos/${imageName}`);
+      pictures.putString(image, 'data_url').then(() => {
         pictures.getDownloadURL().then((url) => {
           this.usuario.foto = (url as string);
           this.Registrar();
@@ -111,10 +120,9 @@ export class RegistroClientePage implements OnInit {
       });
 
     } catch (error) {
-      alert("Error:" + error);
+      this.presentAlert('¡Error!', 'Error en el registro.', 'Error al subir la foto, se cancelará el proceso.');
+      console.log('Error:' + error);
     }
-    //este spinner es necesario
-    this.ActivarSpinner(5000);
   }
 
   /*
@@ -122,7 +130,8 @@ export class RegistroClientePage implements OnInit {
     prueba o si no tenes ganas de sacar fotos.
   */
   public SinFoto() {
-    this.usuario.foto = "https://firebasestorage.googleapis.com/v0/b/comanda-2019-comicon.appspot.com/o/anonimo.png?alt=media&token=72c4068d-0bb0-4d8a-adce-047df2c46e5b";
+    // tslint:disable-next-line: max-line-length
+    this.usuario.foto = 'https://firebasestorage.googleapis.com/v0/b/comanda-2019-comicon.appspot.com/o/anonimo.png?alt=media&token=72c4068d-0bb0-4d8a-adce-047df2c46e5b';
     this.Registrar();
   }
 
@@ -130,10 +139,9 @@ export class RegistroClientePage implements OnInit {
     *basado en las elecciones del usuario se guarda un cliente o un anonimos
   */
   Registrar() {
-    if (this.esCliente == true) {
+    if (this.esCliente === true) {
       this.RegistrarCliente();
-    }
-    else {
+    } else {
       this.anonimo.correo = this.usuario.correo;
       this.anonimo.foto = this.usuario.foto;
       this.anonimo.nombre = this.usuario.nombre;
@@ -148,13 +156,14 @@ export class RegistroClientePage implements OnInit {
     this.auth.RegistrarCliente(this.usuario, this.clave).then(auth => {
       this.usuario = new Cliente();
       this.anonimo = new Anonimo();
-      this.clave = "";
+      this.clave = '';
       this.ocultarSeccion0 = false;
       this.ocultarSeccion1 = true;
       this.ocultarSeccion2 = true;
-      alert("Usted ha sido registrado!");
+      this.presentAlert('Exito!', null, '¡Usted ha sido registrado!');
     }).catch(err => {
-      alert(err);
+      this.presentAlert('¡Error!', 'Error en el registro.', 'Error en base de datos.');
+      console.log(err);
     });
   }
 
@@ -165,13 +174,14 @@ export class RegistroClientePage implements OnInit {
     this.auth.RegistrarAnonimo(this.anonimo, this.clave).then(auth => {
       this.usuario = new Cliente();
       this.anonimo = new Anonimo();
-      this.clave = "";
+      this.clave = '';
       this.ocultarSeccion0 = false;
       this.ocultarSeccion1 = true;
       this.ocultarSeccion2 = true;
-      alert("Usted ha sido registrado!");
+      this.presentAlert('Exito!', null, '¡Usted ha sido registrado!');
     }).catch(err => {
-      alert(err);
+      this.presentAlert('¡Error!', 'Error en el registro.', 'Error en base de datos.');
+      console.log(err);
     });
   }
 
@@ -181,22 +191,10 @@ export class RegistroClientePage implements OnInit {
   public BorrarDatos() {
     this.usuario = new Cliente();
     this.anonimo = new Anonimo();
-    this.clave = "";
+    this.clave = '';
     this.ocultarSeccion0 = false;
     this.ocultarSeccion1 = true;
     this.ocultarSeccion2 = true;
-  }
-
-  /*
-    *spinner improvisado.
-    @delay : tiempo en milisegundo que aparecera.
-  */
-  public ActivarSpinner(delay: number) {
-    this.ocultarSpinner = false;
-    var modelo = this;
-    setTimeout(function () {
-      modelo.ocultarSpinner = true;
-    }, delay);
   }
 
   /*
@@ -220,7 +218,8 @@ export class RegistroClientePage implements OnInit {
       this.usuario.apellido = scan[1];
       this.usuario.nombre = scan[2];
     }, (err) => {
-      alert(err);
+      this.presentAlert('¡Error!', 'Error al escanear el DNI.', 'Error desconocido.');
+      console.log(err);
     });
   }
 
@@ -228,14 +227,12 @@ export class RegistroClientePage implements OnInit {
     *permite seleccionar el tipo de cliete que se registrara
   */
   public ElegirCliente(tipo: string) {
-    if (tipo == "anonimo") {
+    if (tipo === 'anonimo') {
       this.esCliente = false;
-    }
-    else {
+    } else {
       this.esCliente = true;
     }
     this.ocultarSeccion0 = true;
     this.ocultarSeccion1 = false;
   }
-
 }

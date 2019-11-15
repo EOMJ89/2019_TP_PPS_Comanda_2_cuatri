@@ -27,7 +27,7 @@
 
 ion-content {
   // --background: url('./assets/fondos/fondo.png');
-  --background: linear-gradient(#3f3f3f 60%, #4ce000);
+  --background: linear-gradient(#3f3f3f 60%, #4ce000) !important;
   --background-repeat: no-repeat !important;
   --background-size: cover !important;
 }
@@ -58,6 +58,7 @@ ion-content {
   -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
   animation: sk-rotateplane 1.2s infinite ease-in-out;
 }
+
 // Fuerza a los elementos a acomodarse de forma vertical (v) u horizontal (h)
 .flex {
   &-v {
@@ -73,11 +74,6 @@ ion-content {
 // Hacer que los ion-item de los formularios tengan fondo transparente
 .transparent-item {
   --background: transparent !important;
-}
-
-// Imagen de fondo para las páginas
-.background-image {
-  //--background: url("/assets/img/regback.png") 0 0/100% 100% no-repeat;
 }
 
 // Ajusta el alto de un elemento

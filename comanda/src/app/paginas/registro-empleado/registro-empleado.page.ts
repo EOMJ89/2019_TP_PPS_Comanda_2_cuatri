@@ -22,7 +22,7 @@ export class RegistroEmpleadoPage implements OnInit {
   private clave: string;
   private herramientas: Herramientas = new Herramientas();
   private cajaSonido: CajaSonido = new CajaSonido();
-  private listaPerfil: Array<string> = ["dueño", "supervisor", "mozo", "bartender", "candybar", "cocinero"];
+  private listaPerfil: Array<string> = ["dueño", "supervisor", "mozo", "bartender", "candybar", "camarero"]; // Camarero hace de cocinero
   private ocultarSeccion1: boolean = false;
   private ocultarSeccion2: boolean = true;
   private ocultarSpinner: boolean = true;

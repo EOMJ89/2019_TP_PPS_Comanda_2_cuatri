@@ -116,7 +116,8 @@ export class AuthService {
         this.db.collection('anonimos').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
-          foto: usuario.foto
+          foto: usuario.foto,
+          clave,
         })
         resolve(res)
       }).catch(err => reject(err))
