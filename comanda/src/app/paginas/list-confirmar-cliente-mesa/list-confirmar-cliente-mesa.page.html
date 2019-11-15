@@ -10,22 +10,42 @@
 </ion-header>
 
 <ion-content *ngIf="this.esMozo">
-  <ion-list *ngIf="this.clientes.length> 0">
-    <ion-item *ngFor="let cliente of clientes">
-      {{cliente.perfil}}<br>{{cliente.correo}}
-      <div slot="end">
-        <ion-button size="small" color="primary"
-          (click)="this.confirmarCliente(cliente.correo)">
-          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
-        </ion-button>
-        <ion-button size="small" color="danger"
-          (click)="this.rechazarCliente(cliente.correo)">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-item>
-  </ion-list>
-  <ion-card *ngIf="this.clientes.length == 0">
+  <div *ngIf="this.clientes.length> 0">
+    <ion-card class="card-background">
+      <ion-card-content>
+        <div *ngFor="let cliente of clientes">
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Correo</ion-label>
+            <ion-input [value]="cliente.correo" readonly></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Perfil</ion-label>
+            <ion-input [value]="cliente.perfil" readonly></ion-input>
+          </ion-item>
+
+          <div class="width-100 center-horizontal center-vertical">
+            <ion-button color="tertiary"
+              (click)="this.mostrarCliente(cliente)">
+              Ver
+            </ion-button>
+          </div>
+
+          <div class="width-100 center-horizontal">
+            <ion-button color="success"
+              (click)="this.confirmarCliente(cliente.correo)">
+              <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+            </ion-button>
+            <ion-button color="danger"
+              (click)="this.rechazarCliente(cliente.correo)">
+              <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <ion-card *ngIf="this.clientes.length == 0" class="card-background">
     <ion-card-content>
       No hay clientes en la lista.
     </ion-card-content>
@@ -33,14 +53,26 @@
 </ion-content>
 
 <ion-content *ngIf="!this.esMozo">
-  <ion-list *ngIf="this.clientes.length> 0">
-    <ion-item *ngFor="let cliente of clientes">
-      {{cliente.perfil}}<br>{{cliente.correo}}
-    </ion-item>
-  </ion-list>
-  <ion-card *ngIf="this.clientes.length == 0">
+  <div *ngIf="this.clientes.length> 0">
+    <ion-card class="card-background">
+      <ion-card-content>
+        <div *ngFor="let cliente of clientes">
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Correo</ion-label>
+            <ion-input [value]="cliente.correo" readonly></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Perfil</ion-label>
+            <ion-input [value]="cliente.perfil" readonly></ion-input>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <ion-card *ngIf="this.clientes.length == 0" class="card-background">
     <ion-card-content>
-      No hay clientes en lista de espera.
+      No hay clientes en la lista.
     </ion-card-content>
   </ion-card>
 </ion-content>

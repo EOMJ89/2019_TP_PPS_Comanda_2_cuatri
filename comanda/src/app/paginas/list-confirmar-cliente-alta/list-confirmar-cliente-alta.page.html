@@ -10,40 +10,55 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="this.clientes.length> 0" class="transparent-item">
-    <ion-item *ngFor="let cliente of clientes" class="transparent-item">
-      <ion-card class="width-100">
+  <div *ngIf="this.clientes.length> 0" >
+    <div *ngFor="let cliente of clientes">
+      <ion-card class="card-background">
         <ion-card-content>
-          <ion-item class="transparent-item">
+          <div class="width-100 center-vertical center-horizontal extra-bottom">
+            <!-- Hacer placeholder para foto -->
+            <div *ngIf="cliente.foto != ''">
+              <img class="profile-picture" [src]="cliente.foto" />
+            </div>
+            <div *ngIf="cliente.foto == ''">
+              <img class="profile-picture" src="assets/img/add_user.png" />
+            </div>
+          </div>
+
+          <ion-item class="ion-no-padding">
             <ion-label position="floating">Nombre</ion-label>
             <ion-input [value]="cliente.nombre | titlecase" readonly></ion-input>
           </ion-item>
 
-          <ion-item class="transparent-item">
+          <ion-item class="ion-no-padding">
             <ion-label position="floating">Apellido</ion-label>
             <ion-input [value]="cliente.apellido | titlecase" readonly></ion-input>
           </ion-item>
 
-          <ion-item class="transparent-item">
+          <ion-item class="ion-no-padding">
             <ion-label position="floating">DNI</ion-label>
             <ion-input [value]="cliente.DNI" readonly></ion-input>
           </ion-item>
 
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Correo</ion-label>
+            <ion-input [value]="cliente.correo" readonly></ion-input>
+          </ion-item>
+
           <div class="width-100 align-between">
-            <ion-button size="small" color="primary"
+            <ion-button color="primary"
               (click)="this.confirmarCliente(cliente, cliente.key)">
               <ion-icon slot="icon-only" name="checkmark"></ion-icon>
             </ion-button>
-            <ion-button size="small" color="danger"
+            <ion-button color="danger"
               (click)="this.rechazarCliente(cliente, cliente.key)">
               <ion-icon slot="icon-only" name="close"></ion-icon>
             </ion-button>
           </div>
         </ion-card-content>
       </ion-card>
-    </ion-item>
-  </ion-list>
-  <ion-card *ngIf="this.clientes.length == 0">
+    </div>
+  </div>
+  <ion-card *ngIf="this.clientes.length == 0" class="card-background">
     <ion-card-content>
       No hay clientes en la lista.
     </ion-card-content>

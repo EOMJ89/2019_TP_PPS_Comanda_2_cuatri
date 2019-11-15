@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="end">
+      <ion-button color="light" size="small" (click)="cerrar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="this.cliente != undefined" class="card-background">
+    <ion-card-content>
+      <div class="width-100 center-vertical center-horizontal extra-bottom">
+        <!-- Hacer placeholder para foto -->
+        <div *ngIf="cliente.foto != ''">
+          <img class="profile-picture" [src]="cliente.foto" />
+        </div>
+        <div *ngIf="cliente.foto == ''">
+          <img class="profile-picture" src="assets/img/add_user.png" />
+        </div>
+      </div>
+
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input [value]="cliente.nombre | titlecase" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding" *ngIf="this.registrado == 'cliente'">
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-input [value]="cliente.apellido | titlecase" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding" *ngIf="this.registrado == 'cliente'">
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [value]="cliente.DNI" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input [value]="cliente.correo" readonly></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="this.cliente == undefined" class="card-background">
+    <ion-card-content>
+      No hay cliente.
+    </ion-card-content>
+  </ion-card>
+</ion-content>

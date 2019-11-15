@@ -144,6 +144,11 @@ ion-content {
   }
 }
 
+.align-between {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 // Centra los objetos dentro de este elemento de forma horizontal
 .center-horizontal {
   display: flex;

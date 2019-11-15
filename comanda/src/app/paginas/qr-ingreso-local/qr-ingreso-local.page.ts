@@ -84,9 +84,9 @@ export class QrIngresoLocalPage implements OnInit {
         } else {
           this.presentAlert('QR Erroneo', 'El QR no pertenece al de ingreso al local.', 'Por favor, apunte al código de Ingreso al Local');
         }
-      }).catch(err => {
+      }).catch(async (err) => {
         console.log('Error al escanear el qr', err);
-        // await this.manejarQR();
+        await this.manejarQR();
       });
   }
 

@@ -39,7 +39,7 @@ export class LoginPage implements OnInit {
     }).then(a => { a.present(); });
   }
 
-  private traerUsuarioAConfirmar(correo: string): Promise<false | ClienteAConfirmarKey> {
+  private traerUsuarioAConfirmar(correo: string): Promise<boolean | ClienteAConfirmarKey> {
     return this.firestore.collection('clientes-confirmar').ref.where('correo', '==', correo).get()
       .then((d: QuerySnapshot<any>) => {
         if (d.empty) {
@@ -69,8 +69,7 @@ export class LoginPage implements OnInit {
       })
         .catch(err => {
           this.presentAlert('¡Error!', 'Error en el registro.', 'Los datos son incorrectos o no existen.');
-        }
-        );
+        });
     }
   }
 

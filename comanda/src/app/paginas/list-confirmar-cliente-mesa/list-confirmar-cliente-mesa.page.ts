@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ClienteKey } from 'src/app/clases/cliente';
 import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 import { AnonimoKey } from 'src/app/clases/anonimo';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { ListaEsperaClientesKey, } from 'src/app/clases/lista-espera-clientes';
 import { map } from 'rxjs/operators';
+import { ModalClientePage } from '../modal-cliente/modal-cliente.page';
 
 @Component({
   selector: 'app-list-confirmar-cliente-mesa',
@@ -19,7 +20,8 @@ export class ListConfirmarClienteMesaPage implements OnInit {
   constructor(
     private firestore: AngularFirestore,
     private auth: AngularFireAuth,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController
   ) {
   }
 
@@ -148,7 +150,61 @@ export class ListConfirmarClienteMesaPage implements OnInit {
       });
   }
 
-  async presentToast(message: string, color: string) {
+  private traerCliente(correo: string): Promise<false | ClienteKey> {
+    return this.firestore.collection('clientes').ref.where('correo', '==', correo).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return false;
+        } else {
+          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
+          auxReturn.key = d.docs[0].id;
+          return auxReturn;
+        }
+      });
+  }
+
+  private traerClienteAnon(correo: string): Promise<false | AnonimoKey> {
+    return this.firestore.collection('anonimos').ref.where('correo', '==', correo).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return false;
+        } else {
+          const auxReturn: AnonimoKey = d.docs[0].data() as AnonimoKey;
+          auxReturn.key = d.docs[0].id;
+          return auxReturn;
+        }
+      });
+  }
+
+  public async mostrarCliente(cliente: ListaEsperaClientesKey) {
+    // console.log(cliente);
+    const cl: boolean | ClienteKey = await this.traerCliente(cliente.correo);
+
+    if (cl === false) {
+      const clAnon: boolean | AnonimoKey = await this.traerClienteAnon(cliente.correo);
+      if (clAnon !== false) {
+        this.mostrarModalCliente(clAnon, 'clienteAnonimo');
+      } else {
+        // console.log('¡HELP!');
+      }
+    } else {
+      this.mostrarModalCliente(cl, 'cliente');
+    }
+  }
+
+  private async  mostrarModalCliente(cliente: ClienteKey | AnonimoKey, registrado: string) {
+    await this.modalCtrl.create({
+      component: ModalClientePage,
+      componentProps: {
+        cliente,
+        registrado,
+      }
+    }).then(modal => {
+      modal.present();
+    });
+  }
+
+  public async presentToast(message: string, color: string) {
     this.toastCtrl.create({
       message,
       color,

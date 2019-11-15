@@ -45,6 +45,7 @@ const routes: Routes = [
   { path: 'confirmar-entrega', loadChildren: './paginas/confirmar-entrega/confirmar-entrega.module#ConfirmarEntregaPageModule' },
   { path: 'confirmar-cierre-mesa', loadChildren: './paginas/confirmar-cierre-mesa/confirmar-cierre-mesa.module#ConfirmarCierreMesaPageModule' },
   { path: 'confirmar-entrega-mozo', loadChildren: './paginas/confirmar-entrega-mozo/confirmar-entrega-mozo.module#ConfirmarEntregaMozoPageModule' },
+  { path: 'modal-cliente', loadChildren: './paginas/modal-cliente/modal-cliente.module#ModalClientePageModule' },
 
 ];
 
