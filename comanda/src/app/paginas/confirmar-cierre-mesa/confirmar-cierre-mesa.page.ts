@@ -32,14 +32,14 @@ export class ConfirmarCierreMesaPage implements OnInit {
         });
 
         return auxR.filter(p => {
-          return p.estado === 'entregado';
+          return p.estado === 'cuenta';
         });
       }));
   }
 
   public async cerrarPedido(pedido: PedidoKey) {
+    await this.finalizarPedido(pedido);
     this.liberarMesa(pedido);
-    this.finalizarPedido(pedido);
   }
 
   private traerMesa(nroMesa: number): Promise<false | MesaKey> {

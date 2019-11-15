@@ -144,6 +144,7 @@ ion-content {
   }
 }
 
+// Centra lo objetos acomodandolos equitativamente
 .align-between {
   display: flex;
   justify-content: space-evenly;
@@ -255,4 +256,8 @@ ion-content {
 
 .card-background {
   --background: white;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
 }

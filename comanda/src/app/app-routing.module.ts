@@ -16,7 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'registro-empleado',
-    loadChildren: './paginas/registro-empleado/registro-empleado.module#RegistroEmpleadoPageModule'
+    loadChildren: './paginas/registro-empleado/registro-empleado.module#RegistroEmpleadoPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'registro-cliente',
@@ -29,35 +30,38 @@ const routes: Routes = [
   },
   {
     path: 'abm-mesa',
-    loadChildren: './paginas/abm-mesa/abm-mesa.module#AbmMesaPageModule'
+    loadChildren: './paginas/abm-mesa/abm-mesa.module#AbmMesaPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'abm-producto',
-    loadChildren: './paginas/abm-producto/abm-producto.module#AbmProductoPageModule'
+    loadChildren: './paginas/abm-producto/abm-producto.module#AbmProductoPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'encuesta-cliente',
-    loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule'
+    loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'encuesta-empleado',
-    loadChildren: './paginas/encuesta-empleado/encuesta-empleado.module#EncuestaEmpleadoPageModule'
+    loadChildren: './paginas/encuesta-empleado/encuesta-empleado.module#EncuestaEmpleadoPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'encuesta-sup',
-    loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule'
-  },
-  {
-    path: 'modal-encuesta',
-    loadChildren: './paginas/modal-encuesta/modal-encuesta.module#ModalEncuestaPageModule'
+    loadChildren: './paginas/encuesta-sup/encuesta-sup.module#EncuestaSupPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'qr-ingreso-local',
-    loadChildren: './paginas/qr-ingreso-local/qr-ingreso-local.module#QrIngresoLocalPageModule'
+    loadChildren: './paginas/qr-ingreso-local/qr-ingreso-local.module#QrIngresoLocalPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'list-confirmar-cliente-mesa',
-    loadChildren: './paginas/list-confirmar-cliente-mesa/list-confirmar-cliente-mesa.module#ListConfirmarClienteMesaPageModule'
+    loadChildren: './paginas/list-confirmar-cliente-mesa/list-confirmar-cliente-mesa.module#ListConfirmarClienteMesaPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'qr-mesa',
@@ -66,41 +70,39 @@ const routes: Routes = [
   },
   {
     path: 'list-confirmar-cliente-alta',
-    loadChildren: './paginas/list-confirmar-cliente-alta/list-confirmar-cliente-alta.module#ListConfirmarClienteAltaPageModule'
+    loadChildren: './paginas/list-confirmar-cliente-alta/list-confirmar-cliente-alta.module#ListConfirmarClienteAltaPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'generar-pedido',
-    loadChildren: './paginas/generar-pedido/generar-pedido.module#GenerarPedidoPageModule'
-  },
-  {
-    path: 'modal-pedido',
-    loadChildren: './paginas/modal-pedido/modal-pedido.module#ModalPedidoPageModule'
+    loadChildren: './paginas/generar-pedido/generar-pedido.module#GenerarPedidoPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'juegos',
-    loadChildren: './paginas/juegos/juegos.module#JuegosPageModule'
+    loadChildren: './paginas/juegos/juegos.module#JuegosPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'list-confirmar-pedido',
-    loadChildren: './paginas/list-confirmar-pedido/list-confirmar-pedido.module#ListConfirmarPedidoPageModule'
+    loadChildren: './paginas/list-confirmar-pedido/list-confirmar-pedido.module#ListConfirmarPedidoPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'confirmar-entrega',
-    loadChildren: './paginas/confirmar-entrega/confirmar-entrega.module#ConfirmarEntregaPageModule'
+    loadChildren: './paginas/confirmar-entrega/confirmar-entrega.module#ConfirmarEntregaPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'confirmar-cierre-mesa',
-    loadChildren: './paginas/confirmar-cierre-mesa/confirmar-cierre-mesa.module#ConfirmarCierreMesaPageModule'
+    loadChildren: './paginas/confirmar-cierre-mesa/confirmar-cierre-mesa.module#ConfirmarCierreMesaPageModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'confirmar-entrega-mozo',
-    loadChildren: './paginas/confirmar-entrega-mozo/confirmar-entrega-mozo.module#ConfirmarEntregaMozoPageModule'
+    loadChildren: './paginas/confirmar-entrega-mozo/confirmar-entrega-mozo.module#ConfirmarEntregaMozoPageModule',
+    canActivate: [AuthGuard]
   },
-  {
-    path: 'modal-cliente',
-    loadChildren: './paginas/modal-cliente/modal-cliente.module#ModalClientePageModule'
-  },
-
 ];
 
 @NgModule({

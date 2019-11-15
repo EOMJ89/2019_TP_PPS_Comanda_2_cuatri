@@ -172,7 +172,7 @@ export class QrMesaPage implements OnInit {
       }).catch(err => {
         console.log('Error al escanear el qr', err);
         // this.presentAlert('¡Error!', 'Error al leer el código.', 'Error desconocido.');
-        this.manejarQr(6);
+        // this.manejarQr(6);
       });
   }
 

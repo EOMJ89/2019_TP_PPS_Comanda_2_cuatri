@@ -86,7 +86,7 @@ export class QrIngresoLocalPage implements OnInit {
         }
       }).catch(async (err) => {
         console.log('Error al escanear el qr', err);
-        await this.manejarQR();
+        // await this.manejarQR();
       });
   }
 
@@ -106,9 +106,8 @@ export class QrIngresoLocalPage implements OnInit {
         // console.log('Hay usuario anonimo', auxUserAnon);
       } else {
         // Si no encuentro cliente anonimo, significa que soy un empleado y supervisor
-        console.log('No hay cliente, se enviará a las estadisticas de clientes');
-        this.presentAlert(null, 'No hay usuario', 'Se enviará a las estadisticas de clientes.');
-        // this.router.navigate(['/est-satisfaccion']); // Sin implementar
+        console.log('No hay cliente, es un empleado o un desconocido.');
+        this.presentAlert('¡Error!', 'No hay cliente', 'Usted no es un cliente, no puede colocarse en la lista.');
       }
     }
   }

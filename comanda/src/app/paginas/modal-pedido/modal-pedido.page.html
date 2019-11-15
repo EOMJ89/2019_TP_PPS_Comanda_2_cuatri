@@ -15,6 +15,12 @@
         (producto.cantidad * producto.precio) | currency }}
         <div slot="end">{{ producto.estado }}</div>
       </ion-item>
+      <ion-button (click)="this.verCuenta()" expand="block" color="tertiary"
+        [disabled]="this.pedidoActual!= undefined &&
+        (this.pedidoActual.estado == 'comiendo' ||
+        this.pedidoActual.estado == 'cuenta')">
+        Pedir / Ver Cuenta
+      </ion-button>
     </ion-card-content>
   </ion-card>
   <ion-card *ngIf="this.pedidoActual == undefined" class="card-background">

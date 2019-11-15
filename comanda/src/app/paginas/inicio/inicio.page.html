@@ -1,61 +1,104 @@
-<div class="logoOutFix">
-  <img class="logOutImg" (click)="authService.Logout()"
-    src="/assets/img/logotout.png">
-</div>
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-button color="light" size="small" (click)="cerrarSesion()">
+        <ion-icon name="power" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{(this.tipoUser == '' ? "..." : this.tipoUser) | titlecase}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content>
-
-  <img class="logOutImg" (click)="authService.Logout()"
-    src="/assets/img/logotout.png">
-
-  <div [hidden]="ocultarSpinner" class="divSpinner">
-    <table class="tableSpinner">
-      <tr><img class="hided" src="assets/img/hided.png"></tr>
-      <tr><img src="assets/img/preloader.gif"></tr>
-    </table>
+<ion-content class="ion-padding">
+  <div *ngIf="this.tipoUser == ''"
+    class="width-100 center-horizontal center-vertical flex-v spinner-text">
+    Espere...
+    <ion-spinner color="dark"></ion-spinner>
   </div>
 
   <!-- Para el dueño / supervisor -->
-  <ion-item class="itemcButton">
-    <button routerLink="/registro-empleado" class="button">Registrar Empleado</button>
-    <button routerLink="/encuesta-sup" class="button">Encuesta</button>
-  </ion-item>
-  <ion-item class="itemcButton">
-    <button routerLink="/list-confirmar-cliente-alta" class="button">Clientes a
-      Confirmar</button>
-  </ion-item>
+  <div *ngIf="this.tipoUser == 'supervisor' || this.tipoUser == 'dueño'"
+    class="width-100 center-horizontal flex-wrap">
+    <ion-button routerLink="/registro-empleado" size="large">
+      Registrar Empleado
+    </ion-button>
+    <ion-button routerLink="/encuesta-sup" size="large">
+      Encuesta
+    </ion-button>
+    <ion-button routerLink="/list-confirmar-cliente-alta" size="large">
+      Confirmación de Clientes
+    </ion-button>
+    <ion-button routerLink="/list-confirmar-cliente-mesa" size="large">
+      Lista de Espera
+    </ion-button>
+    <ion-button routerLink="/qr-mesa" size="large">
+      QR de Mesa
+    </ion-button>
+    <ion-button routerLink="/confirmar-cierre-mesa" size="large">
+      Cierre de Mesas
+    </ion-button>
+  </div>
+
+  <!-- Para camarero (cocinero), bartender, candybar -->
+  <div class="width-100 center-horizontal flex-wrap"
+    *ngIf="this.tipoUser == 'camarero' || this.tipoUser == 'candybar' ||
+    this.tipoUser == 'bartender'">
+    <ion-button routerLink="/abm-producto" size="large">
+      Registrar Producto
+    </ion-button>
+    <ion-button routerLink="/encuesta-empleado" size="large">
+      Encuesta
+    </ion-button>
+  </div>
 
   <!-- Para el mozo -->
-  <ion-item class="itemcButton">
-    <button routerLink="/abm-mesa" class="button">Registrar Mesa</button>
-    <button routerLink="/abm-producto" class="button">Registrar Producto</button>
-  </ion-item>
-  <ion-item class="itemcButton">
-    <button routerLink="/encuesta-empleado" class="button">Encuesta</button>
-    <button routerLink="/list-confirmar-cliente-mesa" class="button">Lista de
-      Espera</button>
-  </ion-item>
-  <ion-item class="itemcButton">
-    <button routerLink="/list-confirmar-pedido" class="button">Confirmación
-      de Pedidos</button>
-    <button routerLink="/confirmar-entrega-mozo" class="button">
-      Confirmar Entrega Mozo</button>
-  </ion-item>
-  <ion-item class="itemcButton">
-    <button routerLink="/confirmar-cierre-mesa" class="button">Cierre de Mesas</button>
-  </ion-item>
+  <div class="width-100 center-horizontal flex-wrap"
+    *ngIf="this.tipoUser == 'mozo'">
+    <ion-button routerLink="/abm-producto" size="large">
+      Registrar Producto
+    </ion-button>
+    <ion-button routerLink="/abm-mesa" size="large">
+      Registrar Mesas
+    </ion-button>
+    <ion-button routerLink="/encuesta-empleado" size="large">
+      Encuesta
+    </ion-button>
+    <ion-button routerLink="/qr-ingreso-local" size="large">
+      Ingreso al Local
+    </ion-button>
+    <ion-button routerLink="/list-confirmar-cliente-mesa" size="large">
+      Lista de Espera
+    </ion-button>
+    <ion-button routerLink="/qr-mesa" size="large">
+      QR de Mesa
+    </ion-button>
+    <ion-button routerLink="/list-confirmar-pedido" size="large">
+      Confirmación de Pedidos
+    </ion-button>
+    <ion-button routerLink="/confirmar-entrega-mozo" size="large">
+      Confirmar Entrega Mozo
+    </ion-button>
+    <ion-button routerLink="/confirmar-cierre-mesa" size="large">
+      Cierre de Mesas
+    </ion-button>
+  </div>
 
   <!-- Para el cliente -->
-  <ion-item class="itemcButton">
-    <!-- <button routerLink="/encuesta-cliente" class="button">Encuesta</button> -->
-    <button routerLink="/generar-pedido" class="button">Generar Pedido</button>
-    <button routerLink="/confirmar-entrega" class="button">Confirmar Entrega</button>
-  </ion-item>
-
-  <!-- Para multiples tipos de usuario -->
-  <ion-item class="itemcButton">
-    <button routerLink="/qr-ingreso-local" class="button">Ingreso al Local</button>
-    <button routerLink="/qr-mesa" class="button">QR de Mesa</button>
-  </ion-item>
-
+  <div class="width-100 center-horizontal flex-wrap"
+    *ngIf="this.tipoUser == 'cliente' || this.tipoUser == 'anonimo'">
+    <ion-button routerLink="/qr-ingreso-local" size="large">
+      Ingreso al Local
+    </ion-button>
+    <ion-button routerLink="/qr-mesa" size="large">
+      QR de Mesa
+    </ion-button>
+    <ion-button routerLink="/generar-pedido" size="large">
+      Generar Pedido
+    </ion-button>
+    <ion-button routerLink="/confirmar-entrega" size="large">
+      Confirmar Entrega
+    </ion-button>
+  </div>
 </ion-content>

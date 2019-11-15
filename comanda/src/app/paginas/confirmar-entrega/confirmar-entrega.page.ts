@@ -9,6 +9,7 @@ import { PedidoKey } from 'src/app/clases/pedido';
 import { map } from 'rxjs/operators';
 import { PedidoDetalleKey, PedidoDetalle } from 'src/app/clases/pedidoDetalle';
 import { PedidoDeliveryKey } from 'src/app/clases/pedidoDelivery';
+import { MesaKey } from 'src/app/clases/mesa';
 
 @Component({
   selector: 'app-confirmar-entrega',
@@ -253,11 +254,30 @@ export class ConfirmarEntregaPage implements OnInit {
     });
   }
 
+  private traerMesa(nroMesa: number) {
+    return this.firestore.collection('mesas').ref.where('nromesa', '==', nroMesa).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return null;
+        } else {
+          const auxReturn: MesaKey = d.docs[0].data() as MesaKey;
+          auxReturn.key = d.docs[0].id;
+
+          return auxReturn;
+        }
+      });
+  }
+
   public confirmarEntrega() {
     // console.log('Confirmo la entrega');
 
     if (this.pedidoEnLocal != null) {
-      this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(() => {
+      this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(async () => {
+        const auxMesa = await this.traerMesa(this.pedidoEnLocal.mesa);
+
+        if (auxMesa !== null) {
+          await this.actualizarDoc('mesas', auxMesa.key, { estado: 'comiendo' });
+        }
         this.presentToast('Entrega confirmada', 'success');
         this.inicializarPedidos();
       });
