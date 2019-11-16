@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 import { PedidoKey } from 'src/app/clases/pedido';
+import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
 
 @Component({
   selector: 'app-confirmar-entrega-mozo',
@@ -14,7 +15,8 @@ export class ConfirmarEntregaMozoPage implements OnInit {
 
   constructor(
     private firestore: AngularFirestore,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController) { }
 
   public async ngOnInit() {
     this.inicializarPedidos();
@@ -62,6 +64,18 @@ export class ConfirmarEntregaMozoPage implements OnInit {
       duration: 2000
     }).then(toast => {
       toast.present();
+    });
+  }
+
+  public verPedido(pedido: string) {
+    // alert('La página de pedido no está implementada');
+    this.modalCtrl.create({
+      component: ModalPedidoPage,
+      componentProps: {
+        pedido
+      }
+    }).then(modal => {
+      modal.present();
     });
   }
 }

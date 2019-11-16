@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PedidoKey } from 'src/app/clases/pedido';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { MesaKey } from 'src/app/clases/mesa';
 import { PedidoDetalleKey } from 'src/app/clases/pedidoDetalle';
+import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
 
 @Component({
   selector: 'app-list-confirmar-pedido',
@@ -16,7 +17,8 @@ export class ListConfirmarPedidoPage implements OnInit {
 
   constructor(
     private firestore: AngularFirestore,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController, ) {
   }
 
   ngOnInit() {
@@ -135,6 +137,18 @@ export class ListConfirmarPedidoPage implements OnInit {
       duration: 2000
     }).then(toast => {
       toast.present();
+    });
+  }
+
+  public verPedido(pedido: string) {
+    // alert('La página de pedido no está implementada');
+    this.modalCtrl.create({
+      component: ModalPedidoPage,
+      componentProps: {
+        pedido
+      }
+    }).then(modal => {
+      modal.present();
     });
   }
 }

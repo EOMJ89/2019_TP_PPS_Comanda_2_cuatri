@@ -86,7 +86,7 @@ export class QrIngresoLocalPage implements OnInit {
         }
       }).catch(async (err) => {
         console.log('Error al escanear el qr', err);
-        // await this.manejarQR();
+        await this.manejarQR();
       });
   }
 

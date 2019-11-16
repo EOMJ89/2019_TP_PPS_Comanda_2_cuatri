@@ -35,7 +35,7 @@ export class ConfirmarEntregaPage implements OnInit {
   }
 
   public inicializarPedidos() {
-    this.pedidoDetalles = new Array<PedidoDetalleKey>();
+    // this.pedidoDetalles = new Array<PedidoDetalleKey>();
     this.traerPedidos().then((p: PedidoKey[]) => {
       if (p.length > 0) {
         this.pedidoEnLocal = p[0];

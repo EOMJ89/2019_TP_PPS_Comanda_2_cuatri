@@ -13,12 +13,24 @@
   <!-- Pedidos -->
   <ion-card class="card-background" *ngIf="this.pedidos.length> 0">
     <ion-card-content>
-      <div *ngFor="let pedido of this.pedidos">
-        <ion-item class="transparent-item ion-no-padding">
-          {{ pedido.cliente }}<br>{{ pedido.mesa }}
-          <ion-button slot="end" (click)="confirmarEntrega(pedido.key)">Confirmar</ion-button>
-        </ion-item>
+      <div class="ion-no-padding transparent-item flex-v" *ngFor="let pedido of
+        pedidos">
+        <div class="width-100 align-text-center big-letter">
+          Mesa {{pedido.mesa}}
+        </div>
+
+        <div class="width-100 center-horizontal center-vertical">
+          <ion-button color="tertiary"
+            (click)="this.verPedido(pedido.key)">
+            Ver
+          </ion-button>
+        </div>
+
+        <div class="width-100 center-horizontal center-vertical">
+          <ion-button (click)="confirmarEntrega(pedido.key)" color="success">Confirmar</ion-button>
+        </div>
       </div>
+
     </ion-card-content>
   </ion-card>
 

@@ -10,22 +10,31 @@
 </ion-header>
 
 <ion-content class="background-page">
-  <ion-card *ngIf="this.pedidos.length > 0" class="card-background">
+  <ion-card *ngIf="this.pedidos.length> 0" class="card-background">
     <ion-card-content>
-      <ion-item class="ion-no-padding transparent-item" *ngFor="let pedido of
+      <div class="ion-no-padding transparent-item flex-v" *ngFor="let pedido of
         pedidos">
-        Mesa {{pedido.mesa}}
-        <div slot="end">
-          <ion-button size="small" color="primary"
+        <div class="width-100 align-text-center big-letter">
+          Mesa {{pedido.mesa}}
+        </div>
+        <div class="width-100 center-horizontal center-vertical">
+          <ion-button color="tertiary"
+            (click)="this.verPedido(pedido.key)">
+            Ver
+          </ion-button>
+        </div>
+
+        <div class="width-100 center-horizontal">
+          <ion-button color="primary"
             (click)="aceptarPedido(pedido.key)">
             <ion-icon slot="icon-only" name="checkmark"></ion-icon>
           </ion-button>
-          <ion-button size="small" color="danger"
+          <ion-button color="danger"
             (click)="rechazarPedido(pedido.key, pedido.mesa)">
             <ion-icon slot="icon-only" name="close"></ion-icon>
           </ion-button>
         </div>
-      </ion-item>
+      </div>
     </ion-card-content>
   </ion-card>
 

@@ -25,9 +25,7 @@ export class InicioPage {
   }
 
   public async ionViewDidEnter() {
-    if (this.tipoUser === '') {
       await this.buscarUsuario();
-    }
   }
 
   private obtenerUsername() {

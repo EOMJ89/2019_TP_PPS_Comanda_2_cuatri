@@ -9,6 +9,7 @@ export class Pedido {
     public juegoDescuento: boolean;
     public juegoBebida: boolean;
     public juegoComida: boolean;
+    public propina: number;
 
     constructor() {
         this.cliente = '';
@@ -21,6 +22,7 @@ export class Pedido {
         this.juegoDescuento = false;
         this.juegoBebida = false;
         this.juegoComida = false;
+        this.propina = 0;
     }
 }
 
@@ -36,4 +38,5 @@ export interface PedidoKey {
     juegoDescuento: boolean;
     juegoBebida: boolean;
     juegoComida: boolean;
+    propina: number;
 }

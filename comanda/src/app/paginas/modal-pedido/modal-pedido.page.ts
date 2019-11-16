@@ -19,14 +19,12 @@ export class ModalPedidoPage implements OnInit {
   private pedidoActual: PedidoKey;
   private pedidoDetalle: PedidoDetalleKey[] = new Array<PedidoDetalleKey>();
   private cliente = false;
+  private verCuenta = false;
 
   constructor(
     private firestore: AngularFirestore,
     private modalController: ModalController,
-    private authService: AuthService,
-
-  ) {
-  }
+    private authService: AuthService) { }
 
   async ngOnInit() {
     await this.buscarUsuario();
@@ -92,6 +90,8 @@ export class ModalPedidoPage implements OnInit {
       if (auxClienteAnon !== null) {
         this.cliente = true;
         // console.log('Hay usuario anonimo', auxClienteAnon);
+      } else {
+        this.cliente = false;
       }
     }
   }
@@ -101,6 +101,11 @@ export class ModalPedidoPage implements OnInit {
       if (d.exists) {
         this.pedidoActual = d.data() as PedidoKey;
         this.pedidoActual.key = d.id;
+        if (this.pedidoActual.estado === 'cuenta') {
+          this.verCuenta = true;
+        } else {
+          this.verCuenta = false;
+        }
       }
     });
   }
@@ -125,7 +130,23 @@ export class ModalPedidoPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  public verCuenta() {
-    console.log('Ver la cuenta');
+  private actualizarDoc(db: string, key: string, data: any) {
+    return this.firestore.collection(db).doc(key).update(data);
+  }
+
+  public async crearCuenta() {
+    if (this.pedidoActual.estado !== 'finalizado' && this.pedidoActual.estado !== 'cuenta') {
+      await this.actualizarDoc('pedidos', this.pedidoActual.key, { estado: 'cuenta' });
+      this.traerPedido();
+    }
+
+    this.verCuenta = true;
+    // console.log('Ver la cuenta');
+  }
+
+  public manejarPrecioPropina(/* total: number, propina: number */) {
+    const precioTotal: number = this.pedidoActual.preciototal;
+    const agregadoPropina: number = (this.pedidoActual.propina / 100) * precioTotal;
+    return precioTotal + agregadoPropina;
   }
 }

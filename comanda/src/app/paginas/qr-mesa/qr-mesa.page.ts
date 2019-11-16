@@ -172,7 +172,7 @@ export class QrMesaPage implements OnInit {
       }).catch(err => {
         console.log('Error al escanear el qr', err);
         // this.presentAlert('¡Error!', 'Error al leer el código.', 'Error desconocido.');
-        // this.manejarQr(6);
+        this.manejarQr(6);
       });
   }
 
@@ -439,6 +439,7 @@ export class QrMesaPage implements OnInit {
     });
 
     if (auxReturn !== undefined) {
+      return auxReturn;
     } else {
       return false;
     }
@@ -448,6 +449,7 @@ export class QrMesaPage implements OnInit {
     const auxReturn = this.mesas.find(m => {
       return m.cliente === this.user.correo;
     });
+    console.log(auxReturn);
 
     if (auxReturn !== undefined) {
       return true;

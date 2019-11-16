@@ -215,7 +215,8 @@ export class GenerarPedidoPage implements OnInit {
           juegoComida: false,
           juegoDescuento: false,
           mesa: this.mesaDelPedido.nromesa,
-          preciototal: this.calcularPrecioTotal(productosPedidos)
+          preciototal: this.calcularPrecioTotal(productosPedidos),
+          propia: 0,
         };
 
         await this.firestore.collection('pedidos').add(pedido)

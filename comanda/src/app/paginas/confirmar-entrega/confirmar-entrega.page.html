@@ -13,9 +13,29 @@
   <!-- Pedido local -->
   <ion-card class="card-background" *ngIf="this.pedidoEnLocal != null">
     <ion-card-content>
-      <ion-item *ngFor="let producto of pedidoDetalles"
-        class="transparent-item ion-no-padding">
-        ({{ producto.cantidad }}) - {{ producto.producto }}
+      <ion-item class="ion-no-padding">
+        <ion-label>Cliente</ion-label>
+        <ion-input [value]="this.pedidoEnLocal.cliente" readonly></ion-input>
+      </ion-item>
+      <ion-item class="ion-no-padding">
+        <ion-label>Fecha</ion-label>
+        <ion-input [value]="this.pedidoEnLocal.fecha | date:'medium'" readonly></ion-input>
+      </ion-item>
+      <ion-item class="ion-no-padding">
+        <ion-label>Estado</ion-label>
+        <ion-input [value]="this.pedidoEnLocal.estado | titlecase" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="transparent-item ion-no-padding"
+        *ngFor="let producto of pedidoDetalles">
+        ({{producto.cantidad}}) {{producto.producto}} -
+        {{(producto.cantidad * producto.precio) | currency}}
+        <div slot="end">{{producto.estado | titlecase}}</div>
+      </ion-item>
+
+      <ion-item class="ion-no-padding">
+        <ion-label>Total</ion-label>
+        <ion-input [value]="this.pedidoEnLocal.preciototal" readonly></ion-input>
       </ion-item>
     </ion-card-content>
   </ion-card>
@@ -23,12 +43,12 @@
   <!-- Pedido de Delivery -->
   <ion-card class="card-background" *ngIf="this.pedidoDelivery != null">
     <ion-card-content>
-      <ion-item *ngFor="let producto of pedidoDetalles"
-        class="transparent-item ion-no-padding">
-        ({{ producto.cantidad }}) - {{ producto.producto }}
-        <div class="item-note" slot="end">
-          {{(producto.cantidad * producto.precio) | currency}}
-        </div>
+      <!-- Terminar de agregar datos -->
+      <ion-item class="transparent-item ion-no-padding"
+        *ngFor="let producto of pedidoDetalles">
+        ({{ producto.cantidad }}) {{ producto.producto }} -
+        {{(producto.cantidad * producto.precio) | currency}}
+        <div slot="end">{{producto.estado | titlecase}}</div>
       </ion-item>
       <ion-item class="transparent-item ion-no-padding">
         PRECIO FINAL:

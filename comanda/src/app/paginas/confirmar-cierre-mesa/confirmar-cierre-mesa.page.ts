@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 import { PedidoKey } from 'src/app/clases/pedido';
 import { map } from 'rxjs/operators';
 import { MesaKey } from 'src/app/clases/mesa';
+import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
 
 @Component({
   selector: 'app-confirmar-cierre-mesa',
@@ -14,7 +15,8 @@ export class ConfirmarCierreMesaPage implements OnInit {
   private pedidos: PedidoKey[] = new Array<PedidoKey>();
   constructor(
     private firestore: AngularFirestore,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController) { }
 
   ngOnInit() {
     this.traerPedidos().subscribe((p: PedidoKey[]) => {
@@ -88,6 +90,18 @@ export class ConfirmarCierreMesaPage implements OnInit {
       duration: 2000
     }).then(toast => {
       toast.present();
+    });
+  }
+
+  public verPedido(pedido: string) {
+    // alert('La página de pedido no está implementada');
+    this.modalCtrl.create({
+      component: ModalPedidoPage,
+      componentProps: {
+        pedido
+      }
+    }).then(modal => {
+      modal.present();
     });
   }
 }
