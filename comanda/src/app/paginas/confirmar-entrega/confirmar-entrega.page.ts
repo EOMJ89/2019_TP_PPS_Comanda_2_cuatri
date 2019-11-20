@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { PedidoDetalleKey, PedidoDetalle } from 'src/app/clases/pedidoDetalle';
 import { PedidoDeliveryKey } from 'src/app/clases/pedidoDelivery';
 import { MesaKey } from 'src/app/clases/mesa';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-confirmar-entrega',
@@ -20,17 +21,15 @@ export class ConfirmarEntregaPage implements OnInit {
   private pedidoEnLocal: PedidoKey = null;
   private pedidoDetalles: PedidoDetalleKey[] = null;
   private pedidoDelivery: PedidoDeliveryKey = null; // Cambiar a Pedido Delivery cuando se haga la clase
-  private user: ClienteKey | AnonimoKey;
 
   constructor(
-    private auth: AngularFireAuth,
+    private authServ: AuthService,
     private firestore: AngularFirestore,
     private toastCtrl: ToastController,
     private scanner: BarcodeScanner,
     private alertCtrl: AlertController) { }
 
-  public async ngOnInit() {
-    await this.buscarUsuario();
+  public ngOnInit() {
     this.inicializarPedidos();
   }
 
@@ -55,66 +54,8 @@ export class ConfirmarEntregaPage implements OnInit {
     });
   }
 
-  private obtenerUsername() {
-    return this.auth.auth.currentUser.email;
-  }
-
-  private async traerUsuarioRegistrado(): Promise<false | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', await this.obtenerUsername()).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (d.empty) {
-          return false;
-        } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
-          auxReturn.key = d.docs[0].id;
-          return auxReturn;
-        }
-      });
-  }
-
-  private async obtenerUid() {
-    return this.auth.auth.currentUser.uid;
-  }
-
-  private async traerUsuarioAnonimo(): Promise<false | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
-      .then((d: DocumentSnapshot<any>) => {
-        if (d.exists) {
-          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-          auxReturn.key = d.id;
-          return auxReturn;
-        } else {
-          return false;
-        }
-      });
-  }
-
-  private async buscarUsuario() {
-    // Obtengo el cliente activo en la base de clientes registrados
-    const auxUser = await this.traerUsuarioRegistrado()
-      .catch(err => {
-        // alert(err);
-      });
-
-    // Si el cliente está registrado, entonces prosigo con la operación
-    if (auxUser) {
-      // console.log('Hay cliente registrado', auxUser);
-      this.user = auxUser;
-    } else {
-      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-      const auxUserAnon = await this.traerUsuarioAnonimo()
-        .catch(err => {
-          // alert(err);
-        });
-      if (auxUserAnon) {
-        this.user = auxUserAnon;
-        // console.log('Hay usuario anonimo', auxUserAnon);
-      }
-    }
-  }
-
   private traerPedidos() {
-    return this.firestore.collection('pedidos').ref.where('cliente', '==', this.user.correo).get()
+    return this.firestore.collection('pedidos').ref.where('cliente', '==', this.authServ.user.correo).get()
       .then((d: QuerySnapshot<any>) => {
         if (d.empty) {
           return new Array<PedidoKey>();
@@ -158,7 +99,7 @@ export class ConfirmarEntregaPage implements OnInit {
   }
 
   private traerPedidosDelivery() {
-    return this.firestore.collection('pedidosDelivery').ref.where('cliente', '==', this.user.correo).get()
+    return this.firestore.collection('pedidosDelivery').ref.where('cliente', '==', this.authServ.user.correo).get()
       .then((d: QuerySnapshot<any>) => {
         if (d.empty) {
           return new Array<PedidoDeliveryKey>();

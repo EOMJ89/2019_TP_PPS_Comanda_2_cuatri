@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { AngularFirestore, DocumentSnapshot, QuerySnapshot } from '@angular/fire/firestore';
 import { PedidoKey } from 'src/app/clases/pedido';
 import { PedidoDetalleKey } from 'src/app/clases/pedidoDetalle';
@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { ClienteKey } from 'src/app/clases/cliente';
 import { AnonimoKey } from 'src/app/clases/anonimo';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 @Component({
   selector: 'app-modal-pedido',
@@ -24,76 +25,14 @@ export class ModalPedidoPage implements OnInit {
   constructor(
     private firestore: AngularFirestore,
     private modalController: ModalController,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private scanner: BarcodeScanner,
+    private alertCtrl: AlertController) { }
 
   async ngOnInit() {
-    await this.buscarUsuario();
+    this.cliente = this.authService.tipoUser === 'cliente' || this.authService.tipoUser === 'anonimo' ? true : false;
     this.traerPedido();
     this.traerPedidoDetalle();
-  }
-
-
-  private obtenerUsername() {
-    return this.authService.afAuth.auth.currentUser.email;
-  }
-
-  private async traerClienteRegistrado(): Promise<null | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', await this.obtenerUsername()).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (d.empty) {
-          return null;
-        } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
-          auxReturn.key = d.docs[0].id;
-          return auxReturn;
-        }
-      });
-  }
-
-  private async obtenerUid() {
-    return this.authService.afAuth.auth.currentUser.uid;
-  }
-
-  private async traerClienteAnonimo(): Promise<null | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
-      .then((d: DocumentSnapshot<any>) => {
-        if (d.exists) {
-          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-          auxReturn.key = d.id;
-          return auxReturn;
-        } else {
-          return null;
-        }
-      });
-  }
-
-  private async buscarUsuario() {
-    this.cliente = false;
-
-    // Obtengo el cliente activo en la base de clientes registrados
-    const auxCliente: void | ClienteKey = await this.traerClienteRegistrado()
-      .catch(err => {
-        console.log(err);
-      });
-
-    // Si el cliente está registrado, entonces prosigo con la operación
-    if (auxCliente !== null) {
-      this.cliente = true;
-      // console.log('Hay cliente registrado', auxCliente);
-    } else {
-      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-      const auxClienteAnon: void | AnonimoKey = await this.traerClienteAnonimo()
-        .catch(err => {
-          console.log(err);
-        });
-
-      if (auxClienteAnon !== null) {
-        this.cliente = true;
-        // console.log('Hay usuario anonimo', auxClienteAnon);
-      } else {
-        this.cliente = false;
-      }
-    }
   }
 
   public traerPedido() {
@@ -130,10 +69,6 @@ export class ModalPedidoPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  private actualizarDoc(db: string, key: string, data: any) {
-    return this.firestore.collection(db).doc(key).update(data);
-  }
-
   public async crearCuenta() {
     if (this.pedidoActual.estado !== 'finalizado' && this.pedidoActual.estado !== 'cuenta') {
       await this.actualizarDoc('pedidos', this.pedidoActual.key, { estado: 'cuenta' });
@@ -144,9 +79,75 @@ export class ModalPedidoPage implements OnInit {
     // console.log('Ver la cuenta');
   }
 
-  public manejarPrecioPropina(/* total: number, propina: number */) {
-    const precioTotal: number = this.pedidoActual.preciototal;
-    const agregadoPropina: number = (this.pedidoActual.propina / 100) * precioTotal;
+  public manejarPrecioPropina(total?: number, propina?: number) {
+    const precioTotal: number = total === undefined ? this.pedidoActual.preciototal : total;
+    const agregadoPropina: number = ((propina === undefined ? this.pedidoActual.propina : propina) / 100) * precioTotal;
     return precioTotal + agregadoPropina;
+  }
+
+  public cambiarPropina() {
+    console.log('Cambio la propina con un qr');
+
+    this.scanner.scan({ resultDisplayDuration: 0 }).then((data) => {
+      const propina = parseInt(data.text, 10);
+
+      if ((isNaN(propina) === false) ||
+        (propina === 5 || propina === 10 || propina === 15 || propina === 20)) {
+        this.manejarPropina(propina);
+      } else {
+        this.mostrarAlert('¡Código erroneo!', 'Debe escanear un codigo QR valido');
+      }
+    }, (err) => {
+      console.log('Error: ', err);
+      // this.mostrarAlert('¡Error!', 'Error desconocido.');
+      this.manejarPropina(5);
+    });
+  }
+
+  private manejarPropina(propina: number) {
+    const total = this.manejarPrecioPropina(this.pedidoActual.preciototal, propina);
+    this.muestroAlertPropina(this.pedidoActual.preciototal, propina, total);
+  }
+
+  private async mostrarAlert(header, message) {
+    await this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['OK']
+    }).then(alert => {
+      alert.present();
+    });
+  }
+
+  private async muestroAlertPropina(anterior: number, propina: number, total: number) {
+    await this.alertCtrl.create({
+      header: `Propina seleccionada: ${propina}%`,
+      subHeader: '¿Confirmar propina?',
+      message: `Su precio total pasará de ser $${anterior} a ser $${total}`,
+      buttons: [
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.actualizarPropina(propina);
+          }
+        }, {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    }).then(alert => {
+      alert.present();
+    });
+  }
+
+  private actualizarDoc(db: string, key: string, data: any) {
+    return this.firestore.collection(db).doc(key).update(data);
+  }
+
+  public actualizarPropina(propina: number) {
+    this.actualizarDoc('pedidos', this.pedidoActual.key, { propina }).then(() => {
+      this.traerPedido();
+    });
   }
 }

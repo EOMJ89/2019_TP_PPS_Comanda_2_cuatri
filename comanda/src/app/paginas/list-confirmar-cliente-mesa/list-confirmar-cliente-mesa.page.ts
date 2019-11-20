@@ -7,6 +7,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { ListaEsperaClientesKey, } from 'src/app/clases/lista-espera-clientes';
 import { map } from 'rxjs/operators';
 import { ModalClientePage } from '../modal-cliente/modal-cliente.page';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-list-confirmar-cliente-mesa',
@@ -19,29 +20,13 @@ export class ListConfirmarClienteMesaPage implements OnInit {
 
   constructor(
     private firestore: AngularFirestore,
-    private auth: AngularFireAuth,
     private toastCtrl: ToastController,
-    private modalCtrl: ModalController
-  ) {
-  }
+    private modalCtrl: ModalController,
+    private authServ: AuthService
+  ) { }
 
   async ngOnInit() {
-    const auxUser = await this.traerUsuarioRegistrado();
-
-    // Si el cliente está registrado, entonces prosigo con la operación
-    if (auxUser) {
-      // console.log('Hay cliente registrado', auxUser);
-      this.esMozo = false;
-    } else {
-      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-      const auxUserAnon = await this.traerUsuarioAnonimo();
-      if (auxUserAnon) {
-        this.esMozo = false;
-        // console.log('Hay usuario anonimo', auxUserAnon);
-      } else {
-        this.esMozo = true;
-      }
-    }
+    this.esMozo = this.authServ.tipoUser === 'mozo' ? true : false;
 
     this.traerListaEspera().subscribe((d: ListaEsperaClientesKey[]) => {
       // console.log('Tengo la lista de espera', d);
@@ -59,40 +44,6 @@ export class ListConfirmarClienteMesaPage implements OnInit {
     }
 
     return auxReturn;
-  }
-
-  private obtenerUsername() {
-    return this.auth.auth.currentUser.email;
-  }
-
-  private traerUsuarioRegistrado(): Promise<false | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', this.obtenerUsername()).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (d.empty) {
-          return false;
-        } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
-          auxReturn.key = d.docs[0].id;
-          return auxReturn;
-        }
-      });
-  }
-
-  private obtenerUid() {
-    return this.auth.auth.currentUser.uid;
-  }
-
-  private async traerUsuarioAnonimo(): Promise<false | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
-      .then((d: DocumentSnapshot<any>) => {
-        if (d.exists) {
-          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-          auxReturn.key = d.id;
-          return auxReturn;
-        } else {
-          return false;
-        }
-      });
   }
 
   public traerListaEspera() {
@@ -192,7 +143,7 @@ export class ListConfirmarClienteMesaPage implements OnInit {
     }
   }
 
-  private async  mostrarModalCliente(cliente: ClienteKey | AnonimoKey, registrado: string) {
+  private async mostrarModalCliente(cliente: ClienteKey | AnonimoKey, registrado: string) {
     await this.modalCtrl.create({
       component: ModalClientePage,
       componentProps: {

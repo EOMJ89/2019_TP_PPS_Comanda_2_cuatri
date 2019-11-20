@@ -1,42 +1,164 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
-import { AngularFireAuth } from "@angular/fire/auth";
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from 'firebase';
 
-import { AngularFirestore } from '@angular/fire/firestore';
-
-//clases
-import { Empleado } from '../clases/empleado';
-import { Cliente, ClienteAConfirmar } from '../clases/cliente';
-import { Anonimo } from '../clases/anonimo';
+import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
+// clases
+import { Empleado, EmpleadoKey } from '../clases/empleado';
+import { Cliente, ClienteAConfirmar, ClienteKey } from '../clases/cliente';
+import { Anonimo, AnonimoKey } from '../clases/anonimo';
 import { CajaSonido } from '../clases/cajaSonido';
-import * as firebase from "firebase/app";
+import * as firebase from 'firebase/app';
 
 
-var config = {
-  apiKey: "AIzaSyB641BDR9fQ_TDKpGdQOuQa46ZNQiALoIM",
-  authDomain: "comanda-2019-comicon.firebaseapp.com",
-  databaseURL: "https://comanda-2019-comicon.firebaseio.com"
+const config = {
+  apiKey: 'AIzaSyB641BDR9fQ_TDKpGdQOuQa46ZNQiALoIM',
+  authDomain: 'comanda-2019-comicon.firebaseapp.com',
+  databaseURL: 'https://comanda-2019-comicon.firebaseio.com',
+  projectId: 'comanda-2019-comicon',
+  storageBucket: 'comanda-2019-comicon.appspot.com',
+  messagingSenderId: '940906657827',
+  appId: '1:940906657827:web:f6775954d4970b16d41996',
+  measurementId: 'G-2Q085VK4YY'
 };
-var secondaryApp = firebase.initializeApp(config, "Secondary");
+const secondaryApp = firebase.initializeApp(config, 'Secondary');
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user: User;
+  // public user: User;
   public cajaSonido: CajaSonido = new CajaSonido();
+  // tslint:disable: variable-name
+  private _user: ClienteKey | AnonimoKey | EmpleadoKey = null;
+  private _tipoUser = '';
 
-  constructor(public afAuth: AngularFireAuth, public router: Router, private db: AngularFirestore) {
-    this.afAuth.authState.subscribe(user => {
+  constructor(
+    public afAuth: AngularFireAuth,
+    public router: Router,
+    private db: AngularFirestore) {
+    this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.user = user;
+        this.buscarUsuario();
+      }
+    });
+    /* this.afAuth.authState.subscribe(user => {
+       if (user) {
+         this.user = user;
         localStorage.setItem('usuario', JSON.stringify(this.user));
       } else {
         localStorage.setItem('usuario', null);
       }
-    })
+    }); */
   }
+
+  public get user(): ClienteKey | AnonimoKey | EmpleadoKey {
+    return this._user;
+  }
+
+  public get tipoUser(): string {
+    // console.log(this._tipoUser);
+    return this._tipoUser;
+  }
+
+
+  //#region ObtenerUsuario
+  private obtenerUsername() {
+    return this.afAuth.auth.currentUser.email;
+  }
+
+  private async traerClienteRegistrado(): Promise<null | ClienteKey> {
+    return this.db.collection('clientes').ref.where('correo', '==', await this.obtenerUsername()).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return null;
+        } else {
+          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
+          auxReturn.key = d.docs[0].id;
+          return auxReturn;
+        }
+      });
+  }
+
+  private async obtenerUid() {
+    return this.afAuth.auth.currentUser.uid;
+  }
+
+  private async traerClienteAnonimo(): Promise<null | AnonimoKey> {
+    return this.db.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
+      .then((d: DocumentSnapshot<any>) => {
+        if (d.exists) {
+          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
+          auxReturn.key = d.id;
+          return auxReturn;
+        } else {
+          return null;
+        }
+      });
+  }
+
+  private async traerEmpleado(): Promise<null | EmpleadoKey> {
+    return this.db.collection('empleados').ref.where('correo', '==', await this.obtenerUsername()).get()
+      .then((d: QuerySnapshot<any>) => {
+        if (d.empty) {
+          return null;
+        } else {
+          const auxReturn: EmpleadoKey = d.docs[0].data() as EmpleadoKey;
+          auxReturn.key = d.docs[0].id;
+          return auxReturn;
+        }
+      });
+  }
+
+  private async buscarUsuario() {
+    this._tipoUser = '';
+
+    // Obtengo el cliente activo en la base de clientes registrados
+    const auxCliente: void | ClienteKey = await this.traerClienteRegistrado()
+      .catch(err => {
+        console.log(err);
+      });
+
+    // Si el cliente está registrado, entonces prosigo con la operación
+    if (auxCliente !== null) {
+      this._tipoUser = 'cliente';
+      this._user = auxCliente as ClienteKey;
+      // console.log('Hay cliente registrado', auxCliente);
+    } else {
+      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
+      const auxClienteAnon: void | AnonimoKey = await this.traerClienteAnonimo()
+        .catch(err => {
+          console.log(err);
+        });
+
+      if (auxClienteAnon !== null) {
+        this._tipoUser = 'anonimo';
+        this._user = auxClienteAnon as AnonimoKey;
+        // console.log('Hay usuario anonimo', auxClienteAnon);
+      } else {
+        const auxEmpleado: void | EmpleadoKey = await this.traerEmpleado()
+          .catch(err => {
+            console.log(err);
+          });
+
+        if (auxEmpleado !== null) {
+          this._tipoUser = (auxEmpleado as EmpleadoKey).tipo;
+          this._user = auxEmpleado as EmpleadoKey;
+
+          // console.log('Hay empleado', auxEmpleado);
+        } else {
+          console.log('Error, no hay usuario idenfiticable');
+          this.Logout();
+        }
+      }
+    }
+
+    // console.log(this.user);
+    console.log(this.tipoUser);
+  }
+  //#endregion
 
   /*
     *permite guardar un usuario del tipo empleado en firebase a travez de un correo y contraseña
@@ -46,8 +168,7 @@ export class AuthService {
   */
   RegistrarEmpleado(usuario: Empleado, clave: string) {
     return new Promise((resolve, reject) => {
-      this.afAuth.auth.createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
-        const uid = res.user.uid;
+      secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
         this.db.collection('empleados').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
@@ -56,10 +177,12 @@ export class AuthService {
           CUIL: usuario.CUIL,
           foto: usuario.foto,
           tipo: usuario.tipo
-        })
-        resolve(res)
-      }).catch(err => reject(err))
-    })
+        }).then(() => {
+          secondaryApp.auth().signOut();
+        });
+        resolve(res);
+      }).catch(err => reject(err));
+    });
   }
 
   /*
@@ -70,18 +193,19 @@ export class AuthService {
   */
   RegistrarClienteConfirmado(usuario: Cliente, clave: string) {
     return new Promise((resolve, reject) => {
-      this.afAuth.auth.createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
-        const uid = res.user.uid;
+      secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
         this.db.collection('clientes').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
           apellido: usuario.apellido,
           DNI: usuario.DNI,
           foto: usuario.foto,
-        })
-        resolve(res)
-      }).catch(err => reject(err))
-    })
+        }).then(() => {
+          secondaryApp.auth().signOut();
+        });
+        resolve(res);
+      }).catch(err => reject(err));
+    });
   }
 
   /*
@@ -111,17 +235,18 @@ export class AuthService {
   */
   RegistrarAnonimo(usuario: Anonimo, clave: string) {
     return new Promise((resolve, reject) => {
-      this.afAuth.auth.createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
-        const uid = res.user.uid;
+      secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
         this.db.collection('anonimos').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
           foto: usuario.foto,
           clave,
-        })
-        resolve(res)
-      }).catch(err => reject(err))
-    })
+        }).then(() => {
+          secondaryApp.auth().signOut();
+        });
+        resolve(res);
+      }).catch(err => reject(err));
+    });
   }
 
   /*
@@ -134,7 +259,7 @@ export class AuthService {
       await this.afAuth.auth.signInWithEmailAndPassword(correo, clave);
       // this.router.navigate(['inicio']);
     } catch (e) {
-      alert("Error!" + e.message);
+      console.log('Error!', e);
     }
   }
 
@@ -143,8 +268,11 @@ export class AuthService {
   */
   async Logout() {
     this.cajaSonido.ReproducirGuardar();
-    await this.afAuth.auth.signOut();
-    localStorage.removeItem('usuario');
+    await this.afAuth.auth.signOut().then(() => {
+      this._user = null;
+      this._tipoUser = '';
+    });
+    // localStorage.removeItem('usuario');
     this.router.navigate(['login']);
   }
 

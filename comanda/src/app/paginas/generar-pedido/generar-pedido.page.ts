@@ -11,6 +11,7 @@ import { AnonimoKey } from 'src/app/clases/anonimo';
 import { AngularFirestore, QuerySnapshot, DocumentSnapshot, DocumentReference } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/servicios/auth.service';
 /* import { Pedido } from 'src/app/clases/pedido';
 import { PedidoDetalle } from 'src/app/clases/pedidoDetalle'; */
 
@@ -29,15 +30,14 @@ export class GenerarPedidoPage implements OnInit {
   private productosBartender: ProductoKey[];
   private productosCandybar: ProductoKey[];
   private totalPedido = 0;
-  private user: ClienteKey | AnonimoKey;
 
   constructor(
     public modalCtrl: ModalController,
     public toastController: ToastController,
     public alertCtrl: AlertController,
-    private auth: AngularFireAuth,
     private firestore: AngularFirestore,
     private router: Router,
+    private authServ: AuthService
   ) { }
 
   // Trae los productos
@@ -76,70 +76,12 @@ export class GenerarPedidoPage implements OnInit {
     });
   }
 
-  private obtenerUsername() {
-    return this.auth.auth.currentUser.email;
-  }
-
-  // Obtiene el cliente si es que este es registrado, retorna false si no está en la base de datos
-  private async traerUsuarioRegistrado(): Promise<false | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', await this.obtenerUsername()).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (d.empty) {
-          return false;
-        } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
-          auxReturn.key = d.docs[0].id;
-          return auxReturn;
-        }
-      });
-  }
-
-  private async obtenerUid() {
-    return this.auth.auth.currentUser.uid;
-  }
-
-  // Obtiene el cliente si es que este es anonimo, retorna false si no está en la base de datos
-  private async traerUsuarioAnonimo(): Promise<false | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
-      .then((d: DocumentSnapshot<any>) => {
-        if (d.exists) {
-          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-          auxReturn.key = d.id;
-          return auxReturn;
-        } else {
-          return false;
-        }
-      });
-  }
-
-  private async buscarUsuario() {
-    // Obtengo el cliente activo en la base de clientes registrados
-    const auxUser = await this.traerUsuarioRegistrado();
-
-    // Si el cliente está registrado, entonces prosigo con la operación
-    if (auxUser) {
-      // console.log('Hay cliente registrado', auxUser);
-      this.user = auxUser;
-    } else {
-      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-      const auxUserAnon = await this.traerUsuarioAnonimo();
-
-      if (auxUserAnon) {
-        this.user = auxUserAnon;
-        // console.log('Hay usuario anonimo', auxUserAnon);
-      }
-    }
-
-    // console.log(this.user.correo);
-  }
 
   async ngOnInit() {
     // this.traerProductos();
     this.inicializarProductos();
-    await this.buscarUsuario();
-    this.traerMesa(this.user.correo);
+    this.traerMesa(this.authServ.user.correo);
   }
-
 
   restarProducto(key: string) {
     const producto = this.productos.find(prod => prod.key === key);
@@ -208,7 +150,7 @@ export class GenerarPedidoPage implements OnInit {
         const pedido: any = {
           cantDet: productosPedidos.length,
           cantEnt: 0,
-          cliente: this.user.correo,
+          cliente: this.authServ.user.correo,
           estado: 'creado',
           fecha: (new Date()).getTime(),
           juegoBebida: false,
@@ -216,7 +158,7 @@ export class GenerarPedidoPage implements OnInit {
           juegoDescuento: false,
           mesa: this.mesaDelPedido.nromesa,
           preciototal: this.calcularPrecioTotal(productosPedidos),
-          propia: 0,
+          propina: 0,
         };
 
         await this.firestore.collection('pedidos').add(pedido)

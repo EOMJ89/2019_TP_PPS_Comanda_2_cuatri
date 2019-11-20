@@ -13,6 +13,7 @@ import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
 })
 export class ConfirmarCierreMesaPage implements OnInit {
   private pedidos: PedidoKey[] = new Array<PedidoKey>();
+
   constructor(
     private firestore: AngularFirestore,
     private toastCtrl: ToastController,

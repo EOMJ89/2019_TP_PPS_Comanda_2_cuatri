@@ -12,6 +12,7 @@ import { ListaEsperaClientesKey } from 'src/app/clases/lista-espera-clientes';
 import { Router } from '@angular/router';
 import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
 import { EncuestaClientePage } from '../encuesta-cliente/encuesta-cliente.page';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-qr-mesa',
@@ -24,19 +25,17 @@ export class QrMesaPage implements OnInit {
   };
   private mesas: MesaKey[];
   private mesaAMostrar: MesaKey;
-  private esCliente = false;
   private reservas: ReservaKey[];
   private reservaAMostrar: ReservaKey;
   private listaEspera: ListaEsperaClientesKey[];
-  private user: ClienteKey | AnonimoKey;
 
   constructor(
     private firestore: AngularFirestore,
     private scanner: BarcodeScanner,
-    private auth: AngularFireAuth,
     private modalCtrl: ModalController,
     public router: Router,
     private alertCtrl: AlertController,
+    private authServ: AuthService
   ) { }
 
   async ngOnInit() {
@@ -54,34 +53,6 @@ export class QrMesaPage implements OnInit {
       // console.log('Tengo la lista de espera', d);
       this.listaEspera = d;
     });
-
-    await this.buscarUsuario();
-  }
-
-  private async buscarUsuario() {
-    // Obtengo el cliente activo en la base de clientes registrados
-    const auxUser = await this.traerUsuarioRegistrado();
-    /* .catch(err => {
-      alert(err);
-    }); */
-
-    // Si el cliente está registrado, entonces prosigo con la operación
-    if (auxUser) {
-      // console.log('Hay cliente registrado', auxUser);
-      this.user = auxUser;
-      this.esCliente = true;
-    } else {
-      // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-      const auxUserAnon = await this.traerUsuarioAnonimo();
-      /* .catch(err => {
-        alert(err);
-      }); */
-      if (auxUserAnon) {
-        this.user = auxUserAnon;
-        this.esCliente = true;
-        // console.log('Hay usuario anonimo', auxUserAnon);
-      }
-    }
   }
 
   public traerListaEspera() {
@@ -116,40 +87,6 @@ export class QrMesaPage implements OnInit {
       }));
   }
 
-  private obtenerUsername() {
-    return this.auth.auth.currentUser.email;
-  }
-
-  private async traerUsuarioRegistrado(): Promise<false | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', await this.obtenerUsername()).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (d.empty) {
-          return false;
-        } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
-          auxReturn.key = d.docs[0].id;
-          return auxReturn;
-        }
-      });
-  }
-
-  private async obtenerUid() {
-    return this.auth.auth.currentUser.uid;
-  }
-
-  private async traerUsuarioAnonimo(): Promise<false | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise()
-      .then((d: DocumentSnapshot<any>) => {
-        if (d.exists) {
-          const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-          auxReturn.key = d.id;
-          return auxReturn;
-        } else {
-          return false;
-        }
-      });
-  }
-
   private buscarMesa(nroMesa: number) {
     this.mesaAMostrar = this.mesas.find(m => {
       return m.nromesa === nroMesa;
@@ -171,6 +108,7 @@ export class QrMesaPage implements OnInit {
       }).catch(err => {
         console.log('Error al escanear el qr', err);
         // this.presentAlert('¡Error!', 'Error al leer el código.', 'Error desconocido.');
+
         this.manejarQr(6);
       });
   }
@@ -182,7 +120,7 @@ export class QrMesaPage implements OnInit {
       // alert(this.mesaAMostrar); // Si hay mesa
       if (this.mesaAMostrar !== undefined) {
         // Verifico el tipo de usuario
-        if (this.esCliente) {
+        if (this.authServ.tipoUser === 'cliente' || this.authServ.tipoUser === 'anonimo') {
           // alert('Es un usuario'); // Reviso el estado de la mesa
           if (this.mesaAMostrar.estado === 'libre') {
             // alert('La mesa está libre'); // Si la mesa está reservada y ya pasó la hora que figura en la reserva
@@ -191,7 +129,7 @@ export class QrMesaPage implements OnInit {
               // Si el cliente escaneando el qr es el de la reserva, se le da la opción de ocupar la mesa
               // de lo contrario, solo se informa
               if (this.validarHorario()) {
-                if (this.reservaAMostrar.correo === this.user.correo) {
+                if (this.reservaAMostrar.correo === this.authServ.user.correo) {
                   this.presentAlertClienteConReserva();
                 } else {
                   this.presentAlert(
@@ -232,7 +170,7 @@ export class QrMesaPage implements OnInit {
             }
           } else {
             // alert('La mesa está ocupada'); // Si la mesa esta ocupada
-            if (this.mesaAMostrar.cliente === this.user.correo) {
+            if (this.mesaAMostrar.cliente === this.authServ.user.correo) {
               // alert('El cliente es el quien la ocupa'); // Si el que escanea es el que ocupa la mesa
               if (this.mesaAMostrar.pedidoActual !== '') {
                 // Si ya hizo un pedido
@@ -341,7 +279,7 @@ export class QrMesaPage implements OnInit {
           handler: () => {
             this.verEncuesta(this.mesaAMostrar.pedidoActual);
           }
-        }
+        },
       ]
     }).then(alert => { alert.present(); });
   }
@@ -381,7 +319,7 @@ export class QrMesaPage implements OnInit {
   public ocuparMesa() {
     // Cambio el estado de la mesa y la asocio al cliente
     this.mesaAMostrar.estado = 'ocupada';
-    this.mesaAMostrar.cliente = this.user.correo;
+    this.mesaAMostrar.cliente = this.authServ.user.correo;
     const mesaKey = this.mesaAMostrar.key;
     const data = this.mesaAMostrar as any;
     delete data.key;
@@ -399,7 +337,7 @@ export class QrMesaPage implements OnInit {
     // Cambio el estado de la mesa y la asocio al cliente
     this.mesaAMostrar.reservada = false;
     this.mesaAMostrar.estado = 'ocupada';
-    this.mesaAMostrar.cliente = this.user.correo;
+    this.mesaAMostrar.cliente = this.authServ.user.correo;
     const mesaKey = this.mesaAMostrar.key;
     const data = this.mesaAMostrar as any;
     delete data.key;
@@ -434,7 +372,7 @@ export class QrMesaPage implements OnInit {
 
   public estaEnLista(): boolean | ListaEsperaClientesKey {
     const auxReturn = this.listaEspera.find(m => {
-      return m.correo === this.user.correo;
+      return m.correo === this.authServ.user.correo;
     });
 
     if (auxReturn !== undefined) {
@@ -446,9 +384,9 @@ export class QrMesaPage implements OnInit {
 
   public estaEnMesa(): boolean {
     const auxReturn = this.mesas.find(m => {
-      return m.cliente === this.user.correo;
+      return m.cliente === this.authServ.user.correo;
     });
-    console.log(auxReturn);
+    // console.log(auxReturn);
 
     if (auxReturn !== undefined) {
       return true;

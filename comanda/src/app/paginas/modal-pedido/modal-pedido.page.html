@@ -52,7 +52,7 @@
 
       <ion-item *ngIf="this.verCuenta == false" class="ion-no-padding">
         <ion-label>Total</ion-label>
-        <ion-input [value]="this.pedidoActual.preciototal" readonly></ion-input>
+        <ion-input [value]="this.pedidoActual.preciototal | currency" readonly></ion-input>
       </ion-item>
 
       <div *ngIf="this.verCuenta == false">
@@ -69,7 +69,11 @@
       <div *ngIf="this.verCuenta == true">
         <ion-item class="ion-no-padding">
           <ion-label>Propina</ion-label>
-          <ion-input [value]="this.pedidoActual.propina | titlecase" readonly></ion-input>
+          <ion-input [value]="(this.pedidoActual.propina /100) | percent"
+            readonly></ion-input>
+          <ion-button slot="end" color="warning" (click)="cambiarPropina()"
+            [disabled]="this.pedidoActual.estado != 'cuenta' ||
+            this.cliente == false">Escanear</ion-button>
         </ion-item>
         <ion-item class="ion-no-padding">
           <ion-label>Total + Propina</ion-label>

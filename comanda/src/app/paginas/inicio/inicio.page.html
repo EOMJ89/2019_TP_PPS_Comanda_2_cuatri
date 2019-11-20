@@ -6,7 +6,8 @@
       </ion-button>
     </ion-buttons>
     <ion-title>
-      {{(this.tipoUser == '' ? "..." : this.tipoUser) | titlecase}}
+      {{(this.authService.tipoUser == '' ? "..." : this.authService.tipoUser) |
+      titlecase}}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button color="light" size="small" (click)="this.configModal()">
@@ -17,14 +18,15 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="this.tipoUser == ''"
+  <div *ngIf="this.authService.tipoUser == ''"
     class="width-100 center-horizontal center-vertical flex-v spinner-text">
     Espere...
     <ion-spinner color="dark"></ion-spinner>
   </div>
 
   <!-- Para el dueño / supervisor -->
-  <div *ngIf="this.tipoUser == 'supervisor' || this.tipoUser == 'dueño'"
+  <div *ngIf="this.authService.tipoUser == 'supervisor' ||
+    this.authService.tipoUser == 'dueño'"
     class="width-100 center-horizontal flex-wrap">
     <ion-button routerLink="/registro-empleado" size="large">
       Registrar Empleado
@@ -48,8 +50,9 @@
 
   <!-- Para camarero (cocinero), bartender, candybar -->
   <div class="width-100 center-horizontal flex-wrap"
-    *ngIf="this.tipoUser == 'camarero' || this.tipoUser == 'candybar' ||
-    this.tipoUser == 'bartender'">
+    *ngIf="this.authService.tipoUser == 'camarero' ||
+    this.authService.tipoUser == 'candybar' ||
+    this.authService.tipoUser == 'bartender'">
     <ion-button routerLink="/abm-producto" size="large">
       Registrar Producto
     </ion-button>
@@ -60,7 +63,7 @@
 
   <!-- Para el mozo -->
   <div class="width-100 center-horizontal flex-wrap"
-    *ngIf="this.tipoUser == 'mozo'">
+    *ngIf="this.authService.tipoUser == 'mozo'">
     <ion-button routerLink="/abm-producto" size="large">
       Registrar Producto
     </ion-button>
@@ -70,9 +73,9 @@
     <ion-button routerLink="/encuesta-empleado" size="large">
       Encuesta
     </ion-button>
-    <ion-button routerLink="/qr-ingreso-local" size="large">
+    <!-- <ion-button routerLink="/qr-ingreso-local" size="large">
       Ingreso al Local
-    </ion-button>
+    </ion-button> -->
     <ion-button routerLink="/list-confirmar-cliente-mesa" size="large">
       Lista de Espera
     </ion-button>
@@ -92,7 +95,8 @@
 
   <!-- Para el cliente -->
   <div class="width-100 center-horizontal flex-wrap"
-    *ngIf="this.tipoUser == 'cliente' || this.tipoUser == 'anonimo'">
+    *ngIf="this.authService.tipoUser == 'cliente' ||
+    this.authService.tipoUser == 'anonimo'">
     <ion-button routerLink="/qr-ingreso-local" size="large">
       Ingreso al Local
     </ion-button>

@@ -9,6 +9,7 @@ import { MesaKey } from 'src/app/clases/mesa';
 import { map } from 'rxjs/operators';
 import { ListaEsperaClientesKey, ListaEsperaClientes } from 'src/app/clases/lista-espera-clientes';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-qr-ingreso-local',
@@ -27,8 +28,8 @@ export class QrIngresoLocalPage implements OnInit {
     private scanner: BarcodeScanner,
     private alertCtrl: AlertController,
     private firestore: AngularFirestore,
-    private auth: AngularFireAuth,
     private router: Router,
+    private authServ: AuthService
   ) { }
 
   ngOnInit() {
@@ -42,73 +43,36 @@ export class QrIngresoLocalPage implements OnInit {
     });
   }
 
-  private obtenerUsername() {
-    return this.auth.auth.currentUser.email;
-  }
-
-  private traerUsuarioRegistrado(): Promise<false | ClienteKey> {
-    return this.firestore.collection('clientes').ref.where('correo', '==', this.obtenerUsername()).get()
-      .then((d: QuerySnapshot<any>) => {
-        if (d.empty) {
-          return false;
-        } else {
-          const auxReturn: ClienteKey = d.docs[0].data() as ClienteKey;
-          auxReturn.key = d.docs[0].id;
-          return auxReturn;
-        }
-      });
-  }
-
-  private obtenerUid() {
-    return this.auth.auth.currentUser.uid;
-  }
-
-  private async traerUsuarioAnonimo(): Promise<false | AnonimoKey> {
-    return this.firestore.collection('anonimos').doc(await this.obtenerUid()).get().toPromise().then((d: DocumentSnapshot<any>) => {
-      if (d.exists) {
-        const auxReturn: AnonimoKey = d.data() as AnonimoKey;
-        auxReturn.key = d.id;
-        return auxReturn;
-      } else {
-        return false;
-      }
-    });
-  }
-
   public doScan() {
     this.scanner.scan(this.opt)
       .then(async (data: BarcodeScanResult) => {
         // console.log('Lo escaneado es', data.text);
         if (data.text === 'IngresoLocal') {
-          await this.manejarQR();
+          this.manejarQR();
         } else {
           this.presentAlert('QR Erroneo', 'El QR no pertenece al de ingreso al local.', 'Por favor, apunte al código de Ingreso al Local');
         }
       }).catch(async (err) => {
         console.log('Error al escanear el qr', err);
-        await this.manejarQR();
+        // this.presentAlert('QR Erroneo', null, 'Error en el lector');
+
+        this.manejarQR();
       });
   }
 
-  private async manejarQR() {
+  private manejarQR() {
     // Obtengo el cliente activo en la base de clientes registrados
-    const auxUser = await this.traerUsuarioRegistrado();
-
     // Si el cliente está registrado, entonces prosigo con la operación
-    if (auxUser) {
+    if (this.authServ.tipoUser === 'cliente') {
       // console.log('Hay cliente registrado', auxUser);
-      this.buscarMesa(auxUser, true);
-    } else {
+      this.buscarMesa(this.authServ.user, true);
+    } else if (this.authServ.tipoUser === 'anonimo') {
       // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
-      const auxUserAnon = await this.traerUsuarioAnonimo();
-      if (auxUserAnon) {
-        this.buscarMesa(auxUserAnon, false);
-        // console.log('Hay usuario anonimo', auxUserAnon);
-      } else {
-        // Si no encuentro cliente anonimo, significa que soy un empleado y supervisor
-        console.log('No hay cliente, es un empleado o un desconocido.');
-        this.presentAlert('¡Error!', 'No hay cliente', 'Usted no es un cliente, no puede colocarse en la lista.');
-      }
+      this.buscarMesa(this.authServ.user, false);
+    } else {
+      // Si no encuentro cliente anonimo, significa que soy un empleado y supervisor
+      console.log('No hay cliente, es un empleado o un desconocido.');
+      this.presentAlert('¡Error!', 'No hay cliente', 'Usted no es un cliente, no puede colocarse en la lista.');
     }
   }
 
