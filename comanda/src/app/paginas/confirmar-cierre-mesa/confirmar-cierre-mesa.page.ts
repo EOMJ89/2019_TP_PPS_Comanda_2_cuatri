@@ -94,7 +94,6 @@ export class ConfirmarCierreMesaPage implements OnInit {
   }
 
   public verPedido(pedido: string) {
-    // alert('La página de pedido no está implementada');
     this.modalCtrl.create({
       component: ModalPedidoPage,
       componentProps: {

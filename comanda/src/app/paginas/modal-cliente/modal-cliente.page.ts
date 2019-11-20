@@ -9,9 +9,8 @@ import { AnonimoKey } from 'src/app/clases/anonimo';
   styleUrls: ['./modal-cliente.page.scss'],
 })
 export class ModalClientePage {
-  // tslint:disable-next-line: no-input-rename
+  // tslint:disable: no-input-rename
   @Input('cliente') public cliente: ClienteKey | AnonimoKey;
-  // tslint:disable-next-line: no-input-rename
   @Input('registrado') public registrado: string;
 
   constructor(private modalCtrl: ModalController) { }

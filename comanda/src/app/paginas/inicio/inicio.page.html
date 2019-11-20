@@ -8,6 +8,11 @@
     <ion-title>
       {{(this.tipoUser == '' ? "..." : this.tipoUser) | titlecase}}
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light" size="small" (click)="this.configModal()">
+        <ion-icon name="person" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

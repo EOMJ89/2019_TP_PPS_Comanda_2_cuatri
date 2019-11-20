@@ -19,7 +19,8 @@ export class Empleado {
 }
 
 export interface EmpleadoKey {
-    key; CUIL: string;
+    key: string;
+    CUIL: string;
     DNI: number;
     apellido: string;
     correo: string;

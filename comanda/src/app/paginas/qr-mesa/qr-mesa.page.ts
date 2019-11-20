@@ -9,7 +9,6 @@ import { map } from 'rxjs/operators';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ReservaKey } from 'src/app/clases/reserva';
 import { ListaEsperaClientesKey } from 'src/app/clases/lista-espera-clientes';
-import { PedidoKey } from 'src/app/clases/pedido';
 import { Router } from '@angular/router';
 import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
 import { EncuestaClientePage } from '../encuesta-cliente/encuesta-cliente.page';
@@ -35,9 +34,9 @@ export class QrMesaPage implements OnInit {
     private firestore: AngularFirestore,
     private scanner: BarcodeScanner,
     private auth: AngularFireAuth,
-    private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     public router: Router,
+    private alertCtrl: AlertController,
   ) { }
 
   async ngOnInit() {

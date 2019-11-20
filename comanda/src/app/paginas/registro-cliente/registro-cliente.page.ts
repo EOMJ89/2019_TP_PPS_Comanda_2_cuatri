@@ -34,7 +34,7 @@ export class RegistroClientePage implements OnInit {
     private auth: AuthService,
     private camera: Camera,
     public barcodeScanner: BarcodeScanner,
-    private alertCtrl: AlertController,
+    private alertCtrl: AlertController
   ) {
     this.usuario = new Cliente();
     this.anonimo = new Anonimo();

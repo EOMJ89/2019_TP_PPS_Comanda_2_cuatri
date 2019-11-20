@@ -28,16 +28,18 @@ import { InicioPageModule } from './paginas/inicio/inicio.module';
 import { LoginPageModule } from './paginas/login/login.module';
 import { RegistroEmpleadoPageModule } from './paginas/registro-empleado/registro-empleado.module';
 import { RegistroClientePageModule } from './paginas/registro-cliente/registro-cliente.module';
+
+// Modales
 import { ModalEncuestaPageModule } from './paginas/modal-encuesta/modal-encuesta.module';
 import { ModalPedidoPageModule } from './paginas/modal-pedido/modal-pedido.module';
 import { ModalClientePageModule } from './paginas/modal-cliente/modal-cliente.module';
-
+import { EncuestaClientePageModule } from './paginas/encuesta-cliente/encuesta-cliente.module';
+import { ConfiguracionPageModule } from './paginas/configuracion/configuracion.module';
 // Servicios
 import { AuthService } from './servicios/auth.service';
 import { FirebaseService } from './servicios/firebase.service';
 
 import { HttpModule } from '@angular/http';
-import { EncuestaClientePageModule } from './paginas/encuesta-cliente/encuesta-cliente.module';
 
 @NgModule({
   declarations: [AppComponent
@@ -59,6 +61,7 @@ import { EncuestaClientePageModule } from './paginas/encuesta-cliente/encuesta-c
     // GenerarPedidoPage,
     ModalPedidoPageModule,
     ModalClientePageModule,
+    ConfiguracionPageModule,
 
     // AngularFire
     AngularFireModule.initializeApp(environment.firebaseConfig),

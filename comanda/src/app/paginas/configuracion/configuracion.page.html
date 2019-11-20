@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar color="end">
+    <ion-buttons slot="start">
+      <ion-button color="light" size="small" (click)="cerrar()">Cerrar</ion-button>
+    </ion-buttons>
+    <ion-title>
+      Usuario
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="card-background">
+    <ion-card-content>
+      <div class="width-100 center-vertical center-horizontal extra-bottom">
+        <div *ngIf="this.user.foto != ''">
+          <img class="profile-picture" [src]="this.user.foto" />
+        </div>
+        <div *ngIf="this.user.foto == ''">
+          <img class="profile-picture" src="assets/img/add_user.png" />
+        </div>
+      </div>
+
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input [value]="this.user.nombre | titlecase" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding" *ngIf="this.type != 'anonimo'">
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-input [value]="this.user.apellido | titlecase" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding" *ngIf="this.type != 'anonimo'">
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [value]="this.user.DNI" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding"
+        *ngIf="this.type != 'anonimo' && this.type != 'cliente'">
+        <ion-label position="floating">CUIL</ion-label>
+        <ion-input [value]="this.user.CUIL" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating">Puesto</ion-label>
+        <ion-input [value]="this.type" readonly></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input [value]="this.user.correo" readonly></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

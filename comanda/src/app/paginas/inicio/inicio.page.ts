@@ -5,6 +5,8 @@ import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire
 import { ClienteKey } from 'src/app/clases/cliente';
 import { AnonimoKey } from 'src/app/clases/anonimo';
 import { EmpleadoKey } from 'src/app/clases/empleado';
+import { ConfiguracionPage } from '../configuracion/configuracion.page';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-inicio',
@@ -13,10 +15,12 @@ import { EmpleadoKey } from 'src/app/clases/empleado';
 })
 export class InicioPage {
   private tipoUser = '';
+  private user: ClienteKey | AnonimoKey | EmpleadoKey = null;
   constructor(
     private authService: AuthService,
     public router: Router,
-    private firestore: AngularFirestore) { }
+    private firestore: AngularFirestore,
+    private modalCtrl: ModalController) { }
 
   public cerrarSesion() {
     this.authService.Logout().then(() => {
@@ -25,7 +29,7 @@ export class InicioPage {
   }
 
   public async ionViewDidEnter() {
-      await this.buscarUsuario();
+    await this.buscarUsuario();
   }
 
   private obtenerUsername() {
@@ -87,6 +91,7 @@ export class InicioPage {
     // Si el cliente está registrado, entonces prosigo con la operación
     if (auxCliente !== null) {
       this.tipoUser = 'cliente';
+      this.user = auxCliente as ClienteKey;
       // console.log('Hay cliente registrado', auxCliente);
     } else {
       // Si el cliente no está registrado, voy a buscar a la base de datos de clientes anonimos.
@@ -97,6 +102,7 @@ export class InicioPage {
 
       if (auxClienteAnon !== null) {
         this.tipoUser = 'anonimo';
+        this.user = auxClienteAnon as AnonimoKey;
         // console.log('Hay usuario anonimo', auxClienteAnon);
       } else {
         const auxEmpleado: void | EmpleadoKey = await this.traerEmpleado()
@@ -106,6 +112,8 @@ export class InicioPage {
 
         if (auxEmpleado !== null) {
           this.tipoUser = (auxEmpleado as EmpleadoKey).tipo;
+          this.user = auxEmpleado as EmpleadoKey;
+
           // console.log('Hay empleado', auxEmpleado);
         } else {
           console.log('Error, no hay usuario idenfiticable');
@@ -113,5 +121,14 @@ export class InicioPage {
         }
       }
     }
+  }
+
+  public configModal() {
+    this.modalCtrl.create({
+      component: ConfiguracionPage,
+      componentProps: { user: this.user, type: this.tipoUser }
+    }).then(modal => {
+      modal.present();
+    });
   }
 }

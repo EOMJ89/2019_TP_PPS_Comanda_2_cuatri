@@ -10,6 +10,7 @@ import * as firebase from "firebase";
 import { Camera } from '@ionic-native/camera/ngx';
 import { CameraOptions } from '@ionic-native/camera';
 import { BarcodeScannerOptions, BarcodeScanResult, BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registro-empleado',
@@ -30,7 +31,8 @@ export class RegistroEmpleadoPage implements OnInit {
   constructor(private auth: AuthService,
     private router: Router,
     private camera: Camera,
-    public barcodeScanner: BarcodeScanner
+    public barcodeScanner: BarcodeScanner,
+    private alertCtrl: AlertController
   ) {
     this.usuario = new Empleado();
     this.clave = "";
@@ -43,6 +45,15 @@ export class RegistroEmpleadoPage implements OnInit {
     this.clave = "";
   }
 
+  public presentAlert(header: string, subHeader: string, message: string) {
+    this.alertCtrl.create({
+      header,
+      subHeader,
+      message,
+      buttons: ['OK']
+    }).then(a => { a.present(); });
+  }
+
   /*
     *verifica que los datos ingresados en el formulario son correctos, de serlo se muestra un selector
   */
@@ -51,27 +62,25 @@ export class RegistroEmpleadoPage implements OnInit {
 
     if (this.usuario.correo == "") {
       validado = false;
-      alert("Debe escribir un correo electronico");
-    }
-    else if (this.clave == "") {
+      this.presentAlert('¡Error!', 'Error en el registro', "Debe escribir un correo electronico");
+    } else if (this.clave == "") {
       validado = false;
-      alert("Debe escribir una clave");
-    }
-    else if (!this.herramientas.ValidarMail(this.usuario.correo)) {
+      this.presentAlert('¡Error!', 'Error en el registro', "Debe escribir una clave");
+    } else if (!this.herramientas.ValidarMail(this.usuario.correo)) {
       validado = false;
-      alert("No es un correo electronico valido");
+      this.presentAlert('¡Error!', 'Error en el registro', "No es un correo electronico valido");
     } else if (this.usuario.tipo == "") {
       validado = false;
-      alert("Debe elegir un tipo");
+      this.presentAlert('¡Error!', 'Error en el registro', "Debe elegir un tipo");
     } else if (!this.herramientas.ValidarNombre(this.usuario.nombre)) {
       validado = false;
-      alert("No es un nombre valido");
+      this.presentAlert('¡Error!', 'Error en el registro', "No es un nombre valido");
     } else if (!this.herramientas.ValidarNombre(this.usuario.apellido)) {
       validado = false;
-      alert("No es un apellido valido");
+      this.presentAlert('¡Error!', 'Error en el registro', "No es un apellido valido");
     } else if (!this.herramientas.ValidarDNI(this.usuario.DNI)) {
       validado = false;
-      alert("No es un DNI valido");
+      this.presentAlert('¡Error!', 'Error en el registro', "No es un DNI valido");
     }
     if (validado) {
       this.ocultarSeccion1 = true;
@@ -107,7 +116,8 @@ export class RegistroEmpleadoPage implements OnInit {
       });
 
     } catch (error) {
-      alert("Error:" + error);
+      console.log(error);
+      this.presentAlert('¡Error!', 'Error en el registro', "Error:" + error);
     }
     //este spinner es necesario
     this.ActivarSpinner(5000);
@@ -131,9 +141,9 @@ export class RegistroEmpleadoPage implements OnInit {
       this.clave = "";
       this.ocultarSeccion1 = false;
       this.ocultarSeccion2 = true;
-      alert("El usuario ha sido registrado!");
+      this.presentAlert('¡Exito!', null, "El usuario ha sido registrado!");
     }).catch(err => {
-      alert(err);
+      this.presentAlert('¡Error!', 'Error en el registro', err);
     });
 
   }
@@ -180,7 +190,7 @@ export class RegistroEmpleadoPage implements OnInit {
       this.usuario.apellido = scan[1];
       this.usuario.nombre = scan[2];
     }, (err) => {
-      alert(err);
+      this.presentAlert('¡Error!', 'Error en el registro', err);
     });
   }
 
