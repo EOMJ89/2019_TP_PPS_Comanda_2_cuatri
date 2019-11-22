@@ -139,7 +139,7 @@ export class ConfirmarEntregaPage implements OnInit {
     }, (err) => {
       console.log('Error: ', err);
       this.mostrarAlert('¡Error!', 'Error desconocido.');
-      this.manejarPropina(5);
+      // this.manejarPropina(5);
     });
   }
 
@@ -213,22 +213,32 @@ export class ConfirmarEntregaPage implements OnInit {
     // console.log('Confirmo la entrega');
 
     if (this.pedidoEnLocal != null) {
-      this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(async () => {
-        const auxMesa = await this.traerMesa(this.pedidoEnLocal.mesa);
+      if (this.pedidoEnLocal.estado !== 'entregado' &&
+        this.pedidoEnLocal.estado !== 'cuenta' &&
+        this.pedidoEnLocal.estado !== 'finalizado') {
+        this.actualizarDoc('pedidos', this.pedidoEnLocal.key, { estado: 'entregado' }).then(async () => {
+          const auxMesa = await this.traerMesa(this.pedidoEnLocal.mesa);
 
-        if (auxMesa !== null) {
-          await this.actualizarDoc('mesas', auxMesa.key, { estado: 'comiendo' });
-        }
-        this.presentToast('Entrega confirmada', 'success');
-        this.inicializarPedidos();
-      });
+          if (auxMesa !== null) {
+            await this.actualizarDoc('mesas', auxMesa.key, { estado: 'comiendo' });
+          }
+          this.presentToast('Entrega confirmada', 'success');
+          this.inicializarPedidos();
+        });
+      } else {
+        this.presentToast('El pedido ya fue entregado', 'danger');
+      }
     }
 
     if (this.pedidoDelivery != null) {
-      this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { estado: 'cobrado' }).then(() => {
-        this.presentToast('Delivery entregado', 'success');
-        this.inicializarPedidos();
-      });
+      if (this.pedidoEnLocal.estado !== 'cobrado') {
+        this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { estado: 'cobrado' }).then(() => {
+          this.presentToast('Delivery entregado', 'success');
+          this.inicializarPedidos();
+        });
+      } else {
+        this.presentToast('El pedido ya fue entregado', 'danger');
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
 import { MesaKey } from 'src/app/clases/mesa';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-abm-mesa',
@@ -14,6 +15,7 @@ import { MesaKey } from 'src/app/clases/mesa';
 export class AbmMesaPage implements OnInit {
   private formMesas: FormGroup;
   private foto: string | boolean = false;
+  private mesas: MesaKey[];
 
   constructor(
     private camera: Camera,
@@ -24,12 +26,30 @@ export class AbmMesaPage implements OnInit {
     private firestore: AngularFirestore,
   ) { }
 
+  public traerMesas() {
+    return this.firestore.collection('mesas').snapshotChanges()
+      .pipe(map((f) => {
+        return f.map((a) => {
+          const data = a.payload.doc.data() as MesaKey;
+          data.key = a.payload.doc.id;
+          return data;
+        });
+      }));
+  }
+
   public ngOnInit() {
+    this.traerMesas().subscribe((d: MesaKey[]) => {
+      // console.log('Tengo las mesas', d);
+      this.mesas = d;
+    });
+
     this.formMesas = new FormGroup({
       nromesaCtrl: new FormControl('', Validators.required),
       cantcomenCtrl: new FormControl('', Validators.required),
       tmesaCtrl: new FormControl('', Validators.required)
     });
+
+
   }
 
   public tomarFoto() {
@@ -49,6 +69,19 @@ export class AbmMesaPage implements OnInit {
     });
   }
 
+  private compararExistencia(): boolean {
+    let auxReturn = false;
+    const comp = parseInt(this.formMesas.value.tmesaCtrl, 10);
+
+    for (const m of this.mesas) {
+      if (m.nromesa === comp) {
+        auxReturn = true;
+        break;
+      }
+    }
+
+    return auxReturn;
+  }
   public agregarMesas() {
     if (this.formMesas.value.nromesaCtrl === '') {
       this.mostrarFaltanDatos('El nro. de mesa es obligatorio');
@@ -64,6 +97,14 @@ export class AbmMesaPage implements OnInit {
     }
     if (this.foto === false) {
       this.mostrarFaltanDatos('Debe subir una foto');
+      return true;
+    }
+    if (this.mesas !== undefined) {
+      this.mostrarFaltanDatos('Eror al corroborar la existencia de la mesa');
+      return true;
+    }
+    if (this.compararExistencia()) {
+      this.mostrarFaltanDatos('Ya existe una mesa con ese número.');
       return true;
     }
 
@@ -86,9 +127,8 @@ export class AbmMesaPage implements OnInit {
       cliente: '',
       foto: '',
       reservada: false,
+      pedidoActual: '',
     };
-
-
     const auxFoto = this.obtenerFotoOriginal();
 
     await imageRef.putString(auxFoto, 'base64', { contentType: 'image/jpeg' })

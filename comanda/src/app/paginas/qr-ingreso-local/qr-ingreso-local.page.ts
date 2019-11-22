@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner, BarcodeScanResult, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 import { AlertController } from '@ionic/angular';
-import { AngularFirestore, QuerySnapshot, DocumentSnapshot } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { ClienteKey } from 'src/app/clases/cliente';
 import { AnonimoKey } from 'src/app/clases/anonimo';
 import { MesaKey } from 'src/app/clases/mesa';
 import { map } from 'rxjs/operators';
-import { ListaEsperaClientesKey, ListaEsperaClientes } from 'src/app/clases/lista-espera-clientes';
+import { ListaEsperaClientesKey } from 'src/app/clases/lista-espera-clientes';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/servicios/auth.service';
 
@@ -55,8 +54,7 @@ export class QrIngresoLocalPage implements OnInit {
       }).catch(async (err) => {
         console.log('Error al escanear el qr', err);
         // this.presentAlert('QR Erroneo', null, 'Error en el lector');
-
-        this.manejarQR();
+        // this.manejarQR();
       });
   }
 

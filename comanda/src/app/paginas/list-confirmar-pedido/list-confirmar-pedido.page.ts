@@ -57,11 +57,27 @@ export class ListConfirmarPedidoPage implements OnInit {
     return this.firestore.collection(db).doc(key).update(data);
   }
 
+  // tslint:disable-next-line: variable-name
+  private async actualizarDetalles(id_pedido: string) {
+    const detalles: Array<PedidoDetalleKey> = await this.traerDetalles(id_pedido);
+    const data = { estado: 'aceptado' };
+    // console.log('Detalles', detalles);
+
+    for (const d of detalles) {
+      // console.log(d);
+      await this.actualizarDoc('pedidoDetalle', d.key, data).catch(err => {
+        console.log('Error en detalles', err);
+      });
+    }
+  }
+
   public async aceptarPedido(pedido: string) {
     const data = { estado: 'aceptado' };
     await this.actualizarDoc('pedidos', pedido, data).catch(err => {
-      console.log(err);
+      console.log('Error en pedido', err);
     });
+    await this.actualizarDetalles(pedido);
+
     this.presentToast('Pedido Aceptado', 'success');
   }
 

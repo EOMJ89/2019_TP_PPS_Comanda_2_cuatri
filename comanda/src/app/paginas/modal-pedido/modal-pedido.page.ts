@@ -99,8 +99,8 @@ export class ModalPedidoPage implements OnInit {
       }
     }, (err) => {
       console.log('Error: ', err);
-      // this.mostrarAlert('¡Error!', 'Error desconocido.');
-      this.manejarPropina(5);
+      this.mostrarAlert('¡Error!', 'Error desconocido.');
+      // this.manejarPropina(5);
     });
   }
 

@@ -1,19 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from '../../servicios/firebase.service';
 import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { ModalPedidoPage } from '../modal-pedido/modal-pedido.page';
-import { CajaSonido } from '../../clases/cajaSonido';
 
 import { MesaKey } from 'src/app/clases/mesa';
 import { ProductoKey } from 'src/app/clases/producto';
-import { ClienteKey } from 'src/app/clases/cliente';
-import { AnonimoKey } from 'src/app/clases/anonimo';
 import { AngularFirestore, QuerySnapshot, DocumentSnapshot, DocumentReference } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/servicios/auth.service';
-/* import { Pedido } from 'src/app/clases/pedido';
-import { PedidoDetalle } from 'src/app/clases/pedidoDetalle'; */
 
 
 @Component({
@@ -80,7 +73,8 @@ export class GenerarPedidoPage implements OnInit {
   async ngOnInit() {
     // this.traerProductos();
     this.inicializarProductos();
-    this.traerMesa(this.authServ.user.correo);
+    // console.log('Entro al buscar mesas');
+    await this.traerMesa(this.authServ.user.correo);
   }
 
   restarProducto(key: string) {
@@ -140,11 +134,14 @@ export class GenerarPedidoPage implements OnInit {
   }
 
   public async generarPedido() {
+    // console.log('Entro a generar pedido');
     // Se genera una copia de la lista de productos
-    const productosPedidos = this.productos.filter(prod => prod.cantidad > 0);
+    const productosPedidos = this.productos.filter(prod => {
+      return prod.cantidad > 0;
+    });
     // console.log(productosPedidos);
     if (productosPedidos.length > 0) {
-      if (this.mesaDelPedido === undefined) {
+      if (this.mesaDelPedido === null) {
         this.presentAlertSinMesa();
       } else {
         const pedido: any = {
@@ -161,10 +158,12 @@ export class GenerarPedidoPage implements OnInit {
           propina: 0,
         };
 
+        // console.log('Creo el pedido');
         await this.firestore.collection('pedidos').add(pedido)
           .then(async (doc: DocumentReference) => {
             this.mesaDelPedido.pedidoActual = doc.id;
             this.actualizarMesa();
+            // console.log('Ya tengo los detalles');
             await this.hacerPedidoDetalle(productosPedidos, doc.id);
             this.verPedido(doc.id);
           });
@@ -211,9 +210,9 @@ export class GenerarPedidoPage implements OnInit {
     await alert.present();
   }
 
-  traerMesa(correo: string): any {
-    // console.log("mesas");
-    this.firestore.collection('mesas').ref.where('cliente', '==', correo).get()
+  private async traerMesa(correo: string) {
+    // console.log('mesas');
+    await this.firestore.collection('mesas').ref.where('cliente', '==', correo).get()
       .then((d: QuerySnapshot<any>) => {
         // console.log(d);
         if (!d.empty) {
@@ -222,6 +221,8 @@ export class GenerarPedidoPage implements OnInit {
         } else {
           this.mesaDelPedido = null;
         }
+
+        // console.log('Mesa encontrada', this.mesaDelPedido);
       });
   }
 
