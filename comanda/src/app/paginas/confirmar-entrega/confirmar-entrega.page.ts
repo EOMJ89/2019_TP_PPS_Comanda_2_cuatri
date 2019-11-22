@@ -128,11 +128,17 @@ export class ConfirmarEntregaPage implements OnInit {
   public propina() {
     // console.log('Doy la propina');
     this.scanner.scan().then((data) => {
-      const propina = parseInt(data.text, 10);
+      // en el generador de qr, colocar 'propina:5' sin comillas, reemplazar el numero por el deseado
+      const d = data.text.split(':');
+      if (d.length > 1) {
+        const propina = parseInt(data.text.split(':')[1], 10);
 
-      if ((isNaN(propina) === false) ||
-        (propina === 5 || propina === 10 || propina === 15 || propina === 20)) {
-        this.manejarPropina(propina);
+        if ((isNaN(propina) === false) ||
+          (propina === 5 || propina === 10 || propina === 15 || propina === 20)) {
+          this.manejarPropina(propina);
+        } else {
+          this.mostrarAlert('¡Código erroneo!', 'Debe escanear un codigo QR valido');
+        }
       } else {
         this.mostrarAlert('¡Código erroneo!', 'Debe escanear un codigo QR valido');
       }
