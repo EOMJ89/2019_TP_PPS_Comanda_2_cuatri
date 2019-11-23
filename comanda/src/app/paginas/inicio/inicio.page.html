@@ -48,9 +48,9 @@
     </ion-button>
   </div>
 
-  <!-- Para camarero (cocinero), bartender, candybar -->
+  <!-- Para cocinero, bartender, candybar -->
   <div class="width-100 center-horizontal flex-wrap"
-    *ngIf="this.authService.tipoUser == 'camarero' ||
+    *ngIf="this.authService.tipoUser == 'cocinero' ||
     this.authService.tipoUser == 'candybar' ||
     this.authService.tipoUser == 'bartender'">
     <ion-button routerLink="/abm-producto" size="large">
@@ -58,6 +58,9 @@
     </ion-button>
     <ion-button routerLink="/encuesta-empleado" size="large">
       Encuesta
+    </ion-button>
+    <ion-button routerLink="/list-pedidos-detalle" size="large">
+      Pedidos Pendientes
     </ion-button>
   </div>
 

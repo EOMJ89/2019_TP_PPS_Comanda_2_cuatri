@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Pedidos pendientes <!-- Bartenders, etc -->
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngFor="let d of this.pedidoDetalle">
+    <ion-item>
+      <ion-label position="floating">Cantidad</ion-label>
+      <ion-input readonly [value]="d.cantidad"></ion-input>
+      <ion-label position="floating">Producto</ion-label>
+      <ion-input readonly [value]="d.producto"></ion-input>
+
+      <ion-label position="floating">Estado</ion-label>
+      <ion-input readonly [value]="d.estado"></ion-input>
+
+      <div class="width-100 align-between">
+        <!-- <ion-button color="primary"
+          (click)="this.cambiarEstado(d, 'aceptado')">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button> -->
+        <ion-button color="success"
+          (click)="this.cambiarEstado(d, 'preparacion')">
+          <ion-icon slot="start" name="play">Preparar</ion-icon>
+        </ion-button>
+        <ion-button color="danger"
+          (click)="this.cambiarEstado(d, 'listoEntrega')">
+          <ion-icon slot="start" name="checkmark">Entregar</ion-icon>
+        </ion-button>
+      </div>
+    </ion-item>
+  </div>
+</ion-content>

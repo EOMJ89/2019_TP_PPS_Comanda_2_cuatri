@@ -43,17 +43,17 @@ export class ListConfirmarClienteAltaPage implements OnInit {
     return this.firestore.collection(db).doc(key).update(data);
   } */
 
-  public confirmarCliente(cliente: ClienteAConfirmarKey, id: string) {
+  public async confirmarCliente(cliente: ClienteAConfirmarKey, id: string) {
     // console.log('Confirmo el cliente', cliente, 'con id', id);
     const clave: string = cliente.clave;
     const data: any = cliente as any;
     delete data.key;
     delete data.clave;
-    this.authServ.RegistrarClienteConfirmado(data, clave)
+    await this.authServ.RegistrarClienteConfirmado(data, clave)
       .then(() => {
         this.removerDoc('clientes-confirmar', id);
       });
-    this.enviarCorreo(cliente.correo, false);
+    this.enviarCorreo(cliente.correo, true);
     this.presentToast('Cliente confirmado', 'success');
   }
 
@@ -100,6 +100,8 @@ export class ListConfirmarClienteAltaPage implements OnInit {
       isHtml: true
     };
     // Enviar mensaje con las opciones por default
-    this.sendEmail.open(email);
+    this.sendEmail.open(email).catch(err => {
+      console.log(err);
+    });
   }
 }

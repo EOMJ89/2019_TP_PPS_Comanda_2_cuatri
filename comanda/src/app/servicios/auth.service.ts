@@ -39,9 +39,9 @@ export class AuthService {
     public afAuth: AngularFireAuth,
     public router: Router,
     private db: AngularFirestore) {
-    this.afAuth.authState.subscribe((user) => {
+    this.afAuth.authState.subscribe(async (user) => {
       if (user) {
-        this.buscarUsuario();
+        await this.buscarUsuario();
       }
     });
     /* this.afAuth.authState.subscribe(user => {
@@ -112,7 +112,7 @@ export class AuthService {
       });
   }
 
-  private async buscarUsuario() {
+  public async buscarUsuario() {
     this._tipoUser = '';
 
     // Obtengo el cliente activo en la base de clientes registrados
@@ -202,9 +202,11 @@ export class AuthService {
           foto: usuario.foto,
         }).then(() => {
           secondaryApp.auth().signOut();
+        }).catch(err => {
+          console.log(err);
         });
         resolve(res);
-      }).catch(err => reject(err));
+      }).catch(err => { reject(err); });
     });
   }
 

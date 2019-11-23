@@ -89,7 +89,7 @@ export class LoginPage implements OnInit {
     } else if (tipo === 'candybar') {
       this.correo = 'candybar@candybar.com';
       this.clave = '444444';
-    } else if (tipo === 'camarero') {
+    } else if (tipo === 'cocinero') {
       this.correo = 'camarero@camarero.com';
       this.clave = '555555';
     } else if (tipo === 'cliente') {

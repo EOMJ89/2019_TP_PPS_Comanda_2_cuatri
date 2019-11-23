@@ -142,7 +142,7 @@ export class RegistroClientePage implements OnInit {
     if (this.esCliente === true) {
       this.RegistrarCliente();
     } else {
-      this.anonimo.correo = this.usuario.correo;
+      this.anonimo.correo = this.usuario.correo; // Cambiar esto para agregar un numero aleatorio
       this.anonimo.foto = this.usuario.foto;
       this.anonimo.nombre = this.usuario.nombre;
       this.RegistrarAnonimo();
@@ -211,8 +211,9 @@ export class RegistroClientePage implements OnInit {
     *permite escanear el dni para rellenar datos del formulario
   */
   public EscanearDNI() {
-    const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', formats: 'PDF_417', resultDisplayDuration: 0 };
+    const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', resultDisplayDuration: 0 };
     this.barcodeScanner.scan(options).then((barcodeData: BarcodeScanResult) => {
+      console.log(barcodeData.format);
       const scan = (barcodeData.text).split('@');
       this.usuario.DNI = parseInt(scan[4], 10);
       this.usuario.apellido = scan[1];

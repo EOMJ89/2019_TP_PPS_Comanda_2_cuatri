@@ -103,6 +103,12 @@ const routes: Routes = [
     loadChildren: './paginas/confirmar-entrega-mozo/confirmar-entrega-mozo.module#ConfirmarEntregaMozoPageModule',
     canActivate: [AuthGuard]
   },
+  {
+    path: 'list-pedidos-detalle',
+    loadChildren: './paginas/list-pedidos-detalle/list-pedidos-detalle.module#ListPedidosDetallePageModule',
+    canActivate: [AuthGuard]
+  },
+
 ];
 
 @NgModule({
