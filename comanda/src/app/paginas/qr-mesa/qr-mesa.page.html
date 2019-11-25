@@ -10,10 +10,43 @@
 </ion-header>
 
 <ion-content class="background-image ion-padding">
-  <div class="center-vertical center-horizontal width-100 height-100">
+  <div class="center-vertical center-horizontal width-100 height-100"
+    *ngIf="this.mesaAMostrar == null">
     <div (click)="doScan()" class="flex-v border center-vertical">
       <img class="qr-img" src="assets/img/QR_code_Wikipedia.svg">
       <span class="qr-text">Escanear</span>
     </div>
+  </div>
+  <div class="center-vertical center-horizontal width-100 height-100"
+    *ngIf="this.mesaAMostrar != null">
+    <ion-card class="card-background">
+      <ion-card-content>
+        <ion-item class="ion-no-padding">
+          <ion-label class="ion-text-center">Mesa</ion-label>
+          <ion-input readonly [value]="this.mesaAMostrar.nromesa"></ion-input>
+        </ion-item>
+
+        <div *ngIf="this.mesaAMostrar.pedidoActual == ''"
+          class="width-100 center-horizontal center-vertical">
+          <ion-button routerLink="/generar-pedido">
+            Realizar Pedido
+          </ion-button>
+        </div>
+
+        <div class="width-100 center-horizontal flex-v"
+          *ngIf="this.mesaAMostrar.pedidoActual != ''">
+          <ion-button (click)="this.verPedido(this.mesaAMostrar.pedidoActual)">
+            Ver Pedido
+          </ion-button>
+          <ion-button
+            (click)="this.verEncuesta(this.mesaAMostrar.pedidoActual)">
+            Realizar Encuesta
+          </ion-button>
+          <ion-button routerLink="/juegos">
+            Ir a Juegos
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

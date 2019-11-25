@@ -11,6 +11,7 @@ import { PedidoDetalleKey, PedidoDetalle } from 'src/app/clases/pedidoDetalle';
 import { PedidoDeliveryKey } from 'src/app/clases/pedidoDelivery';
 import { MesaKey } from 'src/app/clases/mesa';
 import { AuthService } from 'src/app/servicios/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-confirmar-entrega',
@@ -27,7 +28,8 @@ export class ConfirmarEntregaPage implements OnInit {
     private firestore: AngularFirestore,
     private toastCtrl: ToastController,
     private scanner: BarcodeScanner,
-    private alertCtrl: AlertController) { }
+    private alertCtrl: AlertController,
+    private router: Router) { }
 
   public ngOnInit() {
     this.inicializarPedidos();
@@ -229,7 +231,8 @@ export class ConfirmarEntregaPage implements OnInit {
             await this.actualizarDoc('mesas', auxMesa.key, { estado: 'comiendo' });
           }
           this.presentToast('Entrega confirmada', 'success');
-          this.inicializarPedidos();
+          this.router.navigate(['inicio']);
+          // this.inicializarPedidos();
         });
       } else {
         this.presentToast('El pedido ya fue entregado', 'danger');
@@ -240,7 +243,8 @@ export class ConfirmarEntregaPage implements OnInit {
       if (this.pedidoEnLocal.estado !== 'cobrado') {
         this.actualizarDoc('pedidosDelivery', this.pedidoDelivery.key, { estado: 'cobrado' }).then(() => {
           this.presentToast('Delivery entregado', 'success');
-          this.inicializarPedidos();
+          // this.inicializarPedidos();
+          this.router.navigate(['inicio']);
         });
       } else {
         this.presentToast('El pedido ya fue entregado', 'danger');

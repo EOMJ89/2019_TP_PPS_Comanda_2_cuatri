@@ -156,7 +156,7 @@ export class AuthService {
     }
 
     // console.log(this.user);
-    console.log(this.tipoUser);
+    // console.log(this.tipoUser);
   }
   //#endregion
 

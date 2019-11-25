@@ -26,37 +26,46 @@ export class ListPedidosDetallePage implements OnInit {
   }
 
   public async inicializarPedidos() {
-    await this.traerPedidos().subscribe((p: PedidoKey[]) => {
-      this.pedidos = p.filter((pe: PedidoKey) => {
-        // console.log(pe.estado);
-        const auxReturn = (pe.estado !== 'creado' &&
-          pe.estado !== 'entregadoMozo' &&
-          pe.estado !== 'entregado' &&
-          pe.estado !== 'cuenta' &&
-          pe.estado !== 'finalizado');
+    try {
 
-        return auxReturn;
+
+      await this.traerPedidos().subscribe((p: PedidoKey[]) => {
+        this.pedidos = p.filter((pe: PedidoKey) => {
+          // console.log(pe.estado);
+          const auxReturn = (pe.estado !== 'creado' &&
+            pe.estado !== 'entregadoMozo' &&
+            pe.estado !== 'entregado' &&
+            pe.estado !== 'cuenta' &&
+            pe.estado !== 'finalizado');
+
+          return auxReturn;
+        });
+
+        // console.log('Pedidos', this.pedidos);
       });
 
-      console.log('Pedidos', this.pedidos);
-    });
-
-    await this.traerProductos().subscribe((pr: ProductoKey[]) => {
-      this.productos = pr;
-      console.log('Productos', this.productos);
-    });
-
-    this.traerDetalles().subscribe((pd: PedidoDetalleKey[]) => {
-      pd = pd.filter((d: PedidoDetalleKey) => {
-        return this.verificarExistencia(d);
+      await this.traerProductos().subscribe((pr: ProductoKey[]) => {
+        this.productos = pr;
+        // console.log('Productos', this.productos);
       });
 
-      pd = pd.filter((d: PedidoDetalleKey) => {
-        return this.verificarVisibilidad(d);
+      this.traerDetalles().subscribe((pd: PedidoDetalleKey[]) => {
+        pd = pd.filter((d: PedidoDetalleKey) => {
+          return this.verificarExistencia(d);
+        });
+
+        pd = pd.filter((d: PedidoDetalleKey) => {
+          return this.verificarVisibilidad(d);
+        });
+        this.pedidoDetalle = pd;
+        // console.log('Detalles', this.pedidoDetalle);
       });
-      this.pedidoDetalle = pd;
-      console.log('Detalles', this.pedidoDetalle);
-    });
+    } catch (err) {
+      console.log('err', err);
+      this.pedidos = new Array<PedidoKey>();
+      this.pedidoDetalle = new Array<PedidoDetalleKey>();
+      this.productos = new Array<ProductoKey>();
+    }
   }
 
   private verificarExistencia(d: PedidoDetalleKey) {
@@ -119,7 +128,7 @@ export class ListPedidosDetallePage implements OnInit {
         });
 
         return d.filter((pr: ProductoKey) => {
-          console.log('Pr', pr.quienPuedever, 'Yo', this.authServ.tipoUser);
+          // console.log('Pr', pr.quienPuedever, 'Yo', this.authServ.tipoUser);
           return pr.quienPuedever === this.authServ.tipoUser;
         });
       }));
@@ -130,7 +139,7 @@ export class ListPedidosDetallePage implements OnInit {
   }
 
   public async cambiarEstado(d: PedidoDetalleKey, estado: string) {
-    console.log('Pedido', d, 'Estado', estado);
+    // console.log('Pedido', d, 'Estado', estado);
     await this.actualizarDoc('pedidoDetalle', d.key, { estado }).catch(err => {
       console.log(err);
     });
@@ -149,13 +158,11 @@ export class ListPedidosDetallePage implements OnInit {
           data.estado = estado;
         }
 
-        console.log(data);
+        // console.log(data);
         await this.actualizarDoc('pedidos', pedido.key, data).catch(err => {
           console.log('Error en actualizar Pedido', err);
         });
       }
-
     }
-
   }
 }

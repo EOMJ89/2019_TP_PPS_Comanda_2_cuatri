@@ -16,105 +16,109 @@
 </ion-header>
 
 <ion-content class="background-image ion-padding">
-  <form [(formGroup)]="this.formEncuesta">
-    <!-- Preview de las fotos -->
-    <div class="width-100 center-vertical center-horizontal extra-bottom">
-      <!-- Hacer placeholder para foto de encuesta -->
-      <img class="profile-picture" *ngIf="this.fotos.length == 0"
-        src="assets/img/add_user.png">
-      <div *ngFor="let foto of this.fotos">
-        <img class="profile-picture" [src]="foto" />
-      </div>
-    </div>
-    <div class="align-text-center">
-      <ion-button color="primary" [disabled]="this.fotos.length >= 3"
-        (click)="this.tomarFoto()">
-        Subir foto
-      </ion-button>
-    </div>
+  <ion-card><ion-card-content>
+      <form [(formGroup)]="this.formEncuesta">
+        <!-- Preview de las fotos -->
+        <div class="width-100 center-vertical center-horizontal extra-bottom">
+          <!-- Hacer placeholder para foto de encuesta -->
+          <img class="profile-picture" *ngIf="this.fotos.length == 0"
+            src="assets/img/add_user.png">
+          <div *ngFor="let foto of this.fotos">
+            <img class="profile-picture" [src]="foto" />
+          </div>
+        </div>
+        <div class="align-text-center">
+          <ion-button color="primary" [disabled]="this.fotos.length >= 3"
+            (click)="this.tomarFoto()">
+            Subir foto
+          </ion-button>
+        </div>
 
-    <!-- Range para el nivel de conformidad entre 1 y 10 -->
-    <ion-item-group>
-      <ion-item-divider color="primary">
-        <h6>Conformidad</h6>
-      </ion-item-divider>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-range color="primary" min="1" max="10" ticks="true" snaps="true"
-          formControlName="conformidadCtrl">
-          <ion-label slot="start">1</ion-label>
-          <ion-label slot="end">10</ion-label>
-        </ion-range>
-      </ion-item>
-    </ion-item-group>
+        <!-- Range para el nivel de conformidad entre 1 y 10 -->
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <h6>Conformidad</h6>
+          </ion-item-divider>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-range color="primary" min="1" max="10" ticks="true"
+              snaps="true"
+              formControlName="conformidadCtrl">
+              <ion-label slot="start">1</ion-label>
+              <ion-label slot="end">10</ion-label>
+            </ion-range>
+          </ion-item>
+        </ion-item-group>
 
-    <!-- Checkbox para elegir lo más destacado -->
-    <ion-item-group>
-      <ion-item-divider color="primary">
-        <h6>¿Qué le pareció lo más destacado?</h6>
-      </ion-item-divider>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-label>Servicio de mesa</ion-label>
-        <ion-checkbox formControlName="servicioCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-label>Comida</ion-label>
-        <ion-checkbox formControlName="comidaCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-label>Bebida</ion-label>
-        <ion-checkbox formControlName="bebidaCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-label>Instalaciones</ion-label>
-        <ion-checkbox formControlName="instalacionesCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-label>Atención del personal</ion-label>
-        <ion-checkbox formControlName="personalCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-    </ion-item-group>
+        <!-- Checkbox para elegir lo más destacado -->
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <h6>¿Qué le pareció lo más destacado?</h6>
+          </ion-item-divider>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-label>Servicio de mesa</ion-label>
+            <ion-checkbox formControlName="servicioCtrl" checked="false"></ion-checkbox>
+          </ion-item>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-label>Comida</ion-label>
+            <ion-checkbox formControlName="comidaCtrl" checked="false"></ion-checkbox>
+          </ion-item>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-label>Bebida</ion-label>
+            <ion-checkbox formControlName="bebidaCtrl" checked="false"></ion-checkbox>
+          </ion-item>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-label>Instalaciones</ion-label>
+            <ion-checkbox formControlName="instalacionesCtrl" checked="false"></ion-checkbox>
+          </ion-item>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-label>Atención del personal</ion-label>
+            <ion-checkbox formControlName="personalCtrl" checked="false"></ion-checkbox>
+          </ion-item>
+        </ion-item-group>
 
-    <!-- Radio para elegir si recomendaria el lugar a alguien -->
-    <ion-item-group>
-      <ion-item-divider color="primary">
-        <h6>¿Recomendaría este lugar a algún conocido?</h6>
-      </ion-item-divider>
-      <!-- formControlName="recomendariaCtrl" -->
-      <ion-radio-group (ionChange)="mapRadioToFormValue($event)">
-        <ion-item class="transparent-item ion-no-padding">
-          <ion-label>Sí</ion-label>
-          <ion-radio slot="start" value="true" checked></ion-radio>
-        </ion-item>
-        <ion-item class="transparent-item ion-no-padding">
-          <ion-label>No</ion-label>
-          <ion-radio slot="start" value="false"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
-    </ion-item-group>
+        <!-- Radio para elegir si recomendaria el lugar a alguien -->
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <h6>¿Recomendaría este lugar a algún conocido?</h6>
+          </ion-item-divider>
+          <!-- formControlName="recomendariaCtrl" -->
+          <ion-radio-group (ionChange)="mapRadioToFormValue($event)">
+            <ion-item class="transparent-item ion-no-padding">
+              <ion-label>Sí</ion-label>
+              <ion-radio slot="start" value="true" checked></ion-radio>
+            </ion-item>
+            <ion-item class="transparent-item ion-no-padding">
+              <ion-label>No</ion-label>
+              <ion-radio slot="start" value="false"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-item-group>
 
-    <!-- Combo para determinar la limpieza del lugar -->
-    <ion-item-group>
-      <ion-item-divider color="primary">
-        <h6>Limpieza del lugar</h6>
-      </ion-item-divider>
-      <ion-item class="transparent-item ion-no-padding">
-        <ion-select formControlName="limpiezaCtrl"
-          value="limpio">
-          <ion-select-option value="impecable">Impecable</ion-select-option>
-          <ion-select-option value="limpio" selected>Limpio</ion-select-option>
-          <ion-select-option value="sucio">Sucio</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-item-group>
+        <!-- Combo para determinar la limpieza del lugar -->
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <h6>Limpieza del lugar</h6>
+          </ion-item-divider>
+          <ion-item class="transparent-item ion-no-padding">
+            <ion-select formControlName="limpiezaCtrl"
+              value="limpio">
+              <ion-select-option value="impecable">Impecable</ion-select-option>
+              <ion-select-option value="limpio" selected>Limpio</ion-select-option>
+              <ion-select-option value="sucio">Sucio</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-item-group>
 
-    <!-- Textarea adicional para comentarios adicionales -->
-    <ion-item-group>
-      <ion-item-divider color="primary">
-        <h6>Otros comentarios</h6>
-      </ion-item-divider>
-      <ion-item>
-        <ion-textarea formControlName="comentarioCtrl"></ion-textarea>
-      </ion-item>
-    </ion-item-group>
-  </form>
+        <!-- Textarea adicional para comentarios adicionales -->
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <h6>Otros comentarios</h6>
+          </ion-item-divider>
+          <ion-item>
+            <ion-textarea formControlName="comentarioCtrl"></ion-textarea>
+          </ion-item>
+        </ion-item-group>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

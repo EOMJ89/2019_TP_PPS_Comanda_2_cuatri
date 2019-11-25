@@ -24,7 +24,7 @@ export class QrMesaPage implements OnInit {
     resultDisplayDuration: 0,
   };
   private mesas: MesaKey[];
-  private mesaAMostrar: MesaKey;
+  private mesaAMostrar: MesaKey = null;
   private reservas: ReservaKey[];
   private reservaAMostrar: ReservaKey;
   private listaEspera: ListaEsperaClientesKey[];
@@ -39,9 +39,22 @@ export class QrMesaPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    await this.authServ.buscarUsuario();
     this.traerMesas().subscribe((d: MesaKey[]) => {
       // console.log('Tengo las mesas', d);
       this.mesas = d;
+
+      // console.log('Antes de entrar', this.authServ.user.correo);
+      if (this.authServ.tipoUser === 'cliente' || this.authServ.tipoUser === 'anonimo') {
+        if (this.estaEnMesa()) {
+          // console.log('Después de entrar', this.authServ.user.correo);
+          this.mesaAMostrar = this.mesas.find(m => {
+            return m.cliente === this.authServ.user.correo;
+          });
+        } else {
+          console.log('No está en mesa');
+        }
+      }
     });
 
     this.traerReservas().subscribe((d: ReservaKey[]) => {

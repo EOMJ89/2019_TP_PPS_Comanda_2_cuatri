@@ -26,7 +26,11 @@ export class ListConfirmarClienteMesaPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.esMozo = this.authServ.tipoUser === 'mozo' ? true : false;
+    if (this.authServ.tipoUser === 'mozo' ||
+      this.authServ.tipoUser === 'dueño' ||
+      this.authServ.tipoUser === 'supervisor') {
+      this.esMozo = true;
+    }
 
     this.traerListaEspera().subscribe((d: ListaEsperaClientesKey[]) => {
       // console.log('Tengo la lista de espera', d);
