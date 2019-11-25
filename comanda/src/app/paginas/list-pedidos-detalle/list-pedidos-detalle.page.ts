@@ -5,6 +5,7 @@ import { PedidoDetalleKey } from 'src/app/clases/pedidoDetalle';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-list-pedidos-detalle',
@@ -18,7 +19,8 @@ export class ListPedidosDetallePage implements OnInit {
 
   constructor(
     private authServ: AuthService,
-    private firestore: AngularFirestore) { }
+    private firestore: AngularFirestore,
+    private alertCtrl: AlertController) { }
 
   async ngOnInit() {
     await this.authServ.buscarUsuario();
@@ -27,8 +29,6 @@ export class ListPedidosDetallePage implements OnInit {
 
   public async inicializarPedidos() {
     try {
-
-
       await this.traerPedidos().subscribe((p: PedidoKey[]) => {
         this.pedidos = p.filter((pe: PedidoKey) => {
           // console.log(pe.estado);
@@ -57,7 +57,7 @@ export class ListPedidosDetallePage implements OnInit {
         pd = pd.filter((d: PedidoDetalleKey) => {
           return this.verificarVisibilidad(d);
         });
-        this.pedidoDetalle = pd;
+        this.pedidoDetalle = pd.sort(this.ordenarPorPedido);
         // console.log('Detalles', this.pedidoDetalle);
       });
     } catch (err) {
@@ -66,6 +66,11 @@ export class ListPedidosDetallePage implements OnInit {
       this.pedidoDetalle = new Array<PedidoDetalleKey>();
       this.productos = new Array<ProductoKey>();
     }
+  }
+
+  private ordenarPorPedido(a: PedidoDetalleKey, b: PedidoDetalleKey) {
+    // console.log(a.id_pedido.localeCompare(b.id_pedido));
+    return (a.id_pedido.localeCompare(b.id_pedido));
   }
 
   private verificarExistencia(d: PedidoDetalleKey) {
@@ -164,5 +169,28 @@ export class ListPedidosDetallePage implements OnInit {
         });
       }
     }
+  }
+
+  public async presentAlertConfirmarEntrega(d: PedidoDetalleKey, estado: string) {
+    this.alertCtrl.create({
+      header: 'Confirmar Detalle',
+      message: '¿Desea confirmar como finalizado este pedido?',
+      buttons: [
+        {
+          text: 'Sí',
+          handler: () => {
+            this.cambiarEstado(d, estado);
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+            return true;
+          }
+        }
+      ]
+    }).then(alert => {
+      alert.present();
+    });
   }
 }

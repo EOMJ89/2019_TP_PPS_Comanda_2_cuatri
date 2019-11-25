@@ -230,7 +230,7 @@ export class QrMesaPage implements OnInit {
     this.alertCtrl.create({
       header: 'Estado de mesa',
       subHeader: `Mesa: ${this.mesaAMostrar.nromesa}`,
-      message: '¡Bienvenido! Su reserva fue confirmada. ¿Desea ocuparla sla mesa?',
+      message: '¡Bienvenido! Su reserva fue confirmada. ¿Desea ocuparla la mesa?',
       buttons: [
         {
           text: 'Sí',

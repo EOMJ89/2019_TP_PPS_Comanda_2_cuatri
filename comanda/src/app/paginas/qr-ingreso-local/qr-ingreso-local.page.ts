@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner, BarcodeScanResult, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ClienteKey } from 'src/app/clases/cliente';
 import { AnonimoKey } from 'src/app/clases/anonimo';
@@ -28,10 +28,13 @@ export class QrIngresoLocalPage implements OnInit {
     private alertCtrl: AlertController,
     private firestore: AngularFirestore,
     private router: Router,
-    private authServ: AuthService
+    private authServ: AuthService,
+    private toastCtrl: ToastController,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.authServ.buscarUsuario();
+
     this.traerMesas().subscribe((d: MesaKey[]) => {
       // console.log('Tengo las mesas', d);
       this.mesas = d;
@@ -39,6 +42,40 @@ export class QrIngresoLocalPage implements OnInit {
     this.traerListaEspera().subscribe((d: ListaEsperaClientesKey[]) => {
       // console.log('Tengo la lista de espera', d);
       this.listaEspera = d;
+
+      // console.log('Ya tengo las listas');
+      if (this.estaEnLista()) {
+        this.presentToast('Ya se encuentra en la lista', 'success');
+        this.router.navigate(['inicio']);
+      }
+    });
+  }
+
+  public estaEnLista(): boolean {
+    const aux = this.listaEspera.find(m => {
+      return m.correo === this.authServ.user.correo;
+    });
+    let auxReturn = false;
+
+    if (aux !== undefined) {
+      auxReturn = true;
+    } else {
+      auxReturn = false;
+    }
+
+    return auxReturn;
+  }
+
+  public async presentToast(message: string, color: string) {
+    this.toastCtrl.create({
+      message,
+      color,
+      showCloseButton: false,
+      position: 'bottom',
+      closeButtonText: 'Done',
+      duration: 2000
+    }).then(toast => {
+      toast.present();
     });
   }
 

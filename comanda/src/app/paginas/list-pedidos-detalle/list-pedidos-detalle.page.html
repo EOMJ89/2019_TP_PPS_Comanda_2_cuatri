@@ -14,8 +14,8 @@
     <ion-card class="card-background">
       <ion-card-content>
         <ion-item>
-          <ion-label>Cantidad</ion-label>
-          <ion-input readonly [value]="d.cantidad"></ion-input>
+          <ion-label>Pedido</ion-label>
+          <ion-input readonly [value]="d.id_pedido"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -24,30 +24,35 @@
         </ion-item>
 
         <ion-item>
+          <ion-label>Cantidad</ion-label>
+          <ion-input readonly [value]="d.cantidad"></ion-input>
+        </ion-item>
+
+        <ion-item>
           <ion-label>Estado</ion-label>
           <ion-input readonly [value]="d.estado"></ion-input>
         </ion-item>
 
-        <ion-item>
-          <div class="width-100 align-between">
-            <!-- <ion-button color="primary" (click)="this.cambiarEstado(d, 'aceptado')">
+
+        <div class="width-100 align-between" *ngIf="d.estado != 'listoEntrega'">
+          <!-- <ion-button color="primary" (click)="this.cambiarEstado(d, 'aceptado')">
               <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
             </ion-button> -->
-            <ion-button color="success" [disabled]="d.estado != 'aceptado'"
-              (click)="this.cambiarEstado(d, 'preparacion')">
-              Preparar
-            </ion-button>
-            <ion-button color="danger" [disabled]="d.estado != 'preparacion'"
-              (click)="this.cambiarEstado(d, 'listoEntrega')">
-              Entregar
-            </ion-button>
-          </div>
-        </ion-item>
+          <ion-button color="success" [disabled]="d.estado != 'aceptado'"
+            (click)="this.cambiarEstado(d, 'preparacion')">
+            Preparar
+          </ion-button>
+          <ion-button color="danger" [disabled]="d.estado != 'preparacion'"
+            (click)="this.presentAlertConfirmarEntrega(d, 'listoEntrega')">
+            Entregar
+          </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
   </div>
-  <div *ngIf="this.pedidoDetalle != undefined && this.pedidoDetalle.length == 0">
-    <ion-card>
+  <div *ngIf="this.pedidoDetalle != undefined && this.pedidoDetalle.length ==
+    0">
+    <ion-card class="card-background">
       <ion-card-content>
         No hay detalles pendientes.
       </ion-card-content>
