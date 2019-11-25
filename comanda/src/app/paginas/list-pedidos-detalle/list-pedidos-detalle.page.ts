@@ -63,7 +63,10 @@ export class ListPedidosDetallePage implements OnInit {
     let auxReturn = false;
 
     for (const pedido of this.pedidos) {
-      auxReturn = d.id_pedido === pedido.key ? true : false;
+      if (d.id_pedido === pedido.key) {
+        auxReturn = true;
+        break;
+      }
     }
 
     return auxReturn;
@@ -74,7 +77,10 @@ export class ListPedidosDetallePage implements OnInit {
 
     for (const producto of this.productos) {
       if (d.producto === producto.nombre) {
-        auxReturn = (producto.quienPuedever === this.authServ.tipoUser);
+        if (producto.quienPuedever === this.authServ.tipoUser) {
+          auxReturn = true;
+          break;
+        }
       }
     }
 
