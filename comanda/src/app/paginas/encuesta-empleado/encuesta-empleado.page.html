@@ -13,119 +13,122 @@
 </ion-header>
 
 <ion-content class="background-image ion-padding">
-  <form [(formGroup)]="this.formEncuesta">
-    <!-- Preview de las fotos -->
-    <div class="width-100 center-vertical center-horizontal extra-bottom">
-      <!-- Hacer placeholder para foto de encuesta -->
-      <img class="profile-picture" *ngIf="this.fotos.length == 0"
-        src="assets/img/add_user.png">
-      <div *ngFor="let foto of this.fotos">
-        <img class="profile-picture" [src]="foto" />
+
+  <ion-card class="card-background" style="background-color:rgba(255, 255, 255, 0.8);">
+
+    <form [(formGroup)]="this.formEncuesta">
+      <!-- Preview de las fotos -->
+      <div class="width-100 center-vertical center-horizontal extra-bottom">
+        <!-- Hacer placeholder para foto de encuesta -->
+        <img class="profile-picture" *ngIf="this.fotos.length == 0"
+          src="assets/img/add_user.png">
+        <div *ngFor="let foto of this.fotos">
+          <img class="profile-picture" [src]="foto" />
+        </div>
       </div>
-    </div>
-    <div class="align-text-center">
-      <ion-button color="dark" [disabled]="this.fotos.length >= 1"
-        (click)="this.tomarFoto()">
-        Subir foto
-      </ion-button>
-    </div>
+      <div class="align-text-center">
+        <ion-button class="button1" [disabled]="this.fotos.length >= 1"
+          (click)="this.tomarFoto()">
+          Subir foto
+        </ion-button>
+      </div>
 
-    <ion-item-group>
-      <ion-item-divider color="dark">
-        <h6>¿La encuesta fue echa al ingresar o salir del trabajo?</h6>
-      </ion-item-divider>
-      <!-- formControlName="horarioEncuestaCtrl" -->
-      <ion-radio-group (ionChange)="mapHorarioRadioToFormValue($event)">
-        <ion-item class="transparent-item">
-          <ion-label>Al Ingresar</ion-label>
-          <ion-radio slot="start" value="true"></ion-radio>
+      <ion-item-group>
+        <ion-item-divider class="tabla1">
+          <h6 class="tabla1-cont">¿La encuesta fue echa al ingresar o salir del trabajo?</h6>
+        </ion-item-divider>
+        <!-- formControlName="horarioEncuestaCtrl" -->
+        <ion-radio-group (ionChange)="mapHorarioRadioToFormValue($event)">
+          <ion-item class="itemc">
+            <ion-label >Al Ingresar</ion-label>
+            <ion-radio slot="start" value="true"></ion-radio>
+          </ion-item>
+          <ion-item class="itemc">
+            <ion-label>Al Egresar</ion-label>
+            <ion-radio slot="start" value="false"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-item-group>
+
+      <!-- Combo para determinar la limpieza del lugar -->
+      <ion-item-group>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Limpieza del lugar</h6>
+          </ion-item-divider>
+          <ion-item class="itemc">
+            <ion-select class="selecter" formControlName="limpiezaCtrl" value="limpio">
+              <ion-select-option value="impecable">Impecable</ion-select-option>
+              <ion-select-option value="limpio" selected>Limpio</ion-select-option>
+              <ion-select-option value="sucio">Sucio</ion-select-option>
+              <ion-select-option value="imposible">Imposible para trabajar</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-item-group>
+
+      <!-- Range para el nivel de conformidad entre 1 y 10 -->
+      <ion-item-group>
+        <ion-item-divider class="tabla1">
+          <h6 class="tabla1-cont">Orden General</h6>
+        </ion-item-divider>
+        <ion-item class="itemc">
+          <ion-range color="dark" min="1" max="10" ticks="true" snaps="true"
+            formControlName="ordenCtrl">
+            <ion-label slot="start">1</ion-label>
+            <ion-label slot="end">10</ion-label>
+          </ion-range>
         </ion-item>
-        <ion-item class="transparent-item">
-          <ion-label>Al Egresar</ion-label>
-          <ion-radio slot="start" value="false"></ion-radio>
+      </ion-item-group>
+
+      <!-- Checkbox para elegir lo más destacado -->
+      <ion-item-group>
+        <ion-item-divider class="tabla1">
+          <h6 class="tabla1-cont">¿Qué le pareció lo más destacado?</h6>
+        </ion-item-divider>
+        <ion-item class="itemc">
+          <ion-label>Puesto de Trabajo</ion-label>
+          <ion-checkbox formControlName="puestoTrabajoCtrl" checked="false"></ion-checkbox>
         </ion-item>
-      </ion-radio-group>
-    </ion-item-group>
-
-    <!-- Combo para determinar la limpieza del lugar -->
-    <ion-item-group>
-      <ion-item-divider color="dark">
-        <h6>Limpieza del lugar</h6>
-      </ion-item-divider>
-      <ion-item class="transparent-item">
-        <ion-select formControlName="limpiezaCtrl"
-          value="limpio">
-          <ion-select-option value="impecable">Impecable</ion-select-option>
-          <ion-select-option value="limpio" selected>Limpio</ion-select-option>
-          <ion-select-option value="sucio">Sucio</ion-select-option>
-          <ion-select-option value="imposible">Imposible para trabajar</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-item-group>
-
-    <!-- Range para el nivel de conformidad entre 1 y 10 -->
-    <ion-item-group>
-      <ion-item-divider color="dark">
-        <h6>Orden General</h6>
-      </ion-item-divider>
-      <ion-item class="transparent-item">
-        <ion-range color="dark" min="1" max="10" ticks="true" snaps="true"
-          formControlName="ordenCtrl">
-          <ion-label slot="start">1</ion-label>
-          <ion-label slot="end">10</ion-label>
-        </ion-range>
-      </ion-item>
-    </ion-item-group>
-
-    <!-- Checkbox para elegir lo más destacado -->
-    <ion-item-group>
-      <ion-item-divider color="dark">
-        <h6>¿Qué le pareció lo más destacado?</h6>
-      </ion-item-divider>
-      <ion-item class="transparent-item">
-        <ion-label>Puesto de Trabajo</ion-label>
-        <ion-checkbox formControlName="puestoTrabajoCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item">
-        <ion-label>Comunicación</ion-label>
-        <ion-checkbox formControlName="comunicacionCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item">
-        <ion-label>Compañerismo</ion-label>
-        <ion-checkbox formControlName="companerismoCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-      <ion-item class="transparent-item">
-        <ion-label>Horarios Flexibles</ion-label>
-        <ion-checkbox formControlName="horariosFlexiblesCtrl" checked="false"></ion-checkbox>
-      </ion-item>
-    </ion-item-group>
-
-    <!-- Radio para elegir la satisfacción del empleado -->
-    <ion-item-group>
-      <ion-item-divider color="dark">
-        <h6>¿Está satisfecho con el lugar de trabajo?</h6>
-      </ion-item-divider>
-      <!-- formControlName="satisfaccionCtrl" -->
-      <ion-radio-group (ionChange)="mapRadioToFormValue($event)">
-        <ion-item class="transparent-item">
-          <ion-label>Sí</ion-label>
-          <ion-radio slot="start" value="true"></ion-radio>
+        <ion-item class="itemc">
+          <ion-label>Comunicación</ion-label>
+          <ion-checkbox formControlName="comunicacionCtrl" checked="false"></ion-checkbox>
         </ion-item>
-        <ion-item class="transparent-item">
-          <ion-label>No</ion-label>
-          <ion-radio slot="start" value="false"></ion-radio>
+        <ion-item class="itemc">
+          <ion-label>Compañerismo</ion-label>
+          <ion-checkbox formControlName="companerismoCtrl" checked="false"></ion-checkbox>
         </ion-item>
-      </ion-radio-group>
-    </ion-item-group>
+        <ion-item class="itemc">
+          <ion-label>Horarios Flexibles</ion-label>
+          <ion-checkbox formControlName="horariosFlexiblesCtrl" checked="false"></ion-checkbox>
+        </ion-item>
+      </ion-item-group>
 
-    <!-- Textarea adicional para comentarios adicionales -->
-    <ion-item-group>
-      <ion-item-divider color="dark">
-        <h6>Otros comentarios</h6>
-      </ion-item-divider>
-      <ion-item>
-        <ion-textarea formControlName="comentarioCtrl"></ion-textarea>
-      </ion-item>
-    </ion-item-group>
-  </form>
+      <!-- Radio para elegir la satisfacción del empleado -->
+      <ion-item-group>
+        <ion-item-divider class="tabla1">
+          <h6 class="tabla1-cont">¿Está satisfecho con el lugar de trabajo?</h6>
+        </ion-item-divider>
+        <!-- formControlName="satisfaccionCtrl" -->
+        <ion-radio-group (ionChange)="mapRadioToFormValue($event)">
+          <ion-item class="itemc">
+            <ion-label>Sí</ion-label>
+            <ion-radio slot="start" value="true"></ion-radio>
+          </ion-item>
+          <ion-item class="itemc">
+            <ion-label>No</ion-label>
+            <ion-radio slot="start" value="false"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-item-group>
+
+      <!-- Textarea adicional para comentarios adicionales -->
+      <ion-item-group>
+        <ion-item-divider class="tabla1">
+          <h6 class="tabla1-cont">Otros comentarios</h6>
+        </ion-item-divider>
+        <ion-item class="itemc">
+          <ion-textarea class="textArea1" formControlName="comentarioCtrl"></ion-textarea>
+        </ion-item>
+      </ion-item-group>
+    </form>
+  </ion-card>
 </ion-content>

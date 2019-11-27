@@ -11,6 +11,9 @@
 
 <!-- ABM Mesa -->
 <ion-content class="background-image ion-padding">
+
+  <ion-card class="card-background" style="background-color:rgba(255, 255, 255, 0.8);">
+
   <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
     class="height-100">
     <!-- Preview de la foto -->
@@ -22,30 +25,39 @@
         [src]="foto" />
     </div>
 
-    <ion-item class="transparent-item">
-      <ion-label>Nro. Mesa</ion-label>
-      <ion-input formControlName="nromesaCtrl" type="number"></ion-input>
+    <ion-item class="itemc">
+        <ion-label position="floating">Nro. Mesa</ion-label>
+        <br>
+        <ion-input class="inputhis" formControlName="nromesaCtrl" type="number"></ion-input>
     </ion-item>
 
-    <ion-item class="transparent-item">
-      <ion-label>Nro. Personas</ion-label>
-      <ion-input formControlName="cantcomenCtrl" type="number"></ion-input>
+    <ion-item class="itemc">
+      <ion-label position="floating">Nro. Personas</ion-label>
+      <br>
+      <ion-input class="inputhis" formControlName="cantcomenCtrl" type="number"></ion-input>
     </ion-item>
 
-    <ion-select formControlName="tmesaCtrl" placeholder="Tipo">
-      <ion-select-option value="vip">VIP</ion-select-option>
-      <ion-select-option value="discapacitados">Discapacitados</ion-select-option>
-      <ion-select-option value="normal">Normal</ion-select-option>
-    </ion-select>
+    <ion-item class="itemc">
+        <ion-label position="floating">Tipo</ion-label>
+        <br>
+        <ion-select class="selecter" formControlName="tmesaCtrl">
+          <ion-select-option value="vip">VIP</ion-select-option>
+          <ion-select-option value="discapacitados">Discapacitados</ion-select-option>
+          <ion-select-option value="normal">Normal</ion-select-option>
+        </ion-select>
+    </ion-item >
+
+    
 
     <div class="align-text-center">
-      <ion-button color="primary" [disabled]="this.foto"
+      <ion-button class="button1" [disabled]="this.foto"
         (click)="this.tomarFoto()">
         Subir foto
       </ion-button>
-      <ion-button type="submit" color="success" expand="full">
+      <ion-button class="button1" type="submit" expand="full">
         Agregar
       </ion-button>
     </div>
   </form>
+</ion-card>
 </ion-content>

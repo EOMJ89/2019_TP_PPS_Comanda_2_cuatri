@@ -3,3 +3,68 @@
   font-size: 1.5rem;
   color: whitesmoke;
 }
+
+.itemc
+{
+    --background: transparent;
+    color: rgb(0, 0, 0);
+    width: 100%;
+}
+
+
+
+.button1
+{
+    --background: url('/assets/img/btn_empty.png') 0 0/100% 100% no-repeat !important;
+    height: 3rem;
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.button2
+{
+    --background: url('/assets/img/btn_empty2.png') 0 0/100% 100% no-repeat !important;
+    height: 3rem;
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.mini_title
+{
+    --background: url('/assets/img/btn_empty.png') 0 0/100% 100% no-repeat !important;
+    height: 3rem;
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.label1
+{
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+}
+

@@ -7,56 +7,62 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="this.pedidoActual != undefined" class="card-background">
+    <ion-card  style="background-color:rgba(255, 255, 255, 0.8);" *ngIf="this.pedidoActual != undefined">
     <ion-card-content>
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label>Cliente</ion-label>
         <ion-input [value]="this.pedidoActual.cliente" readonly></ion-input>
       </ion-item>
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label>Mesa</ion-label>
         <ion-input [value]="this.pedidoActual.mesa" readonly></ion-input>
       </ion-item>
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label>Fecha</ion-label>
         <ion-input [value]="this.pedidoActual.fecha | date:'medium'" readonly></ion-input>
       </ion-item>
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label>Estado</ion-label>
         <ion-input [value]="this.pedidoActual.estado | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="transparent-item ion-no-padding">
-        <table>
-          <tr *ngFor="let producto of pedidoDetalle">
-            <td>({{ producto.cantidad }}) {{ producto.producto }}</td>
-            <td class="ion-padding">
-              <div *ngIf="this.verCuenta == false">
+      <table class="table1">
+        <tr *ngFor="let producto of pedidoDetalle">
+          <td>({{ producto.cantidad }}) {{ producto.producto }}</td>
+          <td class="ion-padding">
+            <div *ngIf="this.verCuenta == false">
+              <label class="bolded">
                 {{(producto.cantidad * producto.precio) | currency}}
-              </div>
-              <div *ngIf="this.verCuenta == true">
+              </label>
+            </div>
+            <div *ngIf="this.verCuenta == true">
+              <label class="bolded">
                 {{producto.precio | currency}}
-              </div>
-            </td>
-            <td>
-              <div *ngIf="this.verCuenta == false">
+              </label>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="this.verCuenta == false">
+              <label class="bolded">
                 {{producto.estado | titlecase}}
-              </div>
-              <div *ngIf="this.verCuenta == true">
+              </label>
+            </div>
+            <div *ngIf="this.verCuenta == true">
+              <label class="bolded">
                 {{(producto.cantidad * producto.precio) | currency}}
-              </div>
-            </td>
-          </tr>
-        </table>
-      </ion-item>
+              </label>
+            </div>
+          </td>
+        </tr>
+      </table>
 
-      <ion-item *ngIf="this.verCuenta == false" class="ion-no-padding">
+      <ion-item *ngIf="this.verCuenta == false" class="item2">
         <ion-label>Total</ion-label>
         <ion-input [value]="this.pedidoActual.preciototal | currency" readonly></ion-input>
       </ion-item>
 
       <div *ngIf="this.verCuenta == false">
-        <ion-button (click)="this.crearCuenta()" expand="block" color="tertiary"
+        <ion-button class="button2" (click)="this.crearCuenta()" expand="block"
           [disabled]="this.pedidoActual == undefined ||
           (this.pedidoActual.estado != 'comiendo' &&
           this.pedidoActual.estado != 'cuenta' &&
@@ -67,7 +73,7 @@
       </div>
 
       <div *ngIf="this.verCuenta == true">
-        <ion-item class="ion-no-padding">
+        <ion-item class="item2">
           <ion-label>Propina</ion-label>
           <ion-input [value]="(this.pedidoActual.propina /100) | percent"
             readonly></ion-input>
@@ -75,7 +81,7 @@
             [disabled]="this.pedidoActual.estado != 'cuenta' ||
             this.cliente == false">Escanear</ion-button>
         </ion-item>
-        <ion-item class="ion-no-padding">
+        <ion-item class="item2">
           <ion-label>Total + Propina</ion-label>
           <ion-input readonly
             [value]="(this.manejarPrecioPropina()) | currency"></ion-input>

@@ -23,6 +23,10 @@ export class ListPedidosDetallePage implements OnInit {
     private alertCtrl: AlertController) { }
 
   async ngOnInit() {
+    this.pedidos = new Array<PedidoKey>();
+    this.pedidoDetalle = new Array<PedidoDetalleKey>();
+    this.productos = new Array<ProductoKey>();
+
     await this.authServ.buscarUsuario();
     this.inicializarPedidos();
   }
@@ -49,7 +53,7 @@ export class ListPedidosDetallePage implements OnInit {
         // console.log('Productos', this.productos);
       });
 
-      this.traerDetalles().subscribe((pd: PedidoDetalleKey[]) => {
+      await this.traerDetalles().subscribe((pd: PedidoDetalleKey[]) => {
         pd = pd.filter((d: PedidoDetalleKey) => {
           return this.verificarExistencia(d);
         });

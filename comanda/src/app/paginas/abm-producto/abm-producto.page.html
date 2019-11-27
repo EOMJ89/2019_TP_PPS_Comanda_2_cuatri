@@ -11,54 +11,64 @@
 
 <!-- ABM Producto -->
 <ion-content class="background-image ion-padding">
-  <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
-    class="height-100">
-    <!-- Preview de las fotos -->
-    <div class="center-vertical center-horizontal transparent-item width-100">
-      <!-- Hacer placeholder para foto de producto -->
-      <img class="profile-picture" *ngIf="this.fotos.length == 0"
-        src="assets/img/add_user.png">
-      <div *ngFor="let foto of this.fotos">
-        <img class="profile-picture" [src]="foto" />
+
+  <ion-card class="card-background" style="background-color:rgba(255, 255, 255, 0.8);">
+    <form [(formGroup)]="this.formMesas" (submit)="this.agregarMesas()"
+      class="height-100">
+      <!-- Preview de las fotos -->
+      <div class="center-vertical center-horizontal transparent-item width-100">
+        <!-- Hacer placeholder para foto de producto -->
+        <img class="profile-picture" *ngIf="this.fotos.length == 0"
+          src="assets/img/add_user.png">
+        <div *ngFor="let foto of this.fotos">
+          <img class="profile-picture" [src]="foto" />
+        </div>
       </div>
-    </div>
 
-    <ion-item class="transparent-item">
-      <ion-label>Nombre</ion-label>
-      <ion-input formControlName="nombreCtrl" type="text"></ion-input>
-    </ion-item>
+      <ion-item class="itemc">
+        <ion-label position="floating">Nombre</ion-label>
+        <br>
+        <ion-input class="inputhis" formControlName="nombreCtrl" type="text"></ion-input>
+      </ion-item>
 
-    <ion-item class="transparent-item">
-      <ion-label>Descripción</ion-label>
-      <ion-input formControlName="descCtrl" type="text"></ion-input>
-    </ion-item>
+      <ion-item class="itemc">
+        <ion-label position="floating">Descripción</ion-label>
+        <br>
+        <ion-input class="inputhis" formControlName="descCtrl" type="text"></ion-input>
+      </ion-item>
 
-    <ion-item class="transparent-item">
-      <ion-label>Tiempo</ion-label>
-      <ion-input formControlName="tiempoCtrl" type="number"></ion-input>
-    </ion-item>
+      <ion-item class="itemc">
+        <ion-label position="floating">Tiempo</ion-label>
+        <br>
+        <ion-input  class="inputhis"formControlName="tiempoCtrl" type="number"></ion-input>
+      </ion-item>
 
-    <ion-item class="transparent-item">
-      <ion-label>Precio</ion-label>
-      <ion-input formControlName="precioCtrl" type="number"></ion-input>
-    </ion-item>
+      <ion-item class="itemc">
+        <ion-label position="floating">Precio</ion-label>
+        <br>
+        <ion-input class="inputhis" formControlName="precioCtrl" type="number"></ion-input>
+      </ion-item>
 
-    <ion-select formControlName="quienPuedeverCtrl"
-      placeholder="Perfil de Visualización">
-     <!-- <ion-select-option value="mozo">Mozo</ion-select-option> -->
-      <ion-select-option value="bartender">Bartender</ion-select-option>
-      <ion-select-option value="candybar">Candybar</ion-select-option>
-      <ion-select-option value="camarero">Cocinero</ion-select-option>
-    </ion-select>
+      <ion-item class="itemc">
+          <ion-label position="floating">Perfil de Visualización</ion-label>
+          <br>
+          <ion-select  class="selecter" formControlName="quienPuedeverCtrl">
+          <!-- <ion-select-option value="mozo">Mozo</ion-select-option> -->
+            <ion-select-option value="bartender">Bartender</ion-select-option>
+            <ion-select-option value="candybar">Candybar</ion-select-option>
+            <ion-select-option value="camarero">Cocinero</ion-select-option>
+        </ion-select>
+      </ion-item >
 
-    <div class="align-text-center">
-      <ion-button color="primary" [disabled]="this.fotos.length >= 3"
-        (click)="this.tomarFoto()">
-        Subir foto
-      </ion-button>
-      <ion-button type="submit" color="success" expand="full">
-        Agregar
-      </ion-button>
-    </div>
-  </form>
+      <div class="align-text-center">
+        <ion-button class="button1" [disabled]="this.fotos.length >= 3"
+          (click)="this.tomarFoto()">
+          Subir foto
+        </ion-button>
+        <ion-button class="button1" type="submit" expand="full">
+          Agregar
+        </ion-button>
+      </div>
+    </form>
+  </ion-card>
 </ion-content>

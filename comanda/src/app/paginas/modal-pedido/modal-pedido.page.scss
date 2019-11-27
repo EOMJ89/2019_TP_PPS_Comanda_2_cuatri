@@ -1,0 +1,55 @@
+.button2
+{
+    --background: url('/assets/img/btn_empty2.png') 0 0/100% 100% no-repeat !important;
+    height: 3rem;
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.itemc
+{
+    --background: transparent;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    text-align: center;
+}
+
+.item2
+{
+    --background: rgba(255, 255, 255, 0.650);
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    text-align: center;
+}
+
+.bolded
+{
+    font-weight: bold;
+}
+
+.table1
+{
+    border: 2px solid rgb(49, 49, 49);
+    width: 100%;
+
+}
+
+td
+{
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgb(49, 49, 49);
+    font-weight: bold;
+    color: black;
+}
+
+

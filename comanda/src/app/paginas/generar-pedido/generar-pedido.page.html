@@ -12,9 +12,9 @@
 <ion-content>
   <div class="width-100">
     <div>
-      <div class="width-100 center-horizontal center-vertical title-div">
-        COCINA
-      </div>
+      <ion-item class="button1">
+        <ion-label >COCINA</ion-label>
+      </ion-item>
       <ion-slides>
         <ion-slide *ngFor="let producto of productosCocina">
           <ion-card class="card-background">
@@ -30,17 +30,18 @@
               </ion-card-subtitle>
               <ion-card-content>
                 <img [src]="producto.fotos[0]">
-                <h3>
-                  <p>
+
+                <ion-label class="label1">
                     Cant. en Pedido: {{producto.cantidad}}
-                  </p>
-                </h3>
+                </ion-label>
+                <br>
+
                 <ion-button (click)="sumarProducto(producto.key)"
-                  color="primary">
+                  class="button1">
                   <ion-icon name="add-circle" slot="start"></ion-icon>Agregar
                 </ion-button>
                 <ion-button (click)="restarProducto(producto.key)"
-                  [disabled]="producto.cantidad == 0" color="primary">
+                  [disabled]="producto.cantidad == 0" class="button1">
                   <ion-icon name="remove-circle" slot="start"></ion-icon>Restar
                 </ion-button>
               </ion-card-content>
@@ -51,9 +52,9 @@
     </div>
 
     <div>
-      <div class="width-100 center-horizontal center-vertical title-div">
-        BEBIDAS
-      </div>
+      <ion-item class="button1">
+        <ion-label >BEBIDAS</ion-label>
+      </ion-item>
       <ion-slides>
         <ion-slide *ngFor="let producto of productosBartender">
           <ion-card class="card-background">
@@ -75,11 +76,11 @@
                   </p>
                 </h3>
                 <ion-button (click)="sumarProducto(producto.key)"
-                  color="primary">
+                class="button1">
                   <ion-icon name="add-circle" slot="start"></ion-icon>Agregar
                 </ion-button>
                 <ion-button (click)="restarProducto(producto.key)"
-                  [disabled]="producto.cantidad == 0" color="primary">
+                  [disabled]="producto.cantidad == 0" class="button1">
                   <ion-icon name="remove-circle" slot="start"></ion-icon>Restar
                 </ion-button>
               </ion-card-content>
@@ -90,9 +91,9 @@
     </div>
 
     <div>
-      <div class="width-100 center-horizontal center-vertical title-div">
-        POSTRES
-      </div>
+      <ion-item class="button1">
+        <ion-label >POSTRES</ion-label>
+      </ion-item>
       <ion-slides>
         <ion-slide *ngFor="let producto of productosCandybar">
           <ion-card class="card-background">
@@ -114,11 +115,11 @@
                   </p>
                 </h3>
                 <ion-button (click)="sumarProducto(producto.key)"
-                  color="primary">
+                class="button1">
                   <ion-icon name="add-circle" slot="start"></ion-icon>Agregar
                 </ion-button>
                 <ion-button (click)="restarProducto(producto.key)"
-                  [disabled]="producto.cantidad == 0" color="primary">
+                  [disabled]="producto.cantidad == 0" class="button1">
                   <ion-icon name="remove-circle" slot="start"></ion-icon>Restar
                 </ion-button>
               </ion-card-content>
@@ -139,8 +140,8 @@
   </ion-fab>
 </ion-content>
 
-<ion-footer>
-  <ion-button color="dark" expand="block" (click)="confirmarPedido()"
+<ion-footer class="itemc">
+  <ion-button class="button2" expand="block" (click)="confirmarPedido()"
     [disabled]="this.mesaDelPedido == null ||
     this.mesaDelPedido.pedidoActual != ''">Realizar Pedido
   </ion-button>

@@ -1,0 +1,53 @@
+.button_XXS_empty
+{
+    --background: #6DB3F2 url('/assets/img/button_XXS_empty.png') 0 0/100% 100% no-repeat !important;
+    height: 32px;
+    width: 50px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+
+}
+
+.button_XXS_empty_gr
+{
+    --background: rgb(9, 255, 0) url('/assets/img/button_XXS_empty.png') 0 0/100% 100% no-repeat !important;
+    height: 27px;
+    width: 40px;
+    color: rgb(0, 0, 0);
+}
+
+.button_XXS_empty_re
+{
+    --background: rgb(255, 0, 0) url('/assets/img/button_XXS_empty.png') 0 0/100% 100% no-repeat !important;
+    height: 27px;
+    width: 40px;
+    color: rgb(0, 0, 0);
+}
+
+
+.itemc
+{
+    --background: transparent;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    text-align: center;
+}
+
+.item2
+{
+    --background: rgba(255, 255, 255, 0.650);
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    text-align: center;
+}
+
+

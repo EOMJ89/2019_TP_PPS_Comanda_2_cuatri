@@ -5,45 +5,47 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card class="card-background">
+  <ion-card class="card-background" style="background-color:rgba(255, 255, 255, 0.8);">
     <ion-card-content>
       <div class="width-100 center-horizontal center-vertical">
         <img class="profile-picture" src="assets/img/log_usuario.png">
       </div>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="itemc">
         <ion-label position="floating">Correo:</ion-label>
-        <ion-input type="text" [(ngModel)]="correo"></ion-input>
+        <br>
+        <ion-input type="text" class="inputhis" [(ngModel)]="correo"></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="itemc">
         <ion-label position="floating">Clave:</ion-label>
-        <ion-input type="password" [(ngModel)]="clave"></ion-input>
+        <br>
+        <ion-input type="password" class="inputhis" [(ngModel)]="clave"></ion-input>
       </ion-item>
 
       <div class="width-100 center-horizontal">
-        <ion-button (click)="onSumitLogin()" color="success">Ingresar</ion-button>
-        <ion-button routerLink="/registro-cliente" color="warning">Crear Cuenta</ion-button>
+        <ion-button class="button1" (click)="onSumitLogin()">Ingresar</ion-button>
+        <ion-button class="button1" routerLink="/registro-cliente">Crear Cuenta</ion-button>
       </div>
     </ion-card-content>
   </ion-card>
 
   <div class="width-100 center-horizontal center-vertical flex-v">
     <div class="width-100 center-horizontal">
-      <ion-button (click)="ingresoAuto('dueño')">Dueño</ion-button>
-      <ion-button (click)="ingresoAuto('supervisor')">Supervisor</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('dueño')">Dueño</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('supervisor')">Supervisor</ion-button>
     </div>
     <div class="width-100 center-horizontal">
-      <ion-button (click)="ingresoAuto('mozo')">Mozo</ion-button>
-      <ion-button (click)="ingresoAuto('bartender')">Bartender</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('mozo')">Mozo</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('bartender')">Bartender</ion-button>
     </div>
     <div class="width-100 center-horizontal">
-      <ion-button (click)="ingresoAuto('candybar')">Candybar</ion-button>
-      <ion-button (click)="ingresoAuto('cocinero')">Cocinero</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('candybar')">Candybar</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('cocinero')">Cocinero</ion-button>
     </div>
     <div class="width-100 center-horizontal">
-      <ion-button (click)="ingresoAuto('cliente')">Cl. Registrado</ion-button>
-      <ion-button (click)="ingresoAuto('anonimo')">Cl. Anónimo</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('cliente')">Cl. Registrado</ion-button>
+      <ion-button class="button1" (click)="ingresoAuto('anonimo')">Cl. Anónimo</ion-button>
     </div>
   </div>
 </ion-content>

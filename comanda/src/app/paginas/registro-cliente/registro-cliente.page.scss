@@ -1,0 +1,41 @@
+.button1
+{
+    --background: url('/assets/img/btn_empty.png') 0 0/100% 100% no-repeat !important;
+    height: 3rem;
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.inputhis
+{
+    text-align: center;
+    letter-spacing: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+}
+
+.itemc
+{
+    --background: transparent;
+    color: rgb(0, 0, 0);
+}
+
+.selecter
+{
+    text-align: center;
+}
+
+.itemcButton
+{
+    height: 68px;
+    width: 100%;
+    --background: transparent;
+}
