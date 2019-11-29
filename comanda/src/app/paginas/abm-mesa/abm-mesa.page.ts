@@ -99,8 +99,8 @@ export class AbmMesaPage implements OnInit {
       this.mostrarFaltanDatos('Debe subir una foto');
       return true;
     }
-    if (this.mesas !== undefined) {
-      this.mostrarFaltanDatos('Eror al corroborar la existencia de la mesa');
+    if (this.mesas === undefined) {
+      this.mostrarFaltanDatos('Error al corroborar la existencia de la mesa.');
       return true;
     }
     if (this.compararExistencia()) {
