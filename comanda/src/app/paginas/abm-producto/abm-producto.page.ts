@@ -83,6 +83,7 @@ export class AbmProductoPage implements OnInit {
     const datos: any = {
       nombre: this.formMesas.value.nombreCtrl,
       descripcion: this.formMesas.value.descCtrl,
+      cantidad: 0,
       tiempo: this.formMesas.value.tiempoCtrl,
       precio: this.formMesas.value.precioCtrl,
       quienPuedever: this.formMesas.value.quienPuedeverCtrl,
