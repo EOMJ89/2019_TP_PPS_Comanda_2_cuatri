@@ -30,10 +30,9 @@ ion-content {
   // --background: linear-gradient(#3f3f3f 60%, #4ce000) !important;
   --background-repeat: no-repeat !important;
   --background-size: cover !important;
-  --background: url('/assets/img/regback.png') 0 0/100% 100% no-repeat !important;
+  --background: url("/assets/img/regback.png") 0 0/100% 100% no-repeat !important;
 }
 
-//Splash
 .splash {
   position: absolute;
   width: 100%;
@@ -42,20 +41,18 @@ ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(#3f3f3f 60%, #4ce000);
-}
-
-.spinner-landscape {
-  width: 100vw;
-  height: 100vw;
+  // background: #ff7400;
+  background: radial-gradient(circle, #7eef4f 0%, #7d9677 40%);
 }
 
 .spinner {
-  width: 60px;
-  height: 60px;
-  //background-color: #333;
-
-  margin: 100px auto;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vh;
+  height: 100vh;
+  // margin: 100px auto;
   -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
   animation: sk-rotateplane 1.2s infinite ease-in-out;
 }
