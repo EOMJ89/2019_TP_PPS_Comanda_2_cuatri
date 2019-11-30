@@ -255,12 +255,7 @@ export class AuthService {
     @clave : contraseña empleada para el asceso a firebase
   */
   async Login(correo: string, clave: string) {
-    try {
-      await this.afAuth.auth.signInWithEmailAndPassword(correo, clave);
-      // this.router.navigate(['inicio']);
-    } catch (e) {
-      console.log('Error!', e);
-    }
+    return this.afAuth.auth.signInWithEmailAndPassword(correo, clave);
   }
 
   /*

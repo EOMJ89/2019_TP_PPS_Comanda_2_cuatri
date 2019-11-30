@@ -71,7 +71,7 @@ export class AbmMesaPage implements OnInit {
 
   private compararExistencia(): boolean {
     let auxReturn = false;
-    const comp = parseInt(this.formMesas.value.tmesaCtrl, 10);
+    const comp = parseInt(this.formMesas.value.nromesaCtrl, 10);
 
     for (const m of this.mesas) {
       if (m.nromesa === comp) {

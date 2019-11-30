@@ -92,7 +92,7 @@ export class ListConfirmarClienteAltaPage implements OnInit {
     } else {
       auxReturn += `Lamentamos las molestias ocasionadas.<br>`;
     }
-    auxReturn += `<br>Saludos cordiales.<br>Gerencia de Comiradix.`;
+    auxReturn += `<br>Saludos cordiales.<br>Gerencia de Comicon.`;
     return auxReturn;
   }
 

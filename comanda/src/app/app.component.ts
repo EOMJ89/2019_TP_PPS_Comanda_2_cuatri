@@ -30,12 +30,12 @@ export class AppComponent implements OnInit {
       setTimeout(() => {
         // console.log('Desactivo la Splash Screen estatica');
         this.splashScreen.hide();
-      }, 3000);
+      }, 5000);
 
       setTimeout(() => {
         // console.log('Desactivo la Splash Screen animada');
         this.showSplash = false;
-      }, 8000);
+      }, 10000);
     });
   }
 }
