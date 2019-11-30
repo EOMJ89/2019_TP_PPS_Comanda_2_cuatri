@@ -11,19 +11,9 @@ import { Cliente, ClienteAConfirmar, ClienteKey } from '../clases/cliente';
 import { Anonimo, AnonimoKey } from '../clases/anonimo';
 import { CajaSonido } from '../clases/cajaSonido';
 import * as firebase from 'firebase/app';
+import { environment } from 'src/environments/environment';
 
-
-const config = {
-  apiKey: 'AIzaSyB641BDR9fQ_TDKpGdQOuQa46ZNQiALoIM',
-  authDomain: 'comanda-2019-comicon.firebaseapp.com',
-  databaseURL: 'https://comanda-2019-comicon.firebaseio.com',
-  projectId: 'comanda-2019-comicon',
-  storageBucket: 'comanda-2019-comicon.appspot.com',
-  messagingSenderId: '940906657827',
-  appId: '1:940906657827:web:f6775954d4970b16d41996',
-  measurementId: 'G-2Q085VK4YY'
-};
-const secondaryApp = firebase.initializeApp(config, 'Secondary');
+let secondaryApp: firebase.app.App;
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +29,7 @@ export class AuthService {
     public afAuth: AngularFireAuth,
     public router: Router,
     private db: AngularFirestore) {
+    secondaryApp = firebase.initializeApp(environment.firebaseConfig, 'Secondary');
     this.afAuth.authState.subscribe(async (user) => {
       if (user) {
         await this.buscarUsuario();
@@ -167,8 +158,8 @@ export class AuthService {
     @clave : la contraseña empleada para el acceso a firebase.
   */
   RegistrarEmpleado(usuario: Empleado, clave: string) {
-    return new Promise((resolve, reject) => {
-      secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
+    return secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave)
+      .then(res => {
         this.db.collection('empleados').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
@@ -177,12 +168,14 @@ export class AuthService {
           CUIL: usuario.CUIL,
           foto: usuario.foto,
           tipo: usuario.tipo
-        }).then(() => {
-          secondaryApp.auth().signOut();
-        });
-        resolve(res);
-      }).catch(err => reject(err));
-    });
+        })
+          .then(() => {
+            secondaryApp.auth().signOut();
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   /*
@@ -192,22 +185,25 @@ export class AuthService {
     @clave : la contraseña empleada para el acceso a firebase.
   */
   RegistrarClienteConfirmado(usuario: Cliente, clave: string) {
-    return new Promise((resolve, reject) => {
-      secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
+    return secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave)
+      .then(res => {
         this.db.collection('clientes').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
           apellido: usuario.apellido,
           DNI: usuario.DNI,
           foto: usuario.foto,
-        }).then(() => {
-          secondaryApp.auth().signOut();
-        }).catch(err => {
-          console.log(err);
-        });
-        resolve(res);
-      }).catch(err => { reject(err); });
-    });
+        }).
+          then(() => {
+            secondaryApp.auth().signOut();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   /*
@@ -215,7 +211,7 @@ export class AuthService {
     guarda sus datos en bases de datos llamado 'clientes-confirmar'.
    @usuario : el cliente que se quiere guardar, posee correo.
    @clave : la contraseña empleada para el acceso a firebase.
- */
+  */
   RegistrarCliente(usuario: Cliente, clave: string) {
     const d: ClienteAConfirmar = usuario as ClienteAConfirmar;
     d.clave = clave;
@@ -236,19 +232,21 @@ export class AuthService {
     @clave : la contraseña empleada para el acceso a firebase.
   */
   RegistrarAnonimo(usuario: Anonimo, clave: string) {
-    return new Promise((resolve, reject) => {
-      secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave).then(res => {
+    return secondaryApp.auth().createUserWithEmailAndPassword(usuario.correo, clave)
+      .then(res => {
         this.db.collection('anonimos').doc(res.user.uid).set({
           correo: usuario.correo,
           nombre: usuario.nombre,
           foto: usuario.foto,
           clave,
-        }).then(() => {
-          secondaryApp.auth().signOut();
-        });
-        resolve(res);
-      }).catch(err => reject(err));
-    });
+        })
+          .then(() => {
+            secondaryApp.auth().signOut();
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   /*
@@ -256,7 +254,7 @@ export class AuthService {
     @correo : correo personal del usuario que quiere ingresar
     @clave : contraseña empleada para el asceso a firebase
   */
-  async  Login(correo: string, clave: string) {
+  async Login(correo: string, clave: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(correo, clave);
       // this.router.navigate(['inicio']);

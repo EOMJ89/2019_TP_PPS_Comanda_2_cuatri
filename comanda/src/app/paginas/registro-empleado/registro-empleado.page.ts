@@ -201,8 +201,10 @@ export class RegistroEmpleadoPage implements OnInit {
   public EscanearDNI() {
     const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', formats: 'PDF_417', resultDisplayDuration: 0 };
     this.barcodeScanner.scan(options).then((barcodeData: BarcodeScanResult) => {
-      const scan = (barcodeData.text).split('@');
-      this.manejarDNI(scan);
+      if (!barcodeData.cancelled) {
+        const scan = (barcodeData.text).split('@');
+        this.manejarDNI(scan);
+      }
     }, (err) => {
       this.presentAlert('¡Error!', 'Error en el registro', err);
     });

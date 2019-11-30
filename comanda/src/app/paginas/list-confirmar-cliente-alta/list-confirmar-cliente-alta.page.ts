@@ -46,26 +46,30 @@ export class ListConfirmarClienteAltaPage implements OnInit {
   public async confirmarCliente(cliente: ClienteAConfirmarKey, id: string) {
     // console.log('Confirmo el cliente', cliente, 'con id', id);
     const clave: string = cliente.clave;
-    const data: any = cliente as any;
-    delete data.key;
-    delete data.clave;
-    await this.authServ.RegistrarClienteConfirmado(data, clave)
-      .then(async () => {
-        await this.enviarCorreo(cliente.correo, true);
-        this.removerDoc('clientes-confirmar', id);
-      });
-    this.presentToast('Cliente confirmado', 'success');
+    const data: any = {
+      DNI: cliente.DNI,
+      apellido: cliente.apellido,
+      correo: cliente.correo,
+      foto: cliente.foto,
+      nombre: cliente.nombre
+    };
+
+    await this.authServ.RegistrarClienteConfirmado(data, clave).then(async (user) => {
+      await this.enviarCorreo(cliente.correo, true);
+      this.presentToast('Cliente confirmado', 'success');
+      await this.removerDoc('clientes-confirmar', id);
+    });
   }
 
   private removerDoc(db, key) {
     return this.firestore.collection(db).doc(key).delete();
   }
 
-  public rechazarCliente(cliente: ClienteKey, id: string) {
+  public async rechazarCliente(cliente: ClienteKey, id: string) {
     // console.log('Rechazo el cliente', cliente, 'con id', id);
-    this.removerDoc('clientes-confirmar', id);
-    this.enviarCorreo(cliente.correo, false);
+    await this.enviarCorreo(cliente.correo, false);
     this.presentToast('Cliente rechazado', 'danger');
+    this.removerDoc('clientes-confirmar', id);
   }
 
   private async presentToast(mensaje: string, color: string) {

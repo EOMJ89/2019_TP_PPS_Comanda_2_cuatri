@@ -227,10 +227,13 @@ export class RegistroClientePage implements OnInit {
     *permite escanear el dni para rellenar datos del formulario
   */
   public EscanearDNI() {
-    const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', resultDisplayDuration: 0 };
+    const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', formats: 'PDF_417', resultDisplayDuration: 0 };
     this.barcodeScanner.scan(options).then((barcodeData: BarcodeScanResult) => {
-      const scan = (barcodeData.text).split('@');
-      this.manejarDNI(scan);
+      console.log(barcodeData);
+      if (!barcodeData.cancelled) {
+        const scan = (barcodeData.text).split('@');
+        this.manejarDNI(scan);
+      }
     }, (err) => {
       this.presentAlert('¡Error!', 'Error al escanear el DNI.', err);
     });
