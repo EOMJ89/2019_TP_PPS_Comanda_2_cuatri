@@ -50,10 +50,10 @@ export class ListConfirmarClienteAltaPage implements OnInit {
     delete data.key;
     delete data.clave;
     await this.authServ.RegistrarClienteConfirmado(data, clave)
-      .then(() => {
+      .then(async () => {
+        await this.enviarCorreo(cliente.correo, true);
         this.removerDoc('clientes-confirmar', id);
       });
-    this.enviarCorreo(cliente.correo, true);
     this.presentToast('Cliente confirmado', 'success');
   }
 
