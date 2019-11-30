@@ -182,13 +182,29 @@ export class RegistroEmpleadoPage implements OnInit {
     this.usuario.correo = this.herramientas.AutofillMail();
   }
 
+  private manejarDNI(datos: Array<string>) {
+    const dni = parseInt(datos[4], 10);
+
+    if (isNaN(dni)) {
+      console.log('Es de formato 2010');
+      this.usuario.DNI = parseInt(datos[1].trim(), 10);
+      this.usuario.apellido = datos[4];
+      this.usuario.nombre = datos[5];
+    } else {
+      console.log('Es de formato 2014');
+      this.usuario.DNI = parseInt(datos[4], 10);
+      this.usuario.apellido = datos[1];
+      this.usuario.nombre = datos[2];
+    }
+  }
+
   public EscanearDNI() {
     const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', formats: 'PDF_417', resultDisplayDuration: 0 };
     this.barcodeScanner.scan(options).then((barcodeData: BarcodeScanResult) => {
-      const scan = (barcodeData.text).split('@');
-      this.usuario.DNI = parseInt(scan[4], 10);
-      this.usuario.apellido = scan[1];
-      this.usuario.nombre = scan[2];
+      if (!barcodeData.cancelled) {
+        const scan = (barcodeData.text).split('@');
+        this.manejarDNI(scan);
+      }
     }, (err) => {
       this.presentAlert('¡Error!', 'Error en el registro', err);
     });

@@ -1,9 +1,13 @@
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Registro de Empleado</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+        <ion-toolbar color="dark">
+            <ion-buttons slot="start">
+            <ion-back-button defaultHref="inicio"></ion-back-button>
+            </ion-buttons>
+            <ion-title>
+                Registro de Empleado
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
 
 
 <ion-content class="background-image" no-scroll padding>
@@ -22,75 +26,79 @@
         </div>
 
     <div [hidden]="ocultarSeccion1">
-        <ion-item class="itemc">
-        <img class="logo_usuario" src="assets/img/add_user.png">
-        </ion-item>
+
+        <ion-card class="card-background" style="background-color:rgba(255, 255, 255, 0.8);">
+
+            <div class="width-100 center-horizontal center-vertical">
+                <img class="profile-picture" src="assets/img/add_user.png">
+            </div>
+
+            <ion-item class="itemc">
+                <ion-label position="floating">Correo</ion-label>
+                <br>
+                <ion-input class="inputhis" type="text" [(ngModel)]="usuario.correo" autocomplete="off"></ion-input>
+            </ion-item>
+
+            <ion-item class="itemc">
+                <ion-label position="floating">Clave</ion-label>
+                <br>
+                <ion-input class="inputhis" type="password" [(ngModel)]="clave"></ion-input>
+            </ion-item>
+
+            <ion-item class="itemc">
+                <ion-label position="floating">Perfil</ion-label>
+                <br>
+                <ion-select [(ngModel)]="usuario.tipo" class="selecter">
+                    <ion-select-option *ngFor="let perfil of listaPerfil" [value]="perfil">
+                        {{perfil}}
+                    </ion-select-option>
+                    </ion-select>
+            </ion-item >
+
+            <ion-item class="itemc">
+                <ion-label position="floating">Nombre</ion-label>
+                <br>
+                <ion-input class="inputhis" type="text" [(ngModel)]="usuario.nombre"></ion-input>
+            </ion-item>
+
+            <ion-item class="itemc">
+                <ion-label position="floating">Apellido</ion-label>
+                <br>
+                <ion-input class="inputhis" type="text" [(ngModel)]="usuario.apellido"></ion-input>
+            </ion-item>
+
+            <ion-item class="itemc">
+                <ion-label position="floating">DNI</ion-label>
+                <br>
+                <ion-input class="inputhis" type="number" [(ngModel)]="usuario.DNI"></ion-input>
+            </ion-item>
+
+            <ion-item class="itemc">
+                <ion-label position="floating">CUIL</ion-label>
+                <br>
+                <ion-input class="inputhis" type="text" [(ngModel)]="usuario.CUIL"></ion-input>
+            </ion-item>
+        </ion-card>
 
         <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">Correo</ion-label>
-            <br>
-            <ion-input class="inputhis" type="text" name="name" [(ngModel)]="usuario.correo" autocomplete="off" placeholder="algo@algo.com"></ion-input>
+            <ion-button  (click)="EscanearDNI()" class="button1">Escanear DNI</ion-button>
         </ion-item>
-
         <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">Clave</ion-label>
-            <br>
-            <ion-input class="inputhis" type="password" name="password" [(ngModel)]="clave" placeholder="minimo de 6 caracteres"></ion-input>
-        </ion-item>
-
-        <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">Perfil</ion-label>
-            <br>
-            <ion-select [(ngModel)]="usuario.tipo" class="selecter">
-                <ion-select-option *ngFor="let perfil of listaPerfil" [value]="perfil">
-                    {{perfil}}
-                </ion-select-option>
-                </ion-select>
-        </ion-item >
-
-        <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">Nombre</ion-label>
-            <br>
-            <ion-input class="inputhis" type="text" [(ngModel)]="usuario.nombre"></ion-input>
-        </ion-item>
-
-        <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">Apellido</ion-label>
-            <br>
-            <ion-input class="inputhis" type="text" [(ngModel)]="usuario.apellido"></ion-input>
-        </ion-item>
-
-        <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">DNI</ion-label>
-            <br>
-            <ion-input class="inputhis" type="number" [(ngModel)]="usuario.DNI"></ion-input>
-        </ion-item>
-
-        <ion-item class="itemc">
-            <ion-label class="ion-text-center" position="floating">CUIL</ion-label>
-            <br>
-            <ion-input class="inputhis" type="text" [(ngModel)]="usuario.CUIL"></ion-input>
-        </ion-item>
-
-        <ion-item class="itemcButton">
-            <button  (click)="EscanearDNI()"  class="button">Escanear DNI</button>
-        </ion-item>
-        <ion-item class="itemcButton">
-            <button  class="button" (click)="ValidarRegistro()">Registrar</button>
+            <ion-button  class="button1" (click)="ValidarRegistro()">Registrar</ion-button>
         </ion-item>
     </div>
     <div [hidden]="ocultarSeccion2">
-        <ion-item class="itemcButton">
-            <button  class="button" (click)="SacarFoto()">Sacar foto</button>
+        <ion-item class="itemc">
+            <ion-button  class="button1" (click)="SacarFoto()">Sacar foto</ion-button>
         </ion-item>
-        <ion-item class="itemcButton">
-            <button  class="button" (click)="SinFoto()">Sin foto</button>
+        <ion-item class="itemc">
+            <ion-button  class="button1" (click)="SinFoto()">Sin foto</ion-button>
         </ion-item>
     </div>
-    <ion-item class="itemcButton">
-        <button  (click)="RellenarDatos()"  class="button">Rellenar</button>
+    <ion-item class="itemc">
+        <ion-button  (click)="RellenarDatos()"  class="button1">Rellenar</ion-button>
     </ion-item>
-      <ion-item class="itemcButton" (click)="BorrarDatos()">
-            <button routerLink="/inicio"  class="button">Volver</button>
+      <ion-item class="itemc" (click)="BorrarDatos()">
+            <ion-button routerLink="/inicio"  class="button1">Volver</ion-button>
       </ion-item>
   </ion-content>

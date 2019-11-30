@@ -11,23 +11,25 @@
 
 <ion-content>
   <!-- Pedidos -->
-  <ion-card class="card-background" *ngIf="this.pedidos.length> 0">
+  <ion-card style="background-color:rgba(255, 255, 255, 0.8);text-align: center;" *ngIf="this.pedidos.length> 0">
     <ion-card-content>
       <div class="ion-no-padding transparent-item flex-v" *ngFor="let pedido of
         pedidos">
-        <div class="width-100 align-text-center big-letter">
+        <div class="width-100 align-text-center big-letter" style="background: rgba(255, 255, 255, 0.75);">
+          <label class="bolded">
           Mesa {{pedido.mesa}}
+        </label>
         </div>
 
-        <div class="width-100 center-horizontal center-vertical">
-          <ion-button color="tertiary"
+        <div class="width-100 center-horizontal center-vertical" style="background: rgba(255, 255, 255, 0.6);">
+          <ion-button class="button_XXS_empty"
             (click)="this.verPedido(pedido.key)">
             Ver
           </ion-button>
         </div>
 
-        <div class="width-100 center-horizontal center-vertical">
-          <ion-button (click)="confirmarEntrega(pedido.key)" color="success">Confirmar</ion-button>
+        <div class="width-100 center-horizontal center-vertical" style="background: rgba(255, 255, 255, 0.6);">
+          <ion-button (click)="confirmarEntrega(pedido.key)" class="button_XXS_empty_gr">Confirmar</ion-button>
         </div>
       </div>
 

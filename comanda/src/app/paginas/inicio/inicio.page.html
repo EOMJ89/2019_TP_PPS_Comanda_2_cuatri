@@ -28,22 +28,22 @@
   <div *ngIf="this.authService.tipoUser == 'supervisor' ||
     this.authService.tipoUser == 'dueño'"
     class="width-100 center-horizontal flex-wrap">
-    <ion-button routerLink="/registro-empleado" size="large">
+    <ion-button class="button1" routerLink="/registro-empleado" size="large">
       Registrar Empleado
     </ion-button>
-    <ion-button routerLink="/encuesta-sup" size="large">
+    <ion-button class="button1" routerLink="/encuesta-sup" size="large">
       Encuesta
     </ion-button>
-    <ion-button routerLink="/list-confirmar-cliente-alta" size="large">
+    <ion-button class="button1" routerLink="/list-confirmar-cliente-alta" size="large">
       Confirmación de Clientes
     </ion-button>
-    <ion-button routerLink="/list-confirmar-cliente-mesa" size="large">
+    <ion-button class="button1" routerLink="/list-confirmar-cliente-mesa" size="large">
       Lista de Espera
     </ion-button>
-    <ion-button routerLink="/qr-mesa" size="large">
+    <ion-button class="button1" routerLink="/qr-mesa" size="large">
       QR de Mesa
     </ion-button>
-    <ion-button routerLink="/confirmar-cierre-mesa" size="large">
+    <ion-button class="button1" routerLink="/confirmar-cierre-mesa" size="large">
       Cierre de Mesas
     </ion-button>
   </div>
@@ -53,13 +53,13 @@
     *ngIf="this.authService.tipoUser == 'cocinero' ||
     this.authService.tipoUser == 'candybar' ||
     this.authService.tipoUser == 'bartender'">
-    <ion-button routerLink="/abm-producto" size="large">
+    <ion-button class="button1" routerLink="/abm-producto" size="large">
       Registrar Producto
     </ion-button>
-    <ion-button routerLink="/encuesta-empleado" size="large">
+    <ion-button class="button1" routerLink="/encuesta-empleado" size="large">
       Encuesta
     </ion-button>
-    <ion-button routerLink="/list-pedidos-detalle" size="large">
+    <ion-button class="button1" routerLink="/list-pedidos-detalle" size="large">
       Pedidos Pendientes
     </ion-button>
   </div>
@@ -67,31 +67,31 @@
   <!-- Para el mozo -->
   <div class="width-100 center-horizontal flex-wrap"
     *ngIf="this.authService.tipoUser == 'mozo'">
-    <ion-button routerLink="/abm-producto" size="large">
+    <ion-button class="button1" routerLink="/abm-producto" size="large">
       Registrar Producto
     </ion-button>
-    <ion-button routerLink="/abm-mesa" size="large">
+    <ion-button class="button1" routerLink="/abm-mesa" size="large">
       Registrar Mesas
     </ion-button>
-    <ion-button routerLink="/encuesta-empleado" size="large">
+    <ion-button class="button1" routerLink="/encuesta-empleado" size="large">
       Encuesta
     </ion-button>
     <!-- <ion-button routerLink="/qr-ingreso-local" size="large">
       Ingreso al Local
     </ion-button> -->
-    <ion-button routerLink="/list-confirmar-cliente-mesa" size="large">
+    <ion-button class="button1" routerLink="/list-confirmar-cliente-mesa" size="large">
       Lista de Espera
     </ion-button>
-    <ion-button routerLink="/qr-mesa" size="large">
+    <ion-button class="button1" routerLink="/qr-mesa" size="large">
       QR de Mesa
     </ion-button>
-    <ion-button routerLink="/list-confirmar-pedido" size="large">
+    <ion-button class="button1" routerLink="/list-confirmar-pedido" size="large">
       Confirmación de Pedidos
     </ion-button>
-    <ion-button routerLink="/confirmar-entrega-mozo" size="large">
+    <ion-button class="button1" routerLink="/confirmar-entrega-mozo" size="large">
       Confirmar Entrega Mozo
     </ion-button>
-    <ion-button routerLink="/confirmar-cierre-mesa" size="large">
+    <ion-button class="button1" routerLink="/confirmar-cierre-mesa" size="large">
       Cierre de Mesas
     </ion-button>
   </div>
@@ -100,16 +100,16 @@
   <div class="width-100 center-horizontal flex-wrap"
     *ngIf="this.authService.tipoUser == 'cliente' ||
     this.authService.tipoUser == 'anonimo'">
-    <ion-button routerLink="/qr-ingreso-local" size="large">
+    <ion-button class="button1" routerLink="/qr-ingreso-local" size="large">
       Ingreso al Local
     </ion-button>
-    <ion-button routerLink="/qr-mesa" size="large">
+    <ion-button class="button1" routerLink="/qr-mesa" size="large">
       QR de Mesa
     </ion-button>
-    <ion-button routerLink="/generar-pedido" size="large">
+    <ion-button class="button1" routerLink="/generar-pedido" size="large">
       Generar Pedido
     </ion-button>
-    <ion-button routerLink="/confirmar-entrega" size="large">
+    <ion-button class="button1" routerLink="/confirmar-entrega" size="large">
       Confirmar Entrega
     </ion-button>
   </div>

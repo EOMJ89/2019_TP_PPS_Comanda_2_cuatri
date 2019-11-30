@@ -148,12 +148,14 @@ export class QrMesaPage implements OnInit {
                     'Estado de mesa',
                     `Mesa: ${this.mesaAMostrar.nromesa}`,
                     `La mesa se encuentra reservada`);
+                  this.mesaAMostrar = undefined;
                 }
               } else {
                 this.presentAlert(
                   'Estado de mesa',
                   `Mesa: ${this.mesaAMostrar.nromesa}`,
                   `La mesa se encuentra reservada pero aún no es horario`);
+                this.mesaAMostrar = undefined;
               }
             } else {
               // alert('La mesa NO ESTÁ reservada'); // La mesa no está reservada o está fuera del horario de reserva
@@ -165,18 +167,21 @@ export class QrMesaPage implements OnInit {
                   this.presentAlertCliente();
                 } else if ((puestoLista as ListaEsperaClientesKey).estado === 'confirmacionMozo') {
                   this.presentAlert('¡Error!', `Usted sigue en lista de espera.`, `Debe esperar a que el mozo lo confirme`);
+                  this.mesaAMostrar = undefined;
                 }
               } else {
                 // Si el cliente no esta en lista de espera
                 if (this.estaEnMesa()) {
                   // alert('puestoMesa es un MesaKey, el cliente ya ocupa mesa'); // Valido que el cliente NO esté usando otra mesa
                   this.presentAlert('¡Error!', 'Mesa ocupada', 'Usted ya se encuentra ocupando una mesa');
+                  this.mesaAMostrar = undefined;
                 } else {
                   // alert('puestoMesa es un false, el cliente no ocupa una mesa ni está en la lista'); // No está en lista ni en mesa
                   this.presentAlert(
                     '¡Error!',
                     'No se encuentra en lista de espera.',
                     'Debe escanear el QR de ingreso al local.');
+                  this.mesaAMostrar = undefined;
                 }
               }
             }
@@ -200,6 +205,7 @@ export class QrMesaPage implements OnInit {
                 'Estado de mesa',
                 `Mesa: ${this.mesaAMostrar.nromesa}`,
                 `La mesa se encuentra ${this.mesaAMostrar.estado}`);
+              this.mesaAMostrar = undefined;
             }
           }
         } else {
@@ -208,6 +214,7 @@ export class QrMesaPage implements OnInit {
             'Estado de mesa',
             `Mesa: ${this.mesaAMostrar.nromesa}`,
             `La mesa se encuentra ${this.mesaAMostrar.estado}`);
+          this.mesaAMostrar = undefined;
         }
       } else {
         this.presentAlert('¡Error!', 'Error en la Mesa.', 'El número de la Mesa no es correcto.');
@@ -287,6 +294,12 @@ export class QrMesaPage implements OnInit {
           }
         },
         {
+          text: 'Juegos',
+          handler: () => {
+            this.irAJuegos();
+          }
+        },
+        {
           text: 'Encuesta',
           handler: () => {
             this.verEncuesta(this.mesaAMostrar.pedidoActual);
@@ -294,6 +307,10 @@ export class QrMesaPage implements OnInit {
         },
       ]
     }).then(alert => { alert.present(); });
+  }
+
+  public irAJuegos() {
+    this.router.navigate(['juegos']);
   }
 
   public verPedido(pedido: string) {

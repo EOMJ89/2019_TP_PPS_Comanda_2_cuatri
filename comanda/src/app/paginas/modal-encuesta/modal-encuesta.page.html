@@ -10,32 +10,33 @@
 </ion-header>
 
 <ion-content class="background-image ion-padding">
-  <ion-card *ngIf="this.user !== undefined" class="card-background">
+  <!-- <ion-card *ngIf="this.user !== undefined" class="card-background"> -->
+  <ion-card *ngIf="this.user !== undefined" style="background-color:rgba(255, 255, 255, 0.8);">
     <ion-card-header>
       <ion-card-title>Detalles del {{this.tipo | titlecase}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-item color="dark">
+      <ion-item class="itemc2">
         <ion-label position="floating">Nombre</ion-label>
         <ion-input [value]="user.nombre | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item color="dark">
+      <ion-item class="itemc2">
         <ion-label position="floating">Apellido</ion-label>
         <ion-input [value]="user.apellido | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item color="dark" *ngIf="this.tipo === 'empleado'">
+      <ion-item class="itemc2" *ngIf="this.tipo === 'empleado'">
         <ion-label position="floating">CUIL</ion-label>
         <ion-input [value]="user.CUIL" readonly></ion-input>
       </ion-item>
 
-      <ion-item color="dark">
+      <ion-item class="itemc2">
         <ion-label position="floating">DNI</ion-label>
         <ion-input [value]="user.DNI" readonly></ion-input>
       </ion-item>
 
-      <ion-item color="dark" *ngIf="this.tipo === 'empleado'">
+      <ion-item class="itemc2" *ngIf="this.tipo === 'empleado'">
         <ion-label position="floating">Puesto</ion-label>
         <ion-input [value]="user.tipo | titlecase" readonly></ion-input>
       </ion-item>
@@ -44,13 +45,14 @@
 
   <!-- Range para el nivel de puntualidad del empleado -->
   <form [(formGroup)]="this.formEncuesta">
-    <ion-card *ngIf="this.user !== undefined" class="card-background">
+    <!-- <ion-card *ngIf="this.user !== undefined" class="card-background"> -->
+    <ion-card *ngIf="this.user !== undefined" style="background-color:rgba(255, 255, 255, 0.8);">
       <ion-card-content>
         <ion-item-group *ngIf="this.tipo === 'empleado'">
-          <ion-item-divider color="dark">
-            <h6>Puntualidad</h6>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Puntualidad</h6>
           </ion-item-divider>
-          <ion-item class="transparent-item">
+          <ion-item class="itemc">
             <ion-select formControlName="puntualidadCtrl" value="puntual">
               <ion-select-option value="puntual" selected>Puntual</ion-select-option>
               <ion-select-option value="leve">Leve Retraso</ion-select-option>
@@ -61,10 +63,10 @@
 
         <!-- Range para el nivel de cantidad de comenzales del cliente -->
         <ion-item-group *ngIf="this.tipo === 'cliente'">
-          <ion-item-divider color="dark">
-            <h6>Cant. de Comensales</h6>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Cant. de Comensales</h6>
           </ion-item-divider>
-          <ion-item class="transparent-item">
+          <ion-item class="itemc">
             <ion-select formControlName="cantComensalesCtrl" value=1>
               <ion-select-option value=1 selected>Solo</ion-select-option>
               <ion-select-option value=2>Dos personas o mas</ion-select-option>
@@ -77,10 +79,10 @@
 
         <!-- Range para el nivel de valoracion entre 1 y 10 de ambos -->
         <ion-item-group>
-          <ion-item-divider color="dark">
-            <h6>Valoración</h6>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Valoración</h6>
           </ion-item-divider>
-          <ion-item class="transparent-item">
+          <ion-item class="itemc">
             <ion-range color="dark" min="1" max="10" ticks="true" snaps="true"
               formControlName="valoracionCtrl">
               <ion-label slot="start">1</ion-label>
@@ -91,17 +93,17 @@
 
         <!-- Radio para elegir si recomendaria el empleado -->
         <ion-item-group *ngIf="this.tipo === 'empleado'">
-          <ion-item-divider color="dark">
-            <h6>Recomendado</h6>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Recomendado</h6>
           </ion-item-divider>
           <!-- formControlName="recomendacionCtrl" -->
           <ion-radio-group
             (ionChange)="mapRadioToFormValueRecomendacion($event)">
-            <ion-item class="transparent-item">
+            <ion-item class="itemc">
               <ion-label>Sí</ion-label>
               <ion-radio slot="start" value="true"></ion-radio>
             </ion-item>
-            <ion-item class="transparent-item">
+            <ion-item class="itemc">
               <ion-label>No</ion-label>
               <ion-radio slot="start" value="false"></ion-radio>
             </ion-item>
@@ -110,16 +112,16 @@
 
         <!-- Radio para elegir la frequencialidad de cliente -->
         <ion-item-group *ngIf="this.tipo === 'cliente'">
-          <ion-item-divider color="dark">
-            <h6>Cliente frequente</h6>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Cliente frequente</h6>
           </ion-item-divider>
           <!-- formControlName="frequenciaCtrl" -->
           <ion-radio-group (ionChange)="mapRadioToFormValueFrequencia($event)">
-            <ion-item class="transparent-item">
+            <ion-item class="itemc">
               <ion-label>Sí</ion-label>
               <ion-radio slot="start" value="true"></ion-radio>
             </ion-item>
-            <ion-item class="transparent-item">
+            <ion-item class="itemc">
               <ion-label>No</ion-label>
               <ion-radio slot="start" value="false"></ion-radio>
             </ion-item>
@@ -128,11 +130,11 @@
 
         <!-- Textarea adicional para comentarios de ambos-->
         <ion-item-group>
-          <ion-item-divider color="dark">
-            <h6>Comentarios</h6>
+          <ion-item-divider class="tabla1">
+            <h6 class="tabla1-cont">Comentarios</h6>
           </ion-item-divider>
-          <ion-item>
-            <ion-textarea formControlName="comentarioCtrl"></ion-textarea>
+          <ion-item class="itemc">
+            <ion-textarea class="textArea1" formControlName="comentarioCtrl"></ion-textarea>
           </ion-item>
         </ion-item-group>
       </ion-card-content>

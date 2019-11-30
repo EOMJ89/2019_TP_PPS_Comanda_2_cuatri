@@ -1,0 +1,60 @@
+.button_preparar
+{
+    --background: url('/assets/img/button_XXS_play.png') 0 0/100% 100% no-repeat !important;
+    height: 27px;
+    width: 40px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.button_listo
+{
+    --background: url('/assets/img/button_XXS_tilde.png') 0 0/100% 100% no-repeat !important;
+    height: 27px;
+    width: 40px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+.itemc
+{
+    --background: transparent;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.mark1
+{
+    --background: rgba(0, 0, 0, 0.200);
+}
+
+.cardType_1
+{
+    background-color:rgba(255, 255, 255, 0.9);
+}
+
+.cardType_2
+{
+    background-color:rgba(255, 208, 208, 0.9);
+}
+
+.cardType_3
+{
+    background-color:rgba(248, 214, 186, 0.9);
+}

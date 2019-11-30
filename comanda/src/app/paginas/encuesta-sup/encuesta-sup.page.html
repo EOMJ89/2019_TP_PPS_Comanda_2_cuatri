@@ -10,13 +10,13 @@
 </ion-header>
 
 <ion-content class="background-image ion-padding">
-  <ion-item color="light">
+  <ion-item class="button1">
     <ion-label>Empleados</ion-label>
   </ion-item>
   <div class="width-100" *ngFor="let empleado of this.empleados">
     <ion-row>
       <ion-col>
-        <ion-item color="dark"
+        <ion-item class="button2"
           (click)="muestraModal(empleado.key,'empleado')">
           {{empleado.nombre | titlecase}} {{empleado.apellido | titlecase}}
         </ion-item>
@@ -24,13 +24,13 @@
     </ion-row>
   </div>
 
-  <ion-item color="light">
+  <ion-item class="button1">
     <ion-label>Clientes</ion-label>
   </ion-item>
   <div class="width-100" *ngFor="let cliente of this.clientes">
     <ion-row>
       <ion-col>
-        <ion-item color="dark"
+        <ion-item class="button2"
           (click)="muestraModal(cliente.key,'cliente')">
           {{cliente.nombre | titlecase}} {{cliente.apellido | titlecase}}
         </ion-item>

@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="this.cliente != undefined" class="card-background">
+  <ion-card style="background-color:rgba(255, 255, 255, 0.8);" *ngIf="this.cliente != undefined">
     <ion-card-content>
       <div class="width-100 center-vertical center-horizontal extra-bottom">
         <!-- Hacer placeholder para foto -->
@@ -19,22 +19,22 @@
         </div>
       </div>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label position="floating">Nombre</ion-label>
         <ion-input [value]="cliente.nombre | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding" *ngIf="this.registrado == 'cliente'">
+      <ion-item class="item2" *ngIf="this.registrado == 'cliente'">
         <ion-label position="floating">Apellido</ion-label>
         <ion-input [value]="cliente.apellido | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding" *ngIf="this.registrado == 'cliente'">
+      <ion-item class="item2" *ngIf="this.registrado == 'cliente'">
         <ion-label position="floating">DNI</ion-label>
         <ion-input [value]="cliente.DNI" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label position="floating">Correo</ion-label>
         <ion-input [value]="cliente.correo" readonly></ion-input>
       </ion-item>

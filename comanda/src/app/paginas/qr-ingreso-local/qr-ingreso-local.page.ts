@@ -32,23 +32,46 @@ export class QrIngresoLocalPage implements OnInit {
     private toastCtrl: ToastController,
   ) { }
 
+  private esCliente(): boolean {
+    return (this.authServ.tipoUser === 'cliente' || this.authServ.tipoUser === 'anonimo');
+  }
   async ngOnInit() {
     await this.authServ.buscarUsuario();
 
     this.traerMesas().subscribe((d: MesaKey[]) => {
       // console.log('Tengo las mesas', d);
       this.mesas = d;
+
+      if (this.esCliente() && this.estaEnMesa()) {
+        this.presentToast('Ya tiene una mesa asignada', 'success');
+        this.router.navigate(['inicio']);
+      }
     });
     this.traerListaEspera().subscribe((d: ListaEsperaClientesKey[]) => {
       // console.log('Tengo la lista de espera', d);
       this.listaEspera = d;
 
       // console.log('Ya tengo las listas');
-      if (this.estaEnLista()) {
+      if (this.esCliente() && this.estaEnLista()) {
         this.presentToast('Ya se encuentra en la lista', 'success');
         this.router.navigate(['inicio']);
       }
     });
+  }
+
+  public estaEnMesa(): boolean {
+    const aux = this.mesas.find(m => {
+      return m.cliente === this.authServ.user.correo;
+    });
+    let auxReturn = false;
+
+    if (aux !== undefined) {
+      auxReturn = true;
+    } else {
+      auxReturn = false;
+    }
+
+    return auxReturn;
   }
 
   public estaEnLista(): boolean {

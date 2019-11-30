@@ -9,27 +9,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="background-page">
-  <ion-card *ngIf="this.pedidos.length> 0" class="card-background">
+<ion-content>
+  <ion-card *ngIf="this.pedidos.length> 0" style="background-color:rgba(255, 255, 255, 0.8);text-align: center;">
     <ion-card-content>
       <div class="ion-no-padding transparent-item flex-v" *ngFor="let pedido of
         pedidos">
-        <div class="width-100 align-text-center big-letter">
-          Mesa {{pedido.mesa}}
-        </div>
-        <div class="width-100 center-horizontal center-vertical">
-          <ion-button color="tertiary"
+        <div class="width-100 align-text-center big-letter"  style="background: rgba(255, 255, 255, 0.75);">
+          <label class="bolded">
+            Mesa {{pedido.mesa}}
+         </label>
+      </div>
+      <div class="width-100 center-horizontal center-vertical" style="background: rgba(255, 255, 255, 0.6);">
+          <ion-button class="button_XXS_empty"
             (click)="this.verPedido(pedido.key)">
             Ver
           </ion-button>
         </div>
 
-        <div class="width-100 center-horizontal">
-          <ion-button color="primary"
+        <div class="width-100 center-horizontal" style="background: rgba(255, 255, 255, 0.6);">
+          <ion-button class="button_XXS_empty_gr"
             (click)="aceptarPedido(pedido.key)">
-            <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+            <ion-icon slot="icon-only" name="checkmark" style="font-weight: bold;"></ion-icon>
           </ion-button>
-          <ion-button color="danger"
+          <ion-button class="button_XXS_empty_re"
             (click)="rechazarPedido(pedido.key, pedido.mesa)">
             <ion-icon slot="icon-only" name="close"></ion-icon>
           </ion-button>

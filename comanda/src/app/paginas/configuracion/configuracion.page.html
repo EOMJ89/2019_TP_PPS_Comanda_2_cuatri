@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card class="card-background">
+  <ion-card style="background-color:rgba(255, 255, 255, 0.8);">
     <ion-card-content>
       <div class="width-100 center-vertical center-horizontal extra-bottom">
         <div *ngIf="this.user.foto != ''">
@@ -21,33 +21,33 @@
         </div>
       </div>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label position="floating">Nombre</ion-label>
         <ion-input [value]="this.user.nombre | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding" *ngIf="this.type != 'anonimo'">
+      <ion-item class="item2" *ngIf="this.type != 'anonimo'">
         <ion-label position="floating">Apellido</ion-label>
         <ion-input [value]="this.user.apellido | titlecase" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding" *ngIf="this.type != 'anonimo'">
+      <ion-item class="item2" *ngIf="this.type != 'anonimo'">
         <ion-label position="floating">DNI</ion-label>
         <ion-input [value]="this.user.DNI" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding"
+      <ion-item class="item2"
         *ngIf="this.type != 'anonimo' && this.type != 'cliente'">
         <ion-label position="floating">CUIL</ion-label>
         <ion-input [value]="this.user.CUIL" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label position="floating">Puesto</ion-label>
         <ion-input [value]="this.type" readonly></ion-input>
       </ion-item>
 
-      <ion-item class="ion-no-padding">
+      <ion-item class="item2">
         <ion-label position="floating">Correo</ion-label>
         <ion-input [value]="this.user.correo" readonly></ion-input>
       </ion-item>

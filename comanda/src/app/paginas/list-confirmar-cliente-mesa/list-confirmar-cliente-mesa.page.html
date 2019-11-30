@@ -11,36 +11,42 @@
 
 <ion-content *ngIf="this.esMozo">
   <div *ngIf="this.clientes.length> 0">
-    <ion-card class="card-background">
+    <ion-card  style="background-color:rgba(255, 255, 255, 0.8);">
       <ion-card-content>
         <div *ngFor="let cliente of clientes">
-          <ion-item class="ion-no-padding">
+
+          <ion-item class="item2">
             <ion-label>Correo</ion-label>
             <ion-input [value]="cliente.correo" readonly></ion-input>
           </ion-item>
 
-          <ion-item class="ion-no-padding">
+          <ion-item class="item2">
             <ion-label>Perfil</ion-label>
             <ion-input [value]="cliente.perfil" readonly></ion-input>
           </ion-item>
 
-          <div class="width-100 center-horizontal center-vertical">
-            <ion-button color="tertiary"
+          <!-- <ion-item class="itemc"> -->
+          <div class="width-100 center-horizontal center-vertical" style="background: rgba(255, 255, 255, 0.6);">
+            <ion-button class="button_XXS_empty"
               (click)="this.mostrarCliente(cliente)">
               Ver
             </ion-button>
           </div>
+          <!-- </ion-item> -->
 
-          <div class="width-100 center-horizontal">
-            <ion-button color="success"
+          <!-- <ion-item class="itemc"> -->
+          <div class="width-100 center-horizontal" style="background: rgba(255, 255, 255, 0.6);">
+            <ion-button class="button_XXS_empty_gr"
               (click)="this.confirmarCliente(cliente.correo)">
               <ion-icon slot="icon-only" name="checkmark"></ion-icon>
             </ion-button>
-            <ion-button color="danger"
+            <ion-button class="button_XXS_empty_re"
               (click)="this.rechazarCliente(cliente.correo)">
               <ion-icon slot="icon-only" name="close"></ion-icon>
             </ion-button>
           </div>
+          <!-- </ion-item> -->
+      
         </div>
       </ion-card-content>
     </ion-card>

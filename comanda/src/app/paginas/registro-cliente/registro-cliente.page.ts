@@ -207,20 +207,35 @@ export class RegistroClientePage implements OnInit {
     this.usuario.correo = this.herramientas.AutofillMail();
   }
 
+  private manejarDNI(datos: Array<string>) {
+    const dni = parseInt(datos[4], 10);
+
+    if (isNaN(dni)) {
+      console.log('Es de formato 2010');
+      this.usuario.DNI = parseInt(datos[1].trim(), 10);
+      this.usuario.apellido = datos[4];
+      this.usuario.nombre = datos[5];
+    } else {
+      console.log('Es de formato 2014');
+      this.usuario.DNI = parseInt(datos[4], 10);
+      this.usuario.apellido = datos[1];
+      this.usuario.nombre = datos[2];
+    }
+  }
+
   /*
     *permite escanear el dni para rellenar datos del formulario
   */
   public EscanearDNI() {
-    const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', resultDisplayDuration: 0 };
+    const options: BarcodeScannerOptions = { prompt: 'Escaneé el DNI', formats: 'PDF_417', resultDisplayDuration: 0 };
     this.barcodeScanner.scan(options).then((barcodeData: BarcodeScanResult) => {
-      console.log(barcodeData.format);
-      const scan = (barcodeData.text).split('@');
-      this.usuario.DNI = parseInt(scan[4], 10);
-      this.usuario.apellido = scan[1];
-      this.usuario.nombre = scan[2];
+      console.log(barcodeData);
+      if (!barcodeData.cancelled) {
+        const scan = (barcodeData.text).split('@');
+        this.manejarDNI(scan);
+      }
     }, (err) => {
-      this.presentAlert('¡Error!', 'Error al escanear el DNI.', 'Error desconocido.');
-      console.log(err);
+      this.presentAlert('¡Error!', 'Error al escanear el DNI.', err);
     });
   }
 
@@ -235,5 +250,14 @@ export class RegistroClientePage implements OnInit {
     }
     this.ocultarSeccion0 = true;
     this.ocultarSeccion1 = false;
+  }
+
+  Volver() {
+    this.usuario = new Cliente();
+    this.anonimo = new Anonimo();
+    this.clave = '';
+    this.ocultarSeccion0 = false;
+    this.ocultarSeccion1 = true;
+    this.ocultarSeccion2 = true;
   }
 }
