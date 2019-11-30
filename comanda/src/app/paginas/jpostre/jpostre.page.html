@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>jpostre</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <div class="pad-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title center-horizontal">Memoria</h5>
+            <p class="card-text center-horizontal">Se muestran 8 cartas y se debe encontrar las parejas antes de que el tiempo
+              se
+              acabe.</p>
+      
+            <div class="pad-3 center-vertical row">
+              <span class="col-3 center-horizontal" *ngFor="let card of cards; index as i">
+                <img class="img-card" src="{{card.visible ? card.url : imagesInact}}" (click)="CardSelected(i)">
+              </span>
+            </div>
+            <!-- <div class="intentos center-vertical">
+            Lleva {{contIntentos}} intento/os.
+          </div> -->
+            <div style="margin-top: 1rem;">
+              <button class="btn btn-warning col-12" (click)="IniciarJuego()">Reiniciar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--app-resultado [mensaje]=msgResultado valido='{ true; delay(2000).subscribe(() => {return false; });}'></app-resultado-->
+</ion-content>
+<!--ion-content>
+    <div (click)="voltear(1)" class="flip">
+      <div class="back"></div>
+      <div class="front"></div>
+    </div>
+<br><br><br><br><br><br><br><br><br>
+    <div (click)="voltear(2)" class="flip">
+      <div class="back"></div>
+      <div class="front"></div>
+    </div>
+<br><br><br><br><br><br><br><br><br>
+    <div (click)="voltear(3)" class="flip">
+      <div class="back"></div>
+      <div class="front"></div>
+    </div>
+
+</ion-content-->

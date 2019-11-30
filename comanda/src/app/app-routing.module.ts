@@ -108,6 +108,7 @@ const routes: Routes = [
     loadChildren: './paginas/list-pedidos-detalle/list-pedidos-detalle.module#ListPedidosDetallePageModule',
     canActivate: [AuthGuard]
   },
+  { path: 'jpostre', loadChildren: './paginas/jpostre/jpostre.module#JpostrePageModule' },
 
 ];
 

@@ -1,0 +1,47 @@
+img.img-card:hover {
+    position: relative;
+    top: -0.5rem;
+  }
+  
+  img.img-card {
+    padding: 0.5rem;
+    height: 10rem;
+    width: auto;
+  }
+/////////////////////////////////////////////////////////////////////////////////////////
+.flip{
+    width: 20px;
+    height: 40px;
+    margin: 5px;
+    float: left;
+}
+
+.flip > .front {
+    position: absolute;
+    -webkit-transform: perspective(600px) rotateY(0deg);
+    transform: perspective(600px) rotateY(0deg);
+    background-image: url("./../../../assets/juegos/card.png"); width: 80px; height: 160px; border-radius: 7px;
+    -webkit-visibility: hidden;
+    transition: webkit-transform .5s linear 0s ;
+    transition: transform .5s linear 0s ;
+}
+
+.flip > .back {
+    position: absolute;
+    -webkit-transform: perspective(600px) rotateY(180deg);
+    transform: perspective(600px) rotateY(180deg);
+    background-color: aqua; width: 80px; height: 160px; border-radius: 7px;
+    -webkit-visibility: hidden;
+    transition: webkit-transform .5s linear 0s ;
+    transition: transform .5s linear 0s ;
+}
+
+.flip:hover > .front{
+    -webkit-transform: perspective(600px) rotateY(-180deg);
+    transform: perspective(600px) rotateY(-180deg);
+}
+
+.flip:hover > .back{
+    -webkit-transform: perspective(600px) rotateY(0deg);
+    transform: perspective(600px) rotateY(0deg);
+}
