@@ -79,9 +79,15 @@ export class ModalPedidoPage implements OnInit {
     // console.log('Ver la cuenta');
   }
 
-  public manejarPrecioPropina(total?: number, propina?: number) {
-    const precioTotal: number = total === undefined ? this.pedidoActual.preciototal : total;
-    const agregadoPropina: number = ((propina === undefined ? this.pedidoActual.propina : propina) / 100) * precioTotal;
+  public manejarPrecioPropina(total?: number, propina?: number, descuento?: boolean) {
+    let precioTotal: number = total === null ? this.pedidoActual.preciototal : total;
+    if (descuento !== null) {
+      if (descuento === true) {
+        precioTotal = precioTotal - (10 / 100 * precioTotal);
+      }
+    }
+
+    const agregadoPropina: number = ((propina === null ? this.pedidoActual.propina : propina) / 100) * precioTotal;
     return precioTotal + agregadoPropina;
   }
 
@@ -100,7 +106,7 @@ export class ModalPedidoPage implements OnInit {
         } else {
           this.mostrarAlert('¡Código erroneo!', 'Debe escanear un codigo QR valido');
         }
-      }  else {
+      } else {
         this.mostrarAlert('¡Código erroneo!', 'Debe escanear un codigo QR valido');
       }
     }, (err) => {

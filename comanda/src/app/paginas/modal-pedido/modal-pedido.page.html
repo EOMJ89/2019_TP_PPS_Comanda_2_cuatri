@@ -7,7 +7,8 @@
 </ion-header>
 
 <ion-content>
-    <ion-card  style="background-color:rgba(255, 255, 255, 0.8);" *ngIf="this.pedidoActual != undefined">
+  <ion-card style="background-color:rgba(255, 255, 255, 0.8);"
+    *ngIf="this.pedidoActual != undefined">
     <ion-card-content>
       <ion-item class="item2">
         <ion-label>Cliente</ion-label>
@@ -56,9 +57,28 @@
         </tr>
       </table>
 
-      <ion-item *ngIf="this.verCuenta == false" class="item2">
-        <ion-label>Total</ion-label>
-        <ion-input [value]="this.pedidoActual.preciototal | currency" readonly></ion-input>
+      <ion-item class="item2">
+        <ion-label>Descuento de Postre</ion-label>
+        <ion-input readonly
+          [value]="(this.pedidoActual.juegoComida == true ? 'si' : 'no') |
+          titlecase">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="item2">
+        <ion-label>Descuento de Bebida</ion-label>
+        <ion-input readonly
+          [value]="(this.pedidoActual.juegoBebida == true ? 'si' : 'no') |
+          titlecase">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="item2">
+        <ion-label>Descuento de {{0.10 | percent}}</ion-label>
+        <ion-input readonly
+          [value]="(this.pedidoActual.juegoDescuento == true ? 'si' : 'no') |
+          titlecase">
+        </ion-input>
       </ion-item>
 
       <div *ngIf="this.verCuenta == false">
@@ -72,21 +92,28 @@
         </ion-button>
       </div>
 
-      <div *ngIf="this.verCuenta == true">
-        <ion-item class="item2">
-          <ion-label>Propina</ion-label>
-          <ion-input [value]="(this.pedidoActual.propina /100) | percent"
-            readonly></ion-input>
-          <ion-button slot="end" color="warning" (click)="cambiarPropina()"
-            [disabled]="this.pedidoActual.estado != 'cuenta' ||
-            this.cliente == false">Escanear</ion-button>
-        </ion-item>
-        <ion-item class="item2">
-          <ion-label>Total + Propina</ion-label>
-          <ion-input readonly
-            [value]="(this.manejarPrecioPropina()) | currency"></ion-input>
-        </ion-item>
-      </div>
+      <ion-item *ngIf="this.verCuenta == true" class="item2">
+        <ion-label>Propina</ion-label>
+        <ion-input [value]="(this.pedidoActual.propina /100) | percent"
+          readonly></ion-input>
+        <ion-button slot="end" color="warning" (click)="cambiarPropina()"
+          [disabled]="this.pedidoActual.estado != 'cuenta' ||
+          this.cliente == false">Escanear</ion-button>
+      </ion-item>
+
+      <ion-item class="item2" style="text-align: left !important;">
+        <ion-label position="floating">Total</ion-label>
+        <ion-input readonly
+          [value]="this.pedidoActual.preciototal | currency"></ion-input>
+      </ion-item>
+
+      <ion-item class="item2" style="text-align: left !important;">
+        <ion-label position="floating">Total (con descuento<span
+            *ngIf="this.verCuenta == true"> y propina</span>)</ion-label>
+        <ion-input readonly
+          [value]="(this.manejarPrecioPropina(null, null,
+          this.pedidoActual.juegoDescuento)) | currency"></ion-input>
+      </ion-item>
     </ion-card-content>
   </ion-card>
   <ion-card *ngIf="this.pedidoActual == undefined" class="card-background">
